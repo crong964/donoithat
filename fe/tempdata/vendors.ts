@@ -1,0 +1,22 @@
+export default [
+    "Khác",
+    "WIN",
+    "HOMIA",
+    "CHUFA",
+    "ANNE",
+    "ICONICO",
+    "SUND",
+    "CHINOISE",
+    "MOLLIS",
+    "XING",
+    "KONDO",
+    "XYLIA",
+    "SUSANA",
+    "LARISSA",
+    "SAKURA",
+    "SPLAT",
+    "RECIPE",
+    "EASYKID",
+    "PUMPKIN",
+    "ATRIUM"
+]

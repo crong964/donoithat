@@ -1,0 +1,2 @@
+cd ./be
+dotnet run 

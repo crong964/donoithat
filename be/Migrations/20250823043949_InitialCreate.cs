@@ -1,0 +1,153 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace be.Migrations
+{
+    /// <inheritdoc />
+    public partial class InitialCreate : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "Category",
+                columns: table => new
+                {
+                    CategoryId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Index = table.Column<int>(type: "INTEGER", nullable: false),
+                    NameCategory = table.Column<string>(type: "TEXT", nullable: false),
+                    Slug = table.Column<string>(type: "TEXT", nullable: false),
+                    CategoryParentCategoryId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Category", x => x.CategoryId);
+                    table.ForeignKey(
+                        name: "FK_Category_Category_CategoryParentCategoryId",
+                        column: x => x.CategoryParentCategoryId,
+                        principalTable: "Category",
+                        principalColumn: "CategoryId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WeatherForecastItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Date = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    TemperatureC = table.Column<int>(type: "INTEGER", nullable: false),
+                    Summary = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WeatherForecastItems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Product",
+                columns: table => new
+                {
+                    ProductId = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductClassification = table.Column<string>(type: "TEXT", nullable: false),
+                    MainPrice = table.Column<long>(type: "INTEGER", nullable: false),
+                    NameProduct = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
+                    Quality = table.Column<long>(type: "INTEGER", nullable: false),
+                    Measure = table.Column<int>(type: "INTEGER", nullable: false),
+                    Value = table.Column<int>(type: "INTEGER", nullable: false),
+                    CategoryEntityCategoryId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product", x => x.ProductId);
+                    table.ForeignKey(
+                        name: "FK_Product_Category_CategoryEntityCategoryId",
+                        column: x => x.CategoryEntityCategoryId,
+                        principalTable: "Category",
+                        principalColumn: "CategoryId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Image",
+                columns: table => new
+                {
+                    ImageFiles = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductEntityProductId = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Image", x => x.ImageFiles);
+                    table.ForeignKey(
+                        name: "FK_Image_Product_ProductEntityProductId",
+                        column: x => x.ProductEntityProductId,
+                        principalTable: "Product",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductVariant",
+                columns: table => new
+                {
+                    ProductVariantId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    VariantId = table.Column<string>(type: "TEXT", nullable: false),
+                    VariantName = table.Column<string>(type: "TEXT", nullable: false),
+                    Price = table.Column<long>(type: "INTEGER", nullable: false),
+                    Image = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quality = table.Column<long>(type: "INTEGER", nullable: false),
+                    ProductEntityProductId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductVariant", x => x.ProductVariantId);
+                    table.ForeignKey(
+                        name: "FK_ProductVariant_Product_ProductEntityProductId",
+                        column: x => x.ProductEntityProductId,
+                        principalTable: "Product",
+                        principalColumn: "ProductId");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Category_CategoryParentCategoryId",
+                table: "Category",
+                column: "CategoryParentCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_ProductEntityProductId",
+                table: "Image",
+                column: "ProductEntityProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Product_CategoryEntityCategoryId",
+                table: "Product",
+                column: "CategoryEntityCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductVariant_ProductEntityProductId",
+                table: "ProductVariant",
+                column: "ProductEntityProductId");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "Image");
+
+            migrationBuilder.DropTable(
+                name: "ProductVariant");
+
+            migrationBuilder.DropTable(
+                name: "WeatherForecastItems");
+
+            migrationBuilder.DropTable(
+                name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "Category");
+        }
+    }
+}
