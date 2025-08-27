@@ -13,14 +13,12 @@ public class ProductDetailModel
 
     public required long MainPrice { get; set; }
 
-    [StringLength(30, ErrorMessage = "quá dài")]
+   
     public required string NameProduct { get; set; }
 
     public required long Quality { get; set; } = 0;
-    public required int Measure { get; set; }
-    public required int Value { get; set; }
 
-    public ICollection<ProductVariantEntity>? ProductVariantEntities { get; set; }
+    public ICollection<ProductVariantModel>? ProductVariantModels { get; set; }
 
     public ICollection<ImageEntity>? ImageEntities { get; set; }
 
@@ -32,13 +30,13 @@ public class ProductDetailModel
             Description = productEntity.Description,
             ImageEntities = productEntity.ImageEntities,
             MainPrice = productEntity.MainPrice,
-            Measure = productEntity.Measure,
+
             NameProduct = productEntity.NameProduct,
             ProductId = productEntity.ProductId,
             Quality = productEntity.Quality,
-            Value = productEntity.Value,
+
             ProductClassification = productEntity.ProductClassification,
-            ProductVariantEntities = productEntity.ProductVariantEntities
+            ProductVariantModels = productEntity.ProductVariantEntities?.Select(ProductVariantModel.ConvertModelToEntity).ToArray()
         };
         return productModel;
     }

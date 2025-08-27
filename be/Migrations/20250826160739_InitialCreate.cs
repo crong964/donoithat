@@ -15,11 +15,11 @@ namespace be.Migrations
                 name: "Category",
                 columns: table => new
                 {
-                    CategoryId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CategoryId = table.Column<string>(type: "TEXT", nullable: false),
                     Index = table.Column<int>(type: "INTEGER", nullable: false),
                     NameCategory = table.Column<string>(type: "TEXT", nullable: false),
                     Slug = table.Column<string>(type: "TEXT", nullable: false),
-                    CategoryParentCategoryId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    CategoryParentCategoryId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,6 +29,34 @@ namespace be.Migrations
                         column: x => x.CategoryParentCategoryId,
                         principalTable: "Category",
                         principalColumn: "CategoryId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    OrderId = table.Column<string>(type: "TEXT", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quality = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.OrderId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Account = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    FullName = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Account);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,9 +84,7 @@ namespace be.Migrations
                     MainPrice = table.Column<long>(type: "INTEGER", nullable: false),
                     NameProduct = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
                     Quality = table.Column<long>(type: "INTEGER", nullable: false),
-                    Measure = table.Column<int>(type: "INTEGER", nullable: false),
-                    Value = table.Column<int>(type: "INTEGER", nullable: false),
-                    CategoryEntityCategoryId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    CategoryEntityCategoryId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,12 +118,14 @@ namespace be.Migrations
                 name: "ProductVariant",
                 columns: table => new
                 {
-                    ProductVariantId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ProductVariantId = table.Column<string>(type: "TEXT", nullable: false),
                     VariantId = table.Column<string>(type: "TEXT", nullable: false),
                     VariantName = table.Column<string>(type: "TEXT", nullable: false),
                     Price = table.Column<long>(type: "INTEGER", nullable: false),
-                    Image = table.Column<int>(type: "INTEGER", nullable: false),
+                    Image = table.Column<string>(type: "TEXT", nullable: false),
                     Quality = table.Column<long>(type: "INTEGER", nullable: false),
+                    Position = table.Column<int>(type: "INTEGER", nullable: false),
+                    Weight = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductEntityProductId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -138,7 +166,13 @@ namespace be.Migrations
                 name: "Image");
 
             migrationBuilder.DropTable(
+                name: "Order");
+
+            migrationBuilder.DropTable(
                 name: "ProductVariant");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "WeatherForecastItems");

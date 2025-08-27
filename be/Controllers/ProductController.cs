@@ -1,21 +1,19 @@
-using System.Threading.Tasks;
 using be.Entity;
 using be.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace be.Controllers;
 
 [ApiController]
 [Route("api/admin/product")]
-public class ProductController(DatabaseContext context) : ControllerBase
+public class ProductController(DatabaseContext context, ILogger<ProductController> logger) : ControllerBase
 {
     private readonly DatabaseContext _context = context;
+    private readonly ILogger<ProductController> _logger = logger;
 
-    [HttpGet("get")]
+    [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductAll()
     {
         var productModels = await _context.Product.Select(x => ProductModel.Converter(x)).ToListAsync();
@@ -42,27 +40,25 @@ public class ProductController(DatabaseContext context) : ControllerBase
     }
 
 
-    [HttpPost("add")]
-    [RequestSizeLimit(100_000_000_000_000)]
+    [HttpPost]
     public async Task<ActionResult<string>> AddProduct(ProductAddModel productAddModel)
     {
         List<string> ls = [];
-        var dir = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
-        foreach (var formFile in productAddModel.ImageFiles)
-        {
-            if (formFile.Length > 0)
-            {
-                // var filePath = Path.GetTempFileName();
-                var slip = formFile.FileName.Split(".");
-                if (slip != null && slip.Length >= 2)
-                {
-                    var filename = DateTime.Now.Ticks + "." + Path.GetExtension(formFile.FileName);
-                    var filePath = dir + filename;
-                    ls.Add(filename);
 
-                    using var stream = System.IO.File.Create(filePath);
-                    await formFile.CopyToAsync(stream);
-                }
+        var dir = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
+        var dirDs = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+        foreach (var nameFiles in productAddModel.ImageFiles)
+        {
+            var sourceFileName = dir + nameFiles;
+            var destFileName = dirDs + nameFiles;
+            try
+            {
+                System.IO.File.Copy(sourceFileName, destFileName);
+            }
+            catch (System.Exception)
+            {
+                _logger.LogError("không có url ảnh");
+
             }
         }
         var transaction = await _context.Database.BeginTransactionAsync();
@@ -76,14 +72,12 @@ public class ProductController(DatabaseContext context) : ControllerBase
                 CategoryEntity = categoryEntity,
                 Description = productAddModel.Description,
                 MainPrice = productAddModel.MainPrice,
-                Measure = productAddModel.Measure,
-                Value = productAddModel.Value,
                 ProductClassification = productAddModel.ProductClassification,
                 NameProduct = productAddModel.NameProduct,
                 Quality = productAddModel.Quality
             };
             await _context.Product.AddAsync(mainProduct);
-            foreach (var item in ls)
+            foreach (var item in productAddModel.ImageFiles)
             {
                 var imageEntity = new ImageEntity
                 {
@@ -92,35 +86,43 @@ public class ProductController(DatabaseContext context) : ControllerBase
                 };
                 await _context.Image.AddAsync(imageEntity);
             }
-
+            _logger.LogInformation(productAddModel.ProductVariants.Count + "");
             foreach (var item in productAddModel.ProductVariants)
             {
+
+                _logger.LogInformation(item.VariantName);
                 var productVariantEntity = new ProductVariantEntity
                 {
+                    
                     Image = item.Image,
                     Price = item.Price,
                     ProductEntity = mainProduct,
                     Quality = item.Quality,
                     VariantId = item.VariantId,
-                    VariantName = item.VariantName
+                    VariantName = item.VariantName,
+                    Position = item.Position,
+                    Weight = item.Weight,
                 };
+                _logger.LogInformation(productVariantEntity.ProductVariantId);
                 await _context.ProductVariant.AddAsync(productVariantEntity);
             }
-
+            await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
+            _logger.LogError(e.Message);
             await transaction.RollbackAsync();
             foreach (var file in ls)
             {
+                _logger.LogError(e.Message);
                 try
                 {
                     System.IO.File.Delete(dir + file);
                 }
                 catch (System.Exception)
                 {
-
+                    _logger.LogError("không có url ảnh 2");
 
                 }
             }
@@ -128,6 +130,33 @@ public class ProductController(DatabaseContext context) : ControllerBase
         }
 
         return "";
+    }
+
+    [HttpPost("image")]
+    [RequestSizeLimit(100_000_000_000_000)]
+    public async Task<ActionResult<List<string>>> Patch(List<IFormFile> ImageFiles)
+    {
+        List<string> ls = [];
+        var dir = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+        foreach (var formFile in ImageFiles)
+        {
+            if (formFile.Length > 0)
+            {
+                // var filePath = Path.GetTempFileName();
+                var slip = formFile.FileName.Split(".");
+                if (slip != null && slip.Length >= 2)
+                {
+                    var filename = DateTime.Now.Ticks + Path.GetExtension(formFile.FileName);
+                    var filePath = dir + filename;
+                    ls.Add(filename);
+
+                    using var stream = System.IO.File.Create(filePath);
+                    await formFile.CopyToAsync(stream);
+                }
+            }
+        }
+
+        return ls;
     }
 
 

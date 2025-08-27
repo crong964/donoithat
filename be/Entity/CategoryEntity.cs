@@ -6,7 +6,7 @@ namespace be.Entity;
 public class CategoryEntity
 {
     [Key]
-    public Guid CategoryId { get; set; } = Guid.NewGuid();
+    public string CategoryId { get; set; } = Guid.NewGuid().ToString();
 
     public int Index { get; set; }
 

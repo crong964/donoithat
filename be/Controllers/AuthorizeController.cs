@@ -1,9 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
+using be.Entity;
 using be.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
@@ -12,17 +15,22 @@ namespace be.Controllers;
 
 [ApiController]
 [Route("/api/token")]
-public class AuthorizeController : ControllerBase
+public class AuthorizeController(DatabaseContext context) : ControllerBase
 {
-
+    private readonly DatabaseContext _context = context;
     [HttpPost]
-    public ActionResult<string> Login(LoginModel loginModel)
+    public async Task<ActionResult<string>> Login(LoginModel loginModel)
     {
         var domain = "https://localhost:2000";
         var key = "ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM";
+
+
+        var user = await _context.User.
+        Where(x => x.Account == loginModel.Account && x.Password == loginModel.Password).FirstOrDefaultAsync() ?? throw new Exception("trùng tài khoản");
+
         var authClaims = new List<Claim>
            {
-              new(ClaimTypes.Name, loginModel.Acc),
+              new(ClaimTypes.Name, loginModel.Account),
               new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
               new(ClaimTypes.Role,"admin"),
               new("action","an")
@@ -46,7 +54,7 @@ public class AuthorizeController : ControllerBase
     [HttpGet]
     public ActionResult<string> Test()
     {
-        
+
         var tokenStorage = HttpContext.Request.Headers.Authorization;
         var handler = new JwtSecurityTokenHandler();
         var token = handler.ReadJwtToken(tokenStorage[0]?.Replace("Bearer ", ""));

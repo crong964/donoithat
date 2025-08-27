@@ -11,12 +11,11 @@ public class ProductModel
 
     public required long MainPrice { get; set; }
 
-    [StringLength(30, ErrorMessage = "quá dài")]
+   
     public required string NameProduct { get; set; }
 
     public required long Quality { get; set; } = 0;
-    public required int Measure { get; set; }
-    public required int Value { get; set; }
+
 
 
 
@@ -30,11 +29,11 @@ public class ProductModel
             Description = productEntity.Description,
             ImageFiles = productEntity.ImageEntities,
             MainPrice = productEntity.MainPrice,
-            Measure = productEntity.Measure,
+
             NameProduct = productEntity.NameProduct,
             ProductId = productEntity.ProductId,
             Quality = productEntity.Quality,
-            Value = productEntity.Value
+
         };
         return productModel;
     }

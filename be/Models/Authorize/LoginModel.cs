@@ -2,6 +2,6 @@ namespace be.Models;
 
 public class LoginModel
 {
-    public required string Acc { get; set; }
-    public required string Pass { get; set; }
+    public required string Account { get; set; }
+    public required string Password { get; set; }
 }

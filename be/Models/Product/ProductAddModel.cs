@@ -9,16 +9,12 @@ public class ProductAddModel
 
     public required long MainPrice { get; set; }
 
-    [StringLength(30, ErrorMessage = "quá dài")]
+  
     public required string NameProduct { get; set; }
 
     public required long Quality { get; set; } = 0;
-    public required int Measure { get; set; }
-    public required int Value { get; set; }
-
-
 
     public required List<ProductVariantModel> ProductVariants { get; set; }
-    public required Guid TypeProduct { get; set; }
-    public required List<IFormFile> ImageFiles { get; set; }
+    public required string TypeProduct { get; set; }
+    public required List<string> ImageFiles { get; set; }
 }

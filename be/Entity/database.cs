@@ -14,4 +14,9 @@ public class DatabaseContext : DbContext
     public DbSet<ProductVariantEntity> ProductVariant { get; set; } = null!;
     public DbSet<ImageEntity> Image { get; set; } = null!;
     public DbSet<CategoryEntity> Category { get; set; } = null!;
+    public DbSet<UserEntity> User { get; set; } = null!;
+    public DbSet<OrderEntity> Order { get; set; } = null!;
+
+    
+
 }

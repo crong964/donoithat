@@ -11,7 +11,7 @@ using be.Entity;
 namespace be.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250823043949_InitialCreate")]
+    [Migration("20250826160739_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -22,11 +22,10 @@ namespace be.Migrations
 
             modelBuilder.Entity("be.Entity.CategoryEntity", b =>
                 {
-                    b.Property<Guid>("CategoryId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("CategoryId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CategoryParentCategoryId")
+                    b.Property<string>("CategoryParentCategoryId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Index")
@@ -63,12 +62,28 @@ namespace be.Migrations
                     b.ToTable("Image");
                 });
 
+            modelBuilder.Entity("be.Entity.OrderEntity", b =>
+                {
+                    b.Property<string>("OrderId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quality")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Order");
+                });
+
             modelBuilder.Entity("be.Entity.ProductEntity", b =>
                 {
                     b.Property<string>("ProductId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CategoryEntityCategoryId")
+                    b.Property<string>("CategoryEntityCategoryId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -76,9 +91,6 @@ namespace be.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<long>("MainPrice")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Measure")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("NameProduct")
@@ -93,9 +105,6 @@ namespace be.Migrations
                     b.Property<long>("Quality")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Value")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryEntityCategoryId");
@@ -105,11 +114,14 @@ namespace be.Migrations
 
             modelBuilder.Entity("be.Entity.ProductVariantEntity", b =>
                 {
-                    b.Property<Guid>("ProductVariantId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("ProductVariantId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Image")
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Position")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("Price")
@@ -129,11 +141,40 @@ namespace be.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Weight")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ProductVariantId");
 
                     b.HasIndex("ProductEntityProductId");
 
                     b.ToTable("ProductVariant");
+                });
+
+            modelBuilder.Entity("be.Entity.UserEntity", b =>
+                {
+                    b.Property<string>("Account")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Account");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("be.Entity.WeatherForecast", b =>

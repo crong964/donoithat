@@ -7,13 +7,57 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace be.Controllers;
 
-[Authorize]
+
 [ApiController]
 [Route("api/admin/CategoryController")]
 public class CategoryController(ILogger<CategoryController> logger, DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
     private readonly ILogger<CategoryController> _logger = logger;
+
+    [HttpPost("data_test")]
+    public async Task<string> DataTestAsync(ICollection<CategoryTest> categoryTests)
+    {
+        int i = 0;
+        foreach (var item in categoryTests)
+        {
+            var transaction = await _context.Database.BeginTransactionAsync();
+            var categoryParent = new CategoryEntity
+            {
+                NameCategory = item.Name,
+                Index = i+=1,
+                Slug = item.Id
+            };
+            await _context.Category.AddAsync(categoryParent);
+            var j = 0;
+            if (item.Con != null)
+            {
+                foreach (var itemCon in item.Con)
+                {
+                    var categoryChild = new CategoryEntity
+                    {
+                        NameCategory = itemCon.Name,
+                        Index = j += 1,
+                        Slug = itemCon.Id,
+                        CategoryParent = categoryParent
+                    };
+                    await _context.Category.AddAsync(categoryChild);
+                }
+            }
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+        }
+        return "";
+    }
+
+
+
+
+
+
+
+
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CategoryModel>>> GetAll()
@@ -91,7 +135,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
         }
         category.NameCategory = categoryUpdateModel.NameCategory;
         category.Slug = categoryUpdateModel.Slug;
-        category.CategoryId = new Guid(categoryUpdateModel.CategoryId);
+        category.CategoryId = categoryUpdateModel.CategoryId;
         _context.Update(category);
         await _context.SaveChangesAsync();
         return "ok";
@@ -159,7 +203,6 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
 
         return "ok";
     }
-
 
     [HttpDelete]
     public async Task<ActionResult<CategoryModel>> Delete(CategoryDeleteModel CategorySlug)

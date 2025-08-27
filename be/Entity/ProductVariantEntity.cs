@@ -10,14 +10,14 @@ namespace be.Entity
     public class ProductVariantEntity
     {
         [Key]
-        public Guid ProductVariantId { get; set; } = new Guid();
+        public string ProductVariantId { get; set; } = Guid.NewGuid().ToString();
         public required string VariantId { get; set; }
         public required string VariantName { get; set; }
         public required long Price { get; set; }
-        public required int Image { get; set; }
+        public required string Image { get; set; }
         public long Quality { get; set; } = 0;
-
-
+        public int Position { get; set; }
+        public int Weight { get; set; }
 
         public required ProductEntity ProductEntity { set; get; }
     }
