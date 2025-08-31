@@ -11,6 +11,7 @@ namespace be.Entity
     {
         [Key]
         public string ProductVariantId { get; set; } = Guid.NewGuid().ToString();
+        public required string ProductVariantName { get; set; }
         public required string VariantId { get; set; }
         public required string VariantName { get; set; }
         public required long Price { get; set; }

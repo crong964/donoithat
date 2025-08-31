@@ -26,11 +26,15 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
 
 
         var user = await _context.User.
-        Where(x => x.Account == loginModel.Account && x.Password == loginModel.Password).FirstOrDefaultAsync() ?? throw new Exception("trùng tài khoản");
+        Where(x => x.Account == loginModel.Account && x.Password == loginModel.Password).FirstOrDefaultAsync();
+        if (user == null)
+        {
+            return BadRequest("tài khoản");
+        }
 
         var authClaims = new List<Claim>
            {
-              new(ClaimTypes.Name, loginModel.Account),
+              new("id", loginModel.Account),
               new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
               new(ClaimTypes.Role,"admin"),
               new("action","an")
@@ -59,7 +63,8 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
         var handler = new JwtSecurityTokenHandler();
         var token = handler.ReadJwtToken(tokenStorage[0]?.Replace("Bearer ", ""));
 
-        return token.Claims.First(claim => claim.Type == "action").Value;
+
+        return token.Claims.First(claim => claim.Type == "id").Value;
     }
 }
 

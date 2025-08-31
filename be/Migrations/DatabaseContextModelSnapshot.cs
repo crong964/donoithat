@@ -36,9 +36,15 @@ namespace be.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("CategoryId");
 
                     b.HasIndex("CategoryParentCategoryId");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
 
                     b.ToTable("Category");
                 });
@@ -64,13 +70,38 @@ namespace be.Migrations
                     b.Property<string>("OrderId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("OrderTime")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Pay")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProductVariantEntityProductVariantId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Quality")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("UserEntityAccount")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("OrderId");
+
+                    b.HasIndex("ProductVariantEntityProductVariantId");
+
+                    b.HasIndex("UserEntityAccount");
 
                     b.ToTable("Order");
                 });
@@ -84,6 +115,10 @@ namespace be.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -124,6 +159,10 @@ namespace be.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ProductEntityProductId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProductVariantName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<long>("Quality")
@@ -211,6 +250,25 @@ namespace be.Migrations
                         .IsRequired();
 
                     b.Navigation("ProductEntity");
+                });
+
+            modelBuilder.Entity("be.Entity.OrderEntity", b =>
+                {
+                    b.HasOne("be.Entity.ProductVariantEntity", "ProductVariantEntity")
+                        .WithMany()
+                        .HasForeignKey("ProductVariantEntityProductVariantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("be.Entity.UserEntity", "UserEntity")
+                        .WithMany()
+                        .HasForeignKey("UserEntityAccount")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductVariantEntity");
+
+                    b.Navigation("UserEntity");
                 });
 
             modelBuilder.Entity("be.Entity.ProductEntity", b =>

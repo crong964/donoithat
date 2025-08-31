@@ -1,8 +1,6 @@
-using System.ComponentModel;
-using System.Threading.Tasks;
+
 using be.Entity;
 using be.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace be.Controllers;
@@ -15,6 +13,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     private readonly DatabaseContext _context = context;
     private readonly ILogger<CategoryController> _logger = logger;
 
+
     [HttpPost("data_test")]
     public async Task<string> DataTestAsync(ICollection<CategoryTest> categoryTests)
     {
@@ -25,7 +24,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
             var categoryParent = new CategoryEntity
             {
                 NameCategory = item.Name,
-                Index = i+=1,
+                Index = i += 1,
                 Slug = item.Id
             };
             await _context.Category.AddAsync(categoryParent);
@@ -53,24 +52,32 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
 
 
 
-
-
-
-
-
-
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CategoryModel>>> GetAll()
+    public async Task<ActionResult<IEnumerable<CategoryModel>>> GetAll(CategoryGet? categoryGet)
     {
+        IEnumerable<CategoryEntity>? ls = null;
+        if (categoryGet == null)
+        {
+            ls = await _context.Category
+                               .Where(x => x.CategoryParent == null)
 
-        var ls = await _context.Category
-        .Where(x => x.CategoryParent == null)
+                               .Include(x => x.CategoryChidlren)
+                                .OrderBy(x => x.Index)
+                                .ToListAsync();
+        }
+        else
+        {
+            ls = await _context.Category
+                     .Where(x => x.CategoryParent == null && x.Status == categoryGet.Status)
 
-        .Include(x => x.CategoryChidlren)
-         .OrderBy(x => x.Index)
-         .ToListAsync();
+                     .Include(x => x.CategoryChidlren)
+                      .OrderBy(x => x.Index)
+                      .ToListAsync();
+        }
+
 
         var lsmodel = new List<CategoryModel>();
+
         foreach (var item in ls)
         {
             var categoryModel = ConvertEntityToModel.Converter(item);
@@ -128,14 +135,11 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     [HttpPatch]
     public async Task<ActionResult<string>> Update(CategoryUpdateModel categoryUpdateModel)
     {
-        var category = await _context.Category.FindAsync(new Guid(categoryUpdateModel.CategoryId));
-        if (category == null)
-        {
-            throw new Exception("not found");
-        }
+        var category = await _context.Category.FindAsync(new Guid(categoryUpdateModel.CategoryId)) ?? throw new Exception("not found");
         category.NameCategory = categoryUpdateModel.NameCategory;
         category.Slug = categoryUpdateModel.Slug;
         category.CategoryId = categoryUpdateModel.CategoryId;
+        category.Status = categoryUpdateModel.Status;
         _context.Update(category);
         await _context.SaveChangesAsync();
         return "ok";

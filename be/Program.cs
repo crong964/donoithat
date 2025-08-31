@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using be.Service.Implement;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.OpenApi.Any;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,18 +21,20 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     options.JsonSerializerOptions.WriteIndented = true;
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DatabaseContext")
     ?? throw new InvalidOperationException("Connection string 'DatabaseContext' not found.")));
 
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen();
+
 builder.Services.AddSwaggerGen(c =>
     {
         c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -56,6 +61,8 @@ builder.Services.AddSwaggerGen(c =>
                 Array.Empty<string>()
             }
         });
+        c.SchemaFilter<EnumSchemaFilter>();
+
     });
 
 builder.Services.AddCors(options =>
@@ -132,3 +139,19 @@ app.MapControllers(
 //var port = Environment.GetEnvironmentVariable("PORT") ?? "3000";
 app.Run();
 
+public class EnumSchemaFilter : ISchemaFilter
+{
+    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    {
+        if (context.Type.IsEnum)
+        {
+            schema.Enum.Clear();
+            schema.Description = "hello";
+            foreach (var name in Enum.GetNames(context.Type))
+            {
+                schema.Enum.Add(new OpenApiString(name));
+            }
+            schema.Type = "string";
+        }
+    }
+}

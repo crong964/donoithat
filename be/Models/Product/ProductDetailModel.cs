@@ -13,14 +13,14 @@ public class ProductDetailModel
 
     public required long MainPrice { get; set; }
 
-   
+
     public required string NameProduct { get; set; }
 
     public required long Quality { get; set; } = 0;
 
     public ICollection<ProductVariantModel>? ProductVariantModels { get; set; }
 
-    public ICollection<ImageEntity>? ImageEntities { get; set; }
+    public ICollection<string>? ImageEntities { get; set; }
 
 
     static public ProductDetailModel ConvertEntityToModel(ProductEntity productEntity)
@@ -28,7 +28,7 @@ public class ProductDetailModel
         var productModel = new ProductDetailModel
         {
             Description = productEntity.Description,
-            ImageEntities = productEntity.ImageEntities,
+            ImageEntities = productEntity.ImageEntities?.Select(x => x.ImageFiles).ToArray(),
             MainPrice = productEntity.MainPrice,
 
             NameProduct = productEntity.NameProduct,

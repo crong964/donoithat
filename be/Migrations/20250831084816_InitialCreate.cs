@@ -16,9 +16,10 @@ namespace be.Migrations
                 columns: table => new
                 {
                     CategoryId = table.Column<string>(type: "TEXT", nullable: false),
+                    Slug = table.Column<string>(type: "TEXT", nullable: false),
                     Index = table.Column<int>(type: "INTEGER", nullable: false),
                     NameCategory = table.Column<string>(type: "TEXT", nullable: false),
-                    Slug = table.Column<string>(type: "TEXT", nullable: false),
+                    Status = table.Column<bool>(type: "INTEGER", nullable: false),
                     CategoryParentCategoryId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -29,19 +30,6 @@ namespace be.Migrations
                         column: x => x.CategoryParentCategoryId,
                         principalTable: "Category",
                         principalColumn: "CategoryId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Order",
-                columns: table => new
-                {
-                    OrderId = table.Column<string>(type: "TEXT", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    Quality = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Order", x => x.OrderId);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,9 +68,10 @@ namespace be.Migrations
                 {
                     ProductId = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageUrl = table.Column<string>(type: "TEXT", nullable: false),
                     ProductClassification = table.Column<string>(type: "TEXT", nullable: false),
                     MainPrice = table.Column<long>(type: "INTEGER", nullable: false),
-                    NameProduct = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
+                    NameProduct = table.Column<string>(type: "TEXT", nullable: false),
                     Quality = table.Column<long>(type: "INTEGER", nullable: false),
                     CategoryEntityCategoryId = table.Column<string>(type: "TEXT", nullable: true)
                 },
@@ -119,6 +108,7 @@ namespace be.Migrations
                 columns: table => new
                 {
                     ProductVariantId = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductVariantName = table.Column<string>(type: "TEXT", nullable: false),
                     VariantId = table.Column<string>(type: "TEXT", nullable: false),
                     VariantName = table.Column<string>(type: "TEXT", nullable: false),
                     Price = table.Column<long>(type: "INTEGER", nullable: false),
@@ -138,15 +128,62 @@ namespace be.Migrations
                         principalColumn: "ProductId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    OrderId = table.Column<string>(type: "TEXT", nullable: false),
+                    OrderTime = table.Column<long>(type: "INTEGER", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    Pay = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductVariantEntityProductVariantId = table.Column<string>(type: "TEXT", nullable: false),
+                    Quality = table.Column<int>(type: "INTEGER", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    Price = table.Column<long>(type: "INTEGER", nullable: false),
+                    UserEntityAccount = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_Order_ProductVariant_ProductVariantEntityProductVariantId",
+                        column: x => x.ProductVariantEntityProductVariantId,
+                        principalTable: "ProductVariant",
+                        principalColumn: "ProductVariantId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Order_User_UserEntityAccount",
+                        column: x => x.UserEntityAccount,
+                        principalTable: "User",
+                        principalColumn: "Account",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Category_CategoryParentCategoryId",
                 table: "Category",
                 column: "CategoryParentCategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Category_Slug",
+                table: "Category",
+                column: "Slug",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Image_ProductEntityProductId",
                 table: "Image",
                 column: "ProductEntityProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_ProductVariantEntityProductVariantId",
+                table: "Order",
+                column: "ProductVariantEntityProductVariantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_UserEntityAccount",
+                table: "Order",
+                column: "UserEntityAccount");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_CategoryEntityCategoryId",
@@ -169,13 +206,13 @@ namespace be.Migrations
                 name: "Order");
 
             migrationBuilder.DropTable(
+                name: "WeatherForecastItems");
+
+            migrationBuilder.DropTable(
                 name: "ProductVariant");
 
             migrationBuilder.DropTable(
                 name: "User");
-
-            migrationBuilder.DropTable(
-                name: "WeatherForecastItems");
 
             migrationBuilder.DropTable(
                 name: "Product");

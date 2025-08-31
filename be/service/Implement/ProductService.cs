@@ -1,4 +1,4 @@
-namespace be.Service;
+namespace be.Service.Implement;
 
 
 public class ProductService : IProductService
@@ -15,7 +15,3 @@ public class ProductService : IProductService
 }
 
 
-public interface IProductService
-{
-    public int GetProduct();
-}
