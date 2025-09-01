@@ -1,8 +1,10 @@
 interface CateGory {
     id: string
-    name: string
+    nameCategory: string,
+    slug:string,
+    
 }
 
 interface MainCateGory extends CateGory {
-    subCa: CateGory[]
+    categoryChidlren: CateGory[]
 }

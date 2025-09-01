@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace be.Controllers;
 
 [ApiController]
-[Route("api/admin/product")]
+[Route("api/product")]
 public class ProductController(DatabaseContext context, ILogger<ProductController> logger) : ControllerBase
 {
     private readonly DatabaseContext _context = context;

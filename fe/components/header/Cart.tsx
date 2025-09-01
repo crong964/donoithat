@@ -1,13 +1,13 @@
 "use client"
-import { catogory } from "@/tempdata/category"
+import Link from "next/link"
 import Category from "../category/category"
 import Search from "./search"
 import Sign from "./sign"
 
 export default function Cart() {
     return (
-        <a className="lg:ml-5 lg:mb-auto">
-            <a href="/cart" className="flex h-10 gap-1 items-center">
+        <div className="lg:ml-5 lg:mb-auto">
+            <Link href="/cart" className="flex h-10 gap-1 items-center">
                 <div className="w-8 flex items-end justify-center relative">
                     <svg className="mx-auto w-4.5 lg:w-5.5 " version="1.0" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
                         <g transform="translate(0 512) scale(.1 -.1)">
@@ -22,7 +22,7 @@ export default function Cart() {
                     </div>
                 </div>
                 <span className="max-lg:hidden text-[13px] leading-[19px]">Giỏ hàng</span>
-            </a>
-        </a>
+            </Link>
+        </div>
     )
 }

@@ -1,6 +1,6 @@
 export default function Search() {
     return (
-        <div className="ml-5 pr-6.25 flex-1">
+        <search className="ml-5 pr-6.25 flex-1">
             <div className="max-w-170 mx-auto ">
                 <form className="bg-white py-0.75 pl-3.75 flex rounded-sm">
                     <input type="text" placeholder="Tìm kiếm sản phẩm..." className="text-black font-light text-sm focus:outline-none flex-1" />
@@ -29,7 +29,7 @@ export default function Search() {
                     </ul>
                 </div>
             </div>
-        </div>
+        </search>
 
     )
 }

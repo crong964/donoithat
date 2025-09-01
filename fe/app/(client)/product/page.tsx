@@ -3,6 +3,7 @@ import Navi from "@/components/layout/navi";
 import ProductHome from "@/components/product/producthome";
 import { MainCarousel } from "@/components/ui/carousel";
 import detail from "@/tempdata/detail";
+import Link from "next/link";
 
 export default function ProductDetai() {
     return (
@@ -212,7 +213,7 @@ export default function ProductDetai() {
             <section className="lg:px-3.75 mt-10 pb-17.5">
                 <div className="mb-5">
                     <h2 className="text-[24px] font-bold leading-7.25 text-f">
-                        <a href="#" >Xem thêm sản phẩm cùng loại</a>
+                        <Link href="#" >Xem thêm sản phẩm cùng loại</Link>
                     </h2>
                 </div>
                 <MainCarousel >
@@ -227,7 +228,7 @@ export default function ProductDetai() {
             <section className="lg:px-3.75  pb-17.5">
                 <div className="mb-5">
                     <h2 className="text-[24px] font-bold leading-7.25 text-f">
-                        <a href="#" >Sản phẩm đã xem</a>
+                        <Link href="#" >Sản phẩm đã xem</Link>
                     </h2>
                 </div>
                 <MainCarousel >

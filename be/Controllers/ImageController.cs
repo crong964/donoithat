@@ -6,7 +6,7 @@ namespace be.Controllers;
 
 
 [ApiController]
-[Route("api/admin/image")]
+[Route("api/image")]
 public class ImageController(DatabaseContext context, ILogger<ImageController> logger) : ControllerBase
 {
     private readonly DatabaseContext _context = context;

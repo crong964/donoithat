@@ -1,18 +1,21 @@
-export default function ProductItem() {
+import PriceFormat from "@/util/Price";
+import { iProduct } from "./interface";
+
+export default function ProductItem(p: iProduct) {
     return (
         <a href="/product" className="basis-1/2 lg:basis-1/5 flex flex-col grow-0 px-1.75 mb-3.5">
             <div className="flex flex-col grow shadow-pro bg-white cursor-pointer hover:shadow-pro-hover items-baseline ">
                 <div className="p-1.25">
-                    <img src="/i.png" className="w-full h-auto aspect-square" alt="" srcSet="" />
+                    <img src={p.imageUrl} className="w-full min-h-45 h-auto aspect-square" alt="" srcSet="" />
                 </div>
                 <div className="px-3.5 py-2.5 flex flex-col grow items-center">
                     <h1 className="text-[12px] leading-4.25 text-[#9a9a9a] mb-1.25 font-medium">
                         IVY
                     </h1>
                     <h3 className="pb-1.25">
-                        <a className="text-[14px] leading-4.25 text-center line-clamp-2" href="#">Combo Bát Đĩa Sakura Xanh Ngọc ( 6 bát cơm, 2 bát mỳ, 1 bát canh, 1 đĩa nhỡ, 1 đĩa to )</a>
+                        <a className="text-[14px] leading-4.25 text-center line-clamp-2" href="#">{p.nameProduct}</a>
                     </h3>
-                    <p className="font-bold text-sm">750,000₫</p>
+                    <p className="font-bold text-sm">{PriceFormat(p.mainPrice / 100 + "")}₫</p>
                     <div className="mt-auto">
                         <button className="uppercase flex font-bold items-center space-x-3.5 rounded-full lg:pl-3.75 border-1 border-white hover:border-f text-[12px] ">
                             <span className="">

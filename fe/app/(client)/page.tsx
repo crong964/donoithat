@@ -2,6 +2,7 @@ import Coupon from "@/components/coupon/coupon";
 import ProductHome from "@/components/product/producthome";
 import ProductItem from "@/components/product/productitem";
 import { CarouselNext, CarouselPrevious, MainCarousel } from "@/components/ui/carousel";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -35,7 +36,7 @@ export default function Home() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-f opacity-75"></span>
               <span className="relative inline-flex size-3 rounded-full bg-f"></span>
             </span>
-            <a href="#" className="text-[18px] lg:text-[24px] font-bold leading-4.5 lg:leading-7">Đồ bếp nhập khẩu cao cấp</a>
+            <Link href="#" className="text-[18px] lg:text-[24px] font-bold leading-4.5 lg:leading-7">Đồ bếp nhập khẩu cao cấp</Link>
           </div>
           <MainCarousel action={
             <>
@@ -45,20 +46,20 @@ export default function Home() {
               </div>
             </>}>
             {Array.from({ length: 10 })
-              .map((v) => {
+              .map((v,i) => {
                 return (
-                  <ProductHome></ProductHome>
+                  <ProductHome key={i}></ProductHome>
                 )
               })}
           </MainCarousel>
           <div className="flex text-[14px] mt-3.75 leading-4 justify-center">
-            <a href="#" className="py-3 px-1.25 flex space-x-4 justify-center rounded-sm items-center bg-white min-w-80">
+            <Link href="#" className="py-3 px-1.25 flex space-x-4 justify-center rounded-sm items-center bg-white min-w-80">
               <span> Xem tất cả</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 className="inline-block fill-black" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
+                <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -77,7 +78,7 @@ export default function Home() {
       <section className="lg:px-3.75 pb-17.5 relative">
         <div className="mb-5 max-lg:px-3.75">
           <h2 className="text-[18px] lg:text-[24px] font-bold leading-7.25 text-f">
-            <a href="#" >Back To School - Up To 60%</a>
+            <Link href="#" >Back To School - Up To 60%</Link>
           </h2>
         </div>
         <MainCarousel action={
@@ -88,9 +89,9 @@ export default function Home() {
             </div>
           </>}>
           {Array.from({ length: 15 })
-            .map((v) => {
+            .map((v, i) => {
               return (
-                <ProductHome />
+                <ProductHome key={i} />
               )
             })}
 
@@ -104,9 +105,9 @@ export default function Home() {
               <div className="text-white flex-col flex items-end">
                 <p className="text-[18px] leading-6.25 font-semibold mb-2">Xu hướng tìm kiếm</p>
                 <div>
-                  <a style={{ lineHeight: "normal" }} className="uppercase text-[13px] font-medium py-1.25 px-3.75 rounded-2xl bg-f" href="http://">
+                  <Link style={{ lineHeight: "normal" }} className="uppercase text-[13px] font-medium py-1.25 px-3.75 rounded-2xl bg-f" href="http://">
                     xem ngay
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -125,7 +126,7 @@ export default function Home() {
                             </div>
                             <div className=" text-white my-3.5">
                               <h3>
-                                <a className="pt-2" href="http://">Ghê</a>
+                                <Link className="pt-2" href="http://">Ghê</Link>
                               </h3>
                             </div>
                           </div>
@@ -146,13 +147,13 @@ export default function Home() {
           <div className="">
             <ul className=" font-bold h-auto flex items-center">
               <li>
-                <a href="#" className="px-4 py-2.5 text-[14px] leading-5  rounded-full border text-white bg-f">Sản phẩm mới
-                </a>
+                <Link href="#" className="px-4 py-2.5 text-[14px] leading-5  rounded-full border text-white bg-f">Sản phẩm mới
+                </Link>
               </li>
               <li>
-                <a href="#" className="px-4 py-2.5 text-[14px] leading-5 rounded-full text-[#787878] border border-[#eae4e8] ml-5">
+                <Link href="#" className="px-4 py-2.5 text-[14px] leading-5 rounded-full text-[#787878] border border-[#eae4e8] ml-5">
                   Sofa New Arrival
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -164,18 +165,18 @@ export default function Home() {
           <div className=" lg:basis-4/5 lg:pl-3.5">
             <div className="flex flex-wrap">
               {Array.from({ length: 10 })
-                .map((v) => {
+                .map((v,i ) => {
                   return (
-                    <ProductItem></ProductItem>
+                    <ProductItem key={i}></ProductItem>
                   )
                 })}
             </div>
           </div>
         </div>
         <div className="mt-6.25 text-center">
-          <a href="#" className="px-6.25 py-2.5 tracking-wider border text-center text-f border-f text-sm hover:text-white rounded-sm hover:bg-f ">
+          <Link href="#" className="px-6.25 py-2.5 tracking-wider border text-center text-f border-f text-sm hover:text-white rounded-sm hover:bg-f ">
             Xem tất cả <strong>Sản phẩm mới </strong>
-          </a>
+          </Link>
         </div>
       </section>
 

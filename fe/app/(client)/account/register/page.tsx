@@ -5,10 +5,10 @@ export default function RegisterPage() {
                 <div className="max-w-155 mx-auto mt-8.75 mb-12.5 px-7.5 pb-7.5 pt-6.25 bg-white">
                     <div className="mb-11.25 flex text-[24px]  font-bold justify-center">
                         <h4 className="px-7.5 text-[#cacaca] leading-7.25 hover:text-black">
-                            <a href="/account/login">Đăng nhập</a>
+                            <Link href="/account/login">Đăng nhập</Link>
                         </h4>
                         <h4 className="px-7.5 border-l-2 leading-7.25 border-black">
-                            <a href="/account/register">Đăng ký</a>
+                            <Link href="/account/register">Đăng ký</Link>
                         </h4>
                     </div>
 
@@ -60,12 +60,12 @@ export default function RegisterPage() {
                         </div>
                         <div className="pt-1.5 mb-6.25 text-[#cacaca] text-[13px] leading-4.75 font-normal">
                             This site is protected by reCAPTCHA and the Google
-                            <a className="text-[#2962ff]" href="https://policies.google.com/privacy" target="_blank" rel="noreferrer"> Privacy Policy</a>
-                            and <a className="text-[#2962ff]" href="https://policies.google.com/terms" target="_blank" rel="noreferrer"> Terms of Service</a> apply.
+                            <Link className="text-[#2962ff]" href="https://policies.google.com/privacy" target="_blank" rel="noreferrer"> Privacy Policy</Link>
+                            and <Link className="text-[#2962ff]" href="https://policies.google.com/terms" target="_blank" rel="noreferrer"> Terms of Service</Link> apply.
                         </div>
                         <div className="flex items-center">
                             <input type="submit" className="px-8.75 rounded-sm leading-11.25 bg-f uppercase font-semibold text-white" value="Đăng ký" />
-                            <p className="pl-7.5 mr-auto text-[14px] leading-5 font-normal">Bạn đã có tài khoản? <a className="text-[#2962ff]" href="/account/login">Đăng nhập ngay</a></p>
+                            <p className="pl-7.5 mr-auto text-[14px] leading-5 font-normal">Bạn đã có tài khoản? <Link className="text-[#2962ff]" href="/account/login">Đăng nhập ngay</Link></p>
                         </div>
                     </form>
                 </div>

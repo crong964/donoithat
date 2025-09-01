@@ -1,12 +1,11 @@
 import menudata from '@/tempdata/menufooter';
 import { Menu } from 'antd';
 import { MenuItem } from '@/components/ui/menu';
-import App from './test';
 
 export default function Footer() {
     return (
         <footer className=" bg-white min-h-100">
-            <App></App>
+
             <div className="max-w-350 mx-auto">
                 <div className="py-5">
                     <div className="px-3.75">
@@ -113,7 +112,7 @@ function MenuF() {
     const items: MenuItem[][] =
         menudata.map((v, i) => {
             return [{
-                
+
                 className: "flex-1 lg:basis-1/4   grow-0 shrink-0 leading-5.5 lg:px-3.75",
                 label: <div className='font-bold text-[18px] leading-5.5 text-black'>{v.title}</div>,
                 key: i,
@@ -133,7 +132,6 @@ function MenuF() {
         items.map((v, i) => {
             return <Menu
                 mode="inline"
-                
                 items={v}
                 key={i}
                 inlineIndent={0}

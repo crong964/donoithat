@@ -1,9 +1,11 @@
+import Link from "next/link";
+
 export default function ProductCart() {
     return (
         <div className="w-full flex relative px-2.5 py-3.75">
-            <a href="#" className="size-5 bg-[#8f9bb3] text-[8px] leading-5 text-center text-white rounded-full absolute top-2.5 left-0">
+            <Link href="#" className="size-5 bg-[#8f9bb3] text-[8px] leading-5 text-center text-white rounded-full absolute top-2.5 left-0">
                 xóa
-            </a>
+            </Link>
             <div className="basis-20 ">
                 <img className="min-w-20 border border-boder h-auto" src="/cartpro.jpg" alt="" srcSet="" />
             </div>

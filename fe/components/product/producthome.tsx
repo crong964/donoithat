@@ -1,11 +1,13 @@
+import Link from "next/link";
+
 export default function ProductHome() {
     return (
-        <a href="/product" className="basis-1/2 lg:basis-1/5 grow-0 shrink-0 px-0.5 lg:px-1.75 pb-3.5">
+        <Link href="/product" className="basis-1/2 lg:basis-1/5 grow-0 shrink-0 px-0.5 lg:px-1.75 pb-3.5">
             <div className="w-full bg-white shadow-pro hover:shadow-pro-hover duration-300">
                 <img src="/a.jpg" className="w-full h-auto" alt="" srcSet="" />
                 <div className="py-2.5 flex flex-col items-center text-center font-medium px-3.5">
                     <p className="mb-1.25 uppercase text-[12px] ">
-                        <a href="#">ANNE</a>
+                        <Link href="#">ANNE</Link>
                     </p>
                     <h3 className="text-[14px]  leading-[17px]">
                         Bát ăn cơm gốm sứ ANNE màu ngẫu nhiên H5.7xD11.3
@@ -27,6 +29,6 @@ export default function ProductHome() {
                     </button>
                 </div>
             </div>
-        </a>
+        </Link>
     )
 }

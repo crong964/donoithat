@@ -7,7 +7,7 @@ export default function PriceFormat(params: string) {
         temp += element
         count += 1
         if (count % 3 == 0) {
-            temp += " "
+            temp += ","
             count = 0
         }
     }

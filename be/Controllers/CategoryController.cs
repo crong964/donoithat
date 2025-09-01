@@ -7,7 +7,7 @@ namespace be.Controllers;
 
 
 [ApiController]
-[Route("api/admin/CategoryController")]
+[Route("api/Category")]
 public class CategoryController(ILogger<CategoryController> logger, DatabaseContext context)
 {
     private readonly DatabaseContext _context = context;
