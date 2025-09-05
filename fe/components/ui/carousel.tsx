@@ -133,7 +133,7 @@ function Carousel({
 }
 
 function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
-  const { carouselRef, orientation } = useCarousel()
+  const { carouselRef, orientation, } = useCarousel()
 
   return (
     <div
@@ -142,6 +142,28 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="carousel-content"
     >
       <div
+        className={cn(
+          "flex",
+          orientation === "horizontal" ? "" : " flex-col",
+          className
+        )}
+        {...props}
+      />
+    </div>
+  )
+}
+function CarouselContentHover({ className, ...props }: React.ComponentProps<"div">) {
+  const { carouselRef, orientation, scrollNext, scrollPrev } = useCarousel()
+
+  return (
+    <div
+      ref={carouselRef}
+      className="overflow-hidden"
+      data-slot="carousel-content"
+    >
+      <div
+        onMouseEnter={scrollNext}
+        onMouseLeave={scrollPrev}
         className={cn(
           "flex",
           orientation === "horizontal" ? "" : " flex-col",
@@ -260,7 +282,7 @@ function CarouselNext({
   size = "icon",
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { scrollNext, canScrollNext } = useCarousel()
+  const { scrollNext, canScrollNext, } = useCarousel()
 
   return (
     <Button
@@ -277,16 +299,56 @@ function CarouselNext({
     </Button>
   )
 }
-function MainCarousel({ children, action }: { children: React.ReactNode, action?: React.ReactNode }) {
+function MainCarousel({ children, action, className, orientation, onSected }:
+  {
+    children: React.ReactNode,
+    action?: React.ReactNode,
+    className?: string,
+    orientation?: "vertical" | "horizontal" | undefined,
+    onSected?(i: number): void
+  }) {
+  const [api, setApi] = React.useState<CarouselApi>()
+
+  React.useEffect(() => {
+    if (!api) {
+      return
+    }
+
+    api.on("select", () => {
+      if (onSected) {
+        onSected(api.selectedScrollSnap())
+      }
+    })
+  }, [api])
   return (
     <Carousel opts={{
-      align: "start"
-    }}>
-      <CarouselContent >
+      align: "start",
+    }}
+      orientation={orientation}
+      setApi={setApi}
+    >
+      <CarouselContent className={className}>
         {children}
       </CarouselContent>
       {action}
-    </Carousel>
+    </Carousel >
+  )
+}
+function MainCarouselHover({ children, className }:
+  {
+    children: React.ReactNode,
+    className?: string,
+  }) {
+
+  return (
+    <Carousel opts={{
+      align: "start",
+    }}
+    >
+      <CarouselContentHover className={className}>
+        {children}
+      </CarouselContentHover>
+    </Carousel >
   )
 }
 export {
@@ -297,4 +359,5 @@ export {
   MainCarousel,
   CarouselPrevious,
   CarouselNext,
+  MainCarouselHover
 }

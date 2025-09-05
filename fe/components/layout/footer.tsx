@@ -1,11 +1,11 @@
 import menudata from '@/tempdata/menufooter';
 import { Menu } from 'antd';
 import { MenuItem } from '@/components/ui/menu';
+import { Fragment } from 'react';
 
 export default function Footer() {
     return (
         <footer className=" bg-white min-h-100">
-
             <div className="max-w-350 mx-auto">
                 <div className="py-5">
                     <div className="px-3.75">
@@ -36,7 +36,7 @@ export default function Footer() {
                                     <h3 className="text-[20px] leading-6 font-bold">Kết nối với chúng tôi</h3>
                                 </div>
                                 <div>
-                                    <ol className="flex">
+                                    <ul className="flex">
                                         <li className="w-8 h-8  border border-black text-center rounded-full">
                                             <a href="#" className=" text-[14px]  leading-7.5 ">
                                                 <i className="ri-facebook-fill"></i></a>
@@ -46,7 +46,7 @@ export default function Footer() {
                                                 <i className="ri-youtube-line"></i>
                                             </a>
                                         </li>
-                                    </ol>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +96,10 @@ export default function Footer() {
                                     </a>
                                 </div>
                             </div>
-                            <MenuF></MenuF>
+                            {/* <span className='sm:'>
+                                <MenuF></MenuF>
+                            </span> */}
+                            <MenuF2></MenuF2>
                         </div>
                     </div>
                 </div>
@@ -139,6 +142,51 @@ function MenuF() {
 
             />
         })
+    )
+}
+
+function MenuF2() {
+    const items: MenuItem[][] =
+        menudata.map((v, i) => {
+            return [{
+
+                className: "flex-1 lg:basis-1/4   grow-0 shrink-0 leading-5.5 lg:px-3.75",
+                label: <div className='font-bold text-[18px] leading-5.5 text-black'>{v.title}</div>,
+                key: i,
+                children:
+                    v.children.map((vc, ic) => {
+                        return {
+                            label: <li className="hover:text-f mb-2 px-0"><a href="#"> {vc}</a></li>,
+                            key: ic,
+
+                        }
+                    })
+            }]
+        })
+
+
+    return (
+        <Fragment>
+            {
+                menudata.map((v) => {
+                    return (
+                        <ol key={v.title} className='flex-1 lg:basis-1/4   grow-0 shrink-0 leading-5.5 lg:px-3.75'>
+                            <h2 className='font-bold pt-3.75 pb-4 text-[18px] leading-5.5 text-black'>{v.title}</h2>
+                            {
+                                v.children.map((vc, i) => {
+                                    return (
+                                        <li key={vc + i} className="hover:text-f  mb-2 px-0">
+                                            <a className='text-[14px] font-normal' href="#"> {vc}
+                                            </a>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ol>
+                    )
+                })
+            }
+        </Fragment>
     )
 }
 

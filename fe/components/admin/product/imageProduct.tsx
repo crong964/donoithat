@@ -1,6 +1,6 @@
 "use client"
 import { setOpen } from "@/redux/admin/product/mediaLibraryRedux";
-import { RootState } from "@/redux/reduxRoot";
+import { RootState } from "@/redux/admin/reduxRoot";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 interface IimageProduct {

@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
-import productRedux from './admin/product/productRedux'
-import mediaLibraryRedux from './admin/product/mediaLibraryRedux'
-import categoryRedux from './admin/category/categoryRedux'
+import productRedux from './product/productRedux'
+import mediaLibraryRedux from './product/mediaLibraryRedux'
+import categoryRedux from './category/categoryRedux'
 
 export const store = configureStore({
     reducer: {

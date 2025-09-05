@@ -1,5 +1,5 @@
 import { setTypeProduct } from "@/redux/admin/product/productRedux"
-import { RootState } from "@/redux/reduxRoot"
+import { RootState } from "@/redux/admin/reduxRoot"
 import { category } from "@/tempdata/category"
 import { Select } from "antd"
 import { memo } from "react"

@@ -1,5 +1,5 @@
 import { setCategory } from "@/redux/admin/category/categoryRedux"
-import { RootState } from "@/redux/reduxRoot"
+import { RootState } from "@/redux/admin/reduxRoot"
 import { category } from "@/tempdata/category"
 import removeAccents from "@/util/RemoveAccents"
 import { Button, Input } from "antd"

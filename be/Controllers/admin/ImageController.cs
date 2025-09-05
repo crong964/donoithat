@@ -1,7 +1,7 @@
 using be.Entity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace be.Controllers;
+namespace be.Controllers.admin;
 
 
 

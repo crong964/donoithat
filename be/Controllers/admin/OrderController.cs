@@ -7,7 +7,7 @@ using be.Service.Implement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-namespace be.Controllers;
+namespace be.Controllers.admin;
 
 [Authorize]
 [ApiController]

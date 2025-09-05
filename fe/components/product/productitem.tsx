@@ -1,19 +1,36 @@
 import PriceFormat from "@/util/Price";
 import { iProduct } from "./interface";
+import Link from "next/link";
+import { MainCarouselHover } from "../ui/carousel";
 
 export default function ProductItem(p: iProduct) {
     return (
-        <a href="/product" className="basis-1/2 lg:basis-1/5 flex flex-col grow-0 px-1.75 mb-3.5">
+        <div className="basis-1/2 lg:basis-1/5 flex flex-col grow-0 px-1.75 mb-3.5">
             <div className="flex flex-col grow shadow-pro bg-white cursor-pointer hover:shadow-pro-hover items-baseline ">
                 <div className="p-1.25">
-                    <img src={p.imageUrl} className="w-full min-h-45 h-auto aspect-square" alt="" srcSet="" />
+                    <Link href={`/product/${p.slug}`}>
+                        <MainCarouselHover className="flex  h-45 ">
+                            {
+                                p.imageUrls
+                                    .map((v, i) => {
+                                        return (
+                                            <img src={v} className="basis-full min-h-45 h-auto aspect-square" alt="" srcSet="" />
+                                        )
+                                    })
+                            }
+                        </MainCarouselHover>
+
+                    </Link>
+
                 </div>
                 <div className="px-3.5 py-2.5 flex flex-col grow items-center">
                     <h1 className="text-[12px] leading-4.25 text-[#9a9a9a] mb-1.25 font-medium">
-                        IVY
+                        <Link href={`/product/${p.slug}`}>
+                            {p.suplier}
+                        </Link>
                     </h1>
                     <h3 className="pb-1.25">
-                        <a className="text-[14px] leading-4.25 text-center line-clamp-2" href="#">{p.nameProduct}</a>
+                        <Link href={`/product/${p.slug}`} className="text-[14px] leading-4.25 text-center line-clamp-2" >{p.nameProduct}</Link>
                     </h3>
                     <p className="font-bold text-sm">{PriceFormat(p.mainPrice / 100 + "")}₫</p>
                     <div className="mt-auto">
@@ -34,6 +51,6 @@ export default function ProductItem(p: iProduct) {
                     </div>
                 </div>
             </div>
-        </a>
+        </div>
     )
 }

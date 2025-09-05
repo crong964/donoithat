@@ -1,5 +1,5 @@
 import { setTypeProduct, setVendor } from "@/redux/admin/product/productRedux"
-import { RootState } from "@/redux/reduxRoot"
+import { RootState } from "@/redux/admin/reduxRoot"
 import vendors from "@/tempdata/vendors"
 import { Select } from "antd"
 import { memo } from "react"

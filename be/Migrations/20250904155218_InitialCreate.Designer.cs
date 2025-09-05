@@ -11,7 +11,7 @@ using be.Entity;
 namespace be.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250831084816_InitialCreate")]
+    [Migration("20250904155218_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -139,9 +139,20 @@ namespace be.Migrations
                     b.Property<long>("Quality")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Suplier")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryEntityCategoryId");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
 
                     b.ToTable("Product");
                 });

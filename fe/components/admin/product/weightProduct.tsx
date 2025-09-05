@@ -1,5 +1,5 @@
 import { setWeightProduct } from "@/redux/admin/product/productRedux"
-import { RootState } from "@/redux/reduxRoot"
+import { RootState } from "@/redux/admin/reduxRoot"
 import { Input } from "antd"
 import { useDispatch, useSelector } from "react-redux"
 

@@ -1517,9 +1517,10 @@ const data = require("./crawl_data.json")
 
 
 function Convert(params) {
+    let ii = 0
     let op = []
     params.options.forEach((v) => {
-        op.push({ 'op': v, e: [] })
+        op.push({ 'name': v, options: [] })
     })
     let opv = {}
 
@@ -1527,9 +1528,10 @@ function Convert(params) {
         let ops = element.options
         ops.forEach((v, i) => {
             if (opv[v] == undefined) {
-                op[i].e.push({ id: Date.now(), name: v })
+                op[i].options.push({ id: Date.now() + ii + Math.round(Math.random() * 100000), name: v })
                 opv[v] = true
             }
+            ii += 1
         })
     });
 
@@ -1541,21 +1543,24 @@ function Convert(params) {
 function ConvertProduct(params) {
     let op = Convert(params)
     let f = {
+
         nameProduct: params.title,
         mainPrice: params.price,
+        suplier: params.vendor,
+        slug: params.handle,
         typeProduct: params.category,
         description: params.description || "",
-        productClassification: JSON.stringify(Convert(params)),
+        productClassification: JSON.stringify(op),
         quality: params.variants.reduce((preValue, cur) => {
             return cur.inventory_quantity + preValue
         }, 0),
         imageFiles: params.images,
-        ProductVariants: params.variants.reduce((preValue, cur) => {
+        productVariants: params.variants.reduce((preValue, cur) => {
             let variantId = "";
             let variantName = ""
             cur.options.forEach((v, i) => {
                 variantName += `${v} `
-                op[i].e.forEach((op1) => {
+                op[i].options.forEach((op1) => {
                     if (op1.name == v) {
                         variantId += `${op1.id} `
                     }
@@ -1563,11 +1568,12 @@ function ConvertProduct(params) {
             })
 
             return [...preValue, {
+                productVariantId: cur.id+"",
                 variantId: variantId.trim(),
                 variantName: variantName.trim(),
                 price: cur.price,
                 quality: cur.old_inventory_quantity,
-                image: cur.featured_image?.src|| params.images[0],
+                image: cur.featured_image?.src || params.images[0],
                 position: cur.featured_image?.position || 0,
                 weight: cur.weight
             }]

@@ -53,19 +53,6 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
         return tokenHandler.WriteToken(token);
     }
 
-
-
-    [HttpGet]
-    public ActionResult<string> Test()
-    {
-
-        var tokenStorage = HttpContext.Request.Headers.Authorization;
-        var handler = new JwtSecurityTokenHandler();
-        var token = handler.ReadJwtToken(tokenStorage[0]?.Replace("Bearer ", ""));
-
-
-        return token.Claims.First(claim => claim.Type == "id").Value;
-    }
 }
 
 

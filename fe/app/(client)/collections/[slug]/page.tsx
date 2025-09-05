@@ -1,5 +1,6 @@
-import Navi from "@/components/layout/navi"
+import Navi, { iNavi } from "@/components/layout/navi"
 import ProductItem from "@/components/product/productitem"
+import Pagination from "@/components/uicustom/panination"
 import { getProduct } from "@/service/productService"
 import Link from "next/link"
 
@@ -14,9 +15,11 @@ export default async function Colection(params:
     if (data == null || data.productModels == undefined) {
         return <></>
     }
+    const ls: iNavi[] = [
+        { name: "Danh mục", url: "/collections/all" }, { name: param.slug == null || param.slug == "all" ? "Tất cả sản phẩm" : data.nameCate, url: `/collections/${param.slug}` }]
     return (
         <>
-            <Navi />
+            <Navi ls={ls} />
             <div className="flex">
                 <nav className="max-lg:hidden basis-1/4 px-3.75">
                     <section className="bg-white shadow-a rounded-sm mb-3.5">
@@ -53,17 +56,22 @@ export default async function Colection(params:
                     <img src="/slide_4_img.jpg" alt="" srcSet="" />
                     <div className="max-lg:px-3.75 py-2.5 lg:py-3.75">
                         <div className="flex max-lg:flex-col lg:items-center">
-                            <h1 className="text-f font-bold text-[24px] leading-7.25">Tủ kệ</h1>
+                            <h1 className="text-f font-bold text-[24px] leading-7.25">{data.nameCate || "Tất cả sản phẩm"}</h1>
                             <span className="lg:pl-7.5 text-[14px] leading-5 tracking-normal">
-                                <b>15</b>
+                                <b>{data.totalItem}</b>
                                 <span className=""> sản phẩm</span>
                             </span>
                         </div>
                     </div>
                     <div className="flex flex-wrap">
                         {data.productModels.map((v) => {
-                            return <ProductItem {...v} key={v.productId} />
+                            return <ProductItem {...v} key={v.slug} />
                         })}
+                    </div>
+                    <div>
+                        <Pagination page={parseInt(searchParams.page || "1")}
+                            total={data.totalPage}
+                            url={param.slug == null ? "/collections/all" : `/collections/${param.slug}`} />
                     </div>
                 </div>
             </div>

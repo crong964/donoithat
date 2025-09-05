@@ -136,9 +136,20 @@ namespace be.Migrations
                     b.Property<long>("Quality")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Suplier")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryEntityCategoryId");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
 
                     b.ToTable("Product");
                 });

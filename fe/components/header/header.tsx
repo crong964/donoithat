@@ -13,7 +13,7 @@ export default async function Header() {
             <Link href="/">
                 <img src="/topbar_img.jpg" className="w-full h-auto" alt="" srcSet="" />
             </Link>
-            <div className="">
+            <header className="">
                 <div className="bg-f pt-2.5 pb-2.5 lg:pt-4.5 lg:pb-3.5">
                     <div className="max-w-350  mx-auto gap-5 flex max-lg:items-center max-lg:px-1.75">
                         <div className="max-lg:flex-1">
@@ -40,7 +40,7 @@ export default async function Header() {
                         <Search />
                     </div>
                 </div>
-                <div className="max-lg:hidden max-w-350 mx-auto  uppercase px-3.75">
+                <nav className="max-lg:hidden max-w-350 mx-auto  uppercase px-3.75">
                     <ul className="text-f fill-f font-medium flex flex-wrap gap-0.75 justify-center">
                         {data.map((v, i) => {
                             return (
@@ -52,8 +52,8 @@ export default async function Header() {
                             )
                         })}
                     </ul>
-                </div>
-            </div>
+                </nav>
+            </header>
         </>
     )
 }

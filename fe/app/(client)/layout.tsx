@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/layout/footer";
+import ReduxClientComponent from "@/components/client/reduxClientComponent";
 
 
 
@@ -24,11 +25,16 @@ export default function RootLayout({
       <body
         className="bg-a overflow-x-hidden"
       >
-        <Header></Header>
-        <main className="max-w-350 mx-auto pb-7.5">
-          {children}
-        </main>
-        <Footer />
+        <ReduxClientComponent children={
+          <>
+            <Header></Header>
+            <main className="max-w-350 mx-auto pb-7.5">
+              {children}
+            </main>
+            <Footer />
+          </>}
+        />
+
       </body>
     </html>
   );

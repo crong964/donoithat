@@ -1,7 +1,7 @@
 export interface IProductClassification {
     name: string
     id: string
-    options: {
+    options: { 
         id: string
         name: string
     }[]

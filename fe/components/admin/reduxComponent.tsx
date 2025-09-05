@@ -1,6 +1,6 @@
 'use client'
 
-import { store } from "@/redux/reduxRoot"
+import { store } from "@/redux/admin/reduxRoot"
 import { Provider } from 'react-redux'
 
 import React from "react"

@@ -3,7 +3,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { ICcategoryItem } from "./interface"
 import { setIdEdit } from "@/redux/admin/category/categoryRedux"
-import { RootState } from "@/redux/reduxRoot"
+import { RootState } from "@/redux/admin/reduxRoot"
 import { Wrench } from "lucide-react"
 
 export default function CategoryItem(p: {

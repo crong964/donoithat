@@ -67,9 +67,11 @@ namespace be.Migrations
                 columns: table => new
                 {
                     ProductId = table.Column<string>(type: "TEXT", nullable: false),
+                    Slug = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     ImageUrl = table.Column<string>(type: "TEXT", nullable: false),
                     ProductClassification = table.Column<string>(type: "TEXT", nullable: false),
+                    Suplier = table.Column<string>(type: "TEXT", nullable: false),
                     MainPrice = table.Column<long>(type: "INTEGER", nullable: false),
                     NameProduct = table.Column<string>(type: "TEXT", nullable: false),
                     Quality = table.Column<long>(type: "INTEGER", nullable: false),
@@ -189,6 +191,12 @@ namespace be.Migrations
                 name: "IX_Product_CategoryEntityCategoryId",
                 table: "Product",
                 column: "CategoryEntityCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Product_Slug",
+                table: "Product",
+                column: "Slug",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductVariant_ProductEntityProductId",

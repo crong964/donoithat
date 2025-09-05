@@ -7,7 +7,7 @@ namespace be.Controllers;
 
 
 [ApiController]
-[Route("api/user")]
+[Route("api/admin/user")]
 public class UserController(DatabaseContext context) : ControllerBase
 {
     private readonly DatabaseContext _context = context;

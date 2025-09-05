@@ -22,7 +22,7 @@ import {
 } from '@dnd-kit/sortable';
 import { IinputImage } from "./interface";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/reduxRoot";
+import { RootState } from "@/redux/admin/reduxRoot";
 import { addImageUrls, addStringFiles, removeImageUrls, removeStringFiles, swapImage } from "@/redux/admin/product/productRedux";
 
 export default function ImagesInput() {

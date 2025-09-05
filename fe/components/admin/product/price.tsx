@@ -1,5 +1,5 @@
 import { setMainPriceProduct, setMinMaxPrice } from "@/redux/admin/product/productRedux"
-import { RootState } from "@/redux/reduxRoot"
+import { RootState } from "@/redux/admin/reduxRoot"
 import PriceFormat from "@/util/Price"
 import { Input } from "antd"
 import { useEffect } from "react"

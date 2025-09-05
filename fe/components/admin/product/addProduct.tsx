@@ -8,7 +8,7 @@ import React, { useState } from "react"
 import ImagesInput from "./imagesInput"
 import { useDispatch, useSelector } from "react-redux"
 import ProductClassification from "./productClassification"
-import { RootState } from "@/redux/reduxRoot"
+import { RootState } from "@/redux/admin/reduxRoot"
 import { setDescriptionProduct, setNameProduct, setTypeProduct } from "@/redux/admin/product/productRedux"
 import Category from './category'
 import Vendor from './vendor'

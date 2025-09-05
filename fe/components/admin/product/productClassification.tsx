@@ -7,7 +7,7 @@ import { IPrice, IProductVariantsDetailPros } from "./interface"
 import Count from "@/util/Count"
 import PriceFormat from "@/util/Price"
 import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "@/redux/reduxRoot"
+import { RootState } from "@/redux/admin/reduxRoot"
 import {
     addProductClassifications,
     setIamgeVariants,
