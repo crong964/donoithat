@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using be.Entity;
 using be.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 
 namespace be.Controllers.admin;
 
-
+[Authorize]
 [ApiController]
 [Route("/api/admin/token")]
 public class AuthorizeController(DatabaseContext context) : ControllerBase
@@ -53,7 +54,12 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
         return tokenHandler.WriteToken(token);
     }
 
+    [HttpGet("test")]
+    public ActionResult<string> Test2()
+    {
 
+        return "vào";
+    }
 
     [HttpGet]
     public ActionResult<string> Test()

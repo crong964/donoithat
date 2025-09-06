@@ -1,4 +1,20 @@
+'use client'
+import SubmitButton from "@/components/button/submitbuttom";
+import { loginUser } from "@/service/userService";
+import Form from "next/form";
+import Link from "next/link";
+import { useActionState, useEffect } from "react";
+import { toast } from "react-toastify";
+
 export default function LoginPage() {
+    const [message, formAction, isPending] = useActionState(loginUser, undefined)
+    useEffect(() => {
+        toast.error(message)
+
+        return () => {
+
+        };
+    }, [message]);
     return (
         <div className="px-3.75">
             <div className="px-7.5 pb-7.5 pt-6.25 mt-6.75">
@@ -12,16 +28,22 @@ export default function LoginPage() {
                         </h4>
                     </div>
 
-                    <form>
+                    <Form action={formAction}>
                         <div className="mb-6.25">
                             <label htmlFor="">
-                                <input type="text" className="border-boder text-[14px] bg-input focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
+                                <input type="email"
+                                    name="account"
+                                    value="huy91027@gmail.com"
+                                    className="border-boder text-[14px] bg-input focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
                                     placeholder="Vui lòng nhập email của bạn" />
                             </label>
                         </div>
                         <div className="">
                             <label htmlFor="">
-                                <input type="password" className="border-boder text-[14px] bg-input focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
+                                <input
+                                    value="a"
+                                    name="password"
+                                    type="password" className="border-boder text-[14px] bg-input focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
                                     placeholder="Vui lòng nhập mật khẩu" />
                             </label>
                         </div>
@@ -31,13 +53,27 @@ export default function LoginPage() {
                             and <Link className="text-[#2962ff]" href="https://policies.google.com/terms" target="_blank" rel="noreferrer"> Terms of Service</Link> apply.
                         </div>
                         <div className="flex items-center">
-                            <input type="submit" className="px-8.75 text-[14px] rounded-sm leading-11.25 bg-f uppercase font-semibold text-white" value="Đăng nhập" />
+                            <SubmitButton
+                                loading={
+                                    <button type="button"
+                                        className="px-8.75 cursor-progress rounded-sm leading-11.25
+                                         bg-loadingbg uppercase font-semibold text-white"
+                                    >
+                                        Đăng nhập
+                                    </button>}
+                            >
+                                <button type="submit"
+                                    className="px-8.75 cursor-pointer rounded-sm leading-11.25 bg-f uppercase font-semibold text-white"
+                                >
+                                    Đăng nhập
+                                </button>
+                            </SubmitButton>
                             <div className="pl-7.5 mr-auto text-[14px] leading-5 font-normal">
                                 <p>Bạn chưa có tài khoản? <Link className="text-[#2962ff]" href="/account">Quên mật khẩu?</Link></p>
                                 <p>Bạn quên mật khẩu? <Link className="text-[#2962ff]" href="/account/register">Đăng ký</Link> </p>
                             </div>
                         </div>
-                    </form>
+                    </Form>
                 </div>
             </div>
         </div>

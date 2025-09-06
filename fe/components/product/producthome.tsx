@@ -1,19 +1,55 @@
+'use client'
 import Link from "next/link";
 import { iProduct } from "./interface";
 import PriceFormat from "@/util/Price";
+import { Carousel, CarouselItem, MainCarouselHover, useCarousel } from "../ui/carousel";
+import { Eye } from "lucide-react";
+import { useState } from "react";
 
-export default function ProductHome(p: iProduct) {
+function ProductHome2(p: iProduct) {
+    const { carouselRef, scrollNext, scrollPrev } = useCarousel()
+    const [s, S] = useState(false)
     return (
-        <div className="basis-1/2  lg:basis-1/5 grow-0 shrink-0 px-0.5 lg:px-1.75 pb-3.5">
-            <div className="w-full bg-white flex flex-col h-full shadow-pro hover:shadow-pro-hover duration-300">
-
-                <Link href={`/product/${p.slug}`}>
-                    <div className="h-60">
-                        <img src={p.imageUrl} className="w-full h-60" alt="" srcSet="" />
+        <div onMouseEnter={() => {
+            S(true)
+            scrollNext()
+        }}
+            onMouseLeave={() => {
+                S(false)
+                scrollPrev()
+            }} className="h-full">
+            <div
+                className="w-full bg-white flex flex-col h-full shadow-pro hover:shadow-pro-hover duration-300">
+                <Link href={`/product/${p.slug}`} className="p-1.25 relative">
+                    <div
+                        ref={carouselRef}
+                        className="overflow-hidden"
+                        data-slot="carousel-content"
+                    >
+                        <div className="flex">
+                            {
+                                p.imageUrls
+                                    .map((v, i) => {
+                                        return (
+                                            <CarouselItem key={v} className="basis-full ">
+                                                <img key={v} src={v} className=" max-h-60 h-auto w-full"
+                                                    alt={p.nameProduct}
+                                                    srcSet="" />
+                                            </CarouselItem>
+                                        )
+                                    })
+                            }
+                        </div>
                     </div>
-
+                    {
+                        s ?
+                            <div className="flex justify-center items-center absolute top-0 left-0 w-full h-full">
+                                <div className="size-10 rounded-full flex justify-center items-center bg-a">
+                                    <Eye />
+                                </div>
+                            </div> : <></>
+                    }
                 </Link>
-
                 <div className="py-2.5 flex flex-col h-full items-center text-center font-medium px-3.5">
                     <p className="mb-1.25 uppercase text-[12px] ">
                         <Link href="/">{p.suplier}</Link>
@@ -44,5 +80,16 @@ export default function ProductHome(p: iProduct) {
                 </div>
             </div>
         </div >
+    )
+}
+export default function ProductHome(p: iProduct) {
+    return (
+        <Carousel opts={{
+            align: "start",
+        }}
+            className="basis-1/2  lg:basis-1/5 grow-0 shrink-0 px-0.5 lg:px-1.75 pb-3.5"
+        >
+            <ProductHome2 {...p} />
+        </Carousel>
     )
 }

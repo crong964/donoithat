@@ -3,7 +3,7 @@ using be.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace be.Controllers;
+namespace be.Controllers.admin;
 
 
 [ApiController]

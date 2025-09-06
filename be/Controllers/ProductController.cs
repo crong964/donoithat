@@ -46,9 +46,9 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         }
         else
         {
-            productEntities = await _context.Product
-                .Include(x => x.ImageEntities)
-                 .Where(x => x.CategoryEntity.Slug == productGetModel.Slug ||
+            productEntities = await _context.Product.
+            Include(x => x.ImageEntities).
+            Where(x => x.CategoryEntity.Slug == productGetModel.Slug ||
            (x.CategoryEntity.CategoryParent != null && x.CategoryEntity.CategoryParent.Slug == productGetModel.Slug)).
                  Skip(productGetModel.Page * limit - limit).Take(limit).
                  Select(x => x).ToListAsync();
@@ -82,7 +82,8 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
 
         if (productEntity != null)
         {
-            var productEntities = await _context.Product.
+            var productEntities = await _context.Product
+            .Include(x => x.ImageEntities).
             Where(x => x.CategoryEntity.Slug == productEntity.CategoryEntity.Slug && x.ProductId != productEntity.ProductId)
             .ToArrayAsync();
 

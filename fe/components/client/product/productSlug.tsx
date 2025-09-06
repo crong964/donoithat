@@ -86,7 +86,15 @@ export default function ProductSlug(productdetail: iProductDetail) {
 
     return (
         <>
-            <SaveProduct {...product as any} imageUrl={product.imageEntities[0]} />
+            <SaveProduct
+                nameProduct={product.nameProduct}
+                quality={product.quality as any}
+                slug={product.slug}
+                suplier={product.slug}
+                key={product.slug}
+                imageUrls={product.imageEntities}
+                mainPrice={product.mainPrice}
+                imageUrl="" />
             <div className="max-lg:hidden">
                 <Navi ls={navi} />
             </div>

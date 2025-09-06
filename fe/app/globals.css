@@ -46,6 +46,7 @@
 
 @theme {
   --color-f: #c4123f;
+  --color-loadingbg: #c4123f6e;
   --color-a: #F2F2F2;
   --color-collection1-bg: #f8dbde;
   --color-home-coupon: #fdf0d1;

@@ -1,4 +1,20 @@
+'use client'
+import SubmitButton from "@/components/button/submitbuttom";
+import { createUser } from "@/service/userService";
+import Form from "next/form";
+import Link from "next/link";
+import { useActionState, useEffect } from "react";
+import { toast } from "react-toastify";
+
 export default function RegisterPage() {
+    const [message, formAction, isPending] = useActionState(createUser, null);
+    useEffect(() => {
+        toast.error(message)
+
+        return () => {
+
+        };
+    }, [message]);
     return (
         <div className="px-3.75">
             <div className="px-7.5 pb-7.5 pt-6.25 mt-6.75">
@@ -12,49 +28,44 @@ export default function RegisterPage() {
                         </h4>
                     </div>
 
-                    <form>
+                    <Form action={formAction}>
                         <div className="mb-6.25">
                             <label htmlFor="">
-                                <input type="text" className="border-boder text-[14px] bg-input focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
-                                    placeholder="Họ" />
+                                <input required type="text"
+                                    name="fullName"
+                                    value="a"
+                                    className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
+                                    placeholder="Họ và tên" />
                             </label>
                         </div>
                         <div className="mb-6.25">
                             <label htmlFor="">
-                                <input type="text" className="border-boder text-[14px] bg-input focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
-                                    placeholder="Tên" />
+                                <input required type="text"
+                                    value="a"
+                                    name="address" className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
+                                    placeholder="Địa chỉ" />
                             </label>
                         </div>
-                        <div className="mb-6.25 flex">
-                            <label htmlFor="nn" className="mr-5">
-                                <div className="relative pl-6">
-                                    <input type="radio" id="nn" name="sex" className="absolute size-4.5 left-0 top-1/2 -translate-y-1/2" />
-                                    <span className=" text-[14px] font-normal mr-5">Nữ</span>
-                                </div>
+                        <div className="mb-6.25">
+                            <label htmlFor="">
+                                <input value="a" required type="text" name="phoneNumber" className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
+                                    placeholder="Số điện thoại" />
                             </label>
-                            <label htmlFor="n" className="">
-                                <div className="relative pl-6">
-                                    <input type="radio" id="n" name="sex" className="absolute size-4.5  left-0 top-1/2 -translate-y-1/2" />
-                                    <span className=" text-[14px] font-normal mr-5">Nam</span>
-                                </div>
+                        </div>
 
-                            </label>
-                        </div>
                         <div className="mb-6.25">
                             <label htmlFor="">
-                                <input type="text" className="border-boder text-[14px] bg-input focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
-                                    placeholder="mm/dd/yyyy" />
-                            </label>
-                        </div>
-                        <div className="mb-6.25">
-                            <label htmlFor="">
-                                <input type="text" className="border-boder text-[14px] bg-input focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
+                                <input
+                                    value="huy91027@gmail.com"
+                                    required type="email" name="account" className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
                                     placeholder="Email" />
                             </label>
                         </div>
                         <div className="mb-1.25">
                             <label htmlFor="">
-                                <input type="text" className="border-boder text-[14px] bg-input focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
+                                <input required
+                                    value="a"
+                                    type="password" name="password" className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
                                     placeholder="Mật khẩu" />
                             </label>
                         </div>
@@ -64,12 +75,50 @@ export default function RegisterPage() {
                             and <Link className="text-[#2962ff]" href="https://policies.google.com/terms" target="_blank" rel="noreferrer"> Terms of Service</Link> apply.
                         </div>
                         <div className="flex items-center">
-                            <input type="submit" className="px-8.75 rounded-sm leading-11.25 bg-f uppercase font-semibold text-white" value="Đăng ký" />
+                            <SubmitButton
+                                loading={
+                                    <button type="button"
+                                        className="px-8.75 cursor-progress rounded-sm leading-11.25
+                                         bg-loadingbg uppercase font-semibold text-white"
+                                    >
+                                        Đăng ký
+                                    </button>}
+                            >
+                                <button type="submit"
+                                    className="px-8.75 cursor-pointer rounded-sm leading-11.25 bg-f uppercase font-semibold text-white"
+                                >
+                                    Đăng ký
+                                </button>
+                            </SubmitButton>
+
                             <p className="pl-7.5 mr-auto text-[14px] leading-5 font-normal">Bạn đã có tài khoản? <Link className="text-[#2962ff]" href="/account/login">Đăng nhập ngay</Link></p>
                         </div>
-                    </form>
+                    </Form>
                 </div>
             </div>
         </div>
     )
 }
+
+
+{/* <div className="mb-6.25 flex">
+                            <label htmlFor="nn" className="mr-5">
+                                <div className="relative pl-6">
+                                    <input required type="radio" id="nn" name="sex" className="absolute size-4.5 left-0 top-1/2 -translate-y-1/2" />
+                                    <span className=" text-[14px] font-normal mr-5">Nữ</span>
+                                </div>
+                            </label>
+                            <label htmlFor="n" className="">
+                                <div className="relative pl-6">
+                                    <input required type="radio" id="n" name="sex" className="absolute size-4.5  left-0 top-1/2 -translate-y-1/2" />
+                                    <span className=" text-[14px] font-normal mr-5">Nam</span>
+                                </div>
+
+                            </label>
+                        </div> */}
+{/* <div className="mb-6.25">
+                            <label htmlFor="">
+                                <input required type="text" className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
+                                    placeholder="mm/dd/yyyy" />
+                            </label>
+                        </div> */}

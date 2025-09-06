@@ -1,6 +1,5 @@
 import { iGetProduct, iProductDetail } from "@/components/product/interface"
 import { api } from "@/lib/fetch"
-import { queryObjects } from "v8"
 
 
 export const getProduct = async (p?: { slug: string, page?: string } | undefined): Promise<iGetProduct | undefined> => {
@@ -14,7 +13,7 @@ export const getProduct = async (p?: { slug: string, page?: string } | undefined
 export const getProductBySlug = async (slug: string): Promise<iProductDetail | undefined> => {
 
     let data = await api.get(`/product/getProductBySlug?slug=${slug}`)
-
+    
 
     return data.data
 }

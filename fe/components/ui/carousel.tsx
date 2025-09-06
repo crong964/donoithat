@@ -153,7 +153,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 function CarouselContentHover({ className, ...props }: React.ComponentProps<"div">) {
-  const { carouselRef, orientation, scrollNext, scrollPrev } = useCarousel()
+  const { carouselRef, canScrollNext, orientation, scrollNext, scrollPrev } = useCarousel()
 
   return (
     <div
@@ -163,7 +163,7 @@ function CarouselContentHover({ className, ...props }: React.ComponentProps<"div
     >
       <div
         onMouseEnter={scrollNext}
-        onMouseLeave={scrollPrev}
+        onMouseLeave={() => { scrollPrev(); }}
         className={cn(
           "flex",
           orientation === "horizontal" ? "" : " flex-col",
@@ -184,8 +184,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full",
-        orientation === "horizontal" ? "pl-4" : "pt-4",
+        " shrink-0 grow-0 basis-full",
         className
       )}
       {...props}
@@ -354,6 +353,7 @@ function MainCarouselHover({ children, className }:
 export {
   type CarouselApi,
   Carousel,
+  useCarousel,
   CarouselContent,
   CarouselItem,
   MainCarousel,

@@ -26,10 +26,16 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
 
 
         var user = await _context.User.
-        Where(x => x.Account == loginModel.Account && x.Password == loginModel.Password).FirstOrDefaultAsync();
+        Where(x => x.Account == loginModel.Account
+        ).FirstOrDefaultAsync();
+
         if (user == null)
         {
-            return BadRequest("tài khoản");
+            return BadRequest(new { message = "Tài khoản không tồn tại" });
+        }
+        if (!user.Password.Equals(loginModel.Password))
+        {
+            return BadRequest(new { message = "Mật khẩu không đúng" });
         }
 
         var authClaims = new List<Claim>

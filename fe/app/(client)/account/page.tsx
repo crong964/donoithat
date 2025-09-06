@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function IndexPage() {
     return (
         <div className="px-3.75">

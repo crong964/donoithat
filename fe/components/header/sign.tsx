@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
 
 export default function Sign() {
@@ -61,8 +62,8 @@ export default function Sign() {
                                 </button>
                             </div>
                             <div className="mt-4 text-[12px]">
-                                <div className="mb-1">Khách hàng mới? <a href="/account/register" className="text-f">Tạo tài khoản</a></div>
-                                <div className="mb-1">Quên mật khẩu?  <a href="#" className="text-f">Khôi phục mật khẩu</a></div>
+                                <div className="mb-1">Khách hàng mới? <Link href="/account/register" className="text-f">Tạo tài khoản</Link></div>
+                                <div className="mb-1">Quên mật khẩu?  <Link href="#" className="text-f">Khôi phục mật khẩu</Link></div>
                             </div>
                         </div>
                     </div>
