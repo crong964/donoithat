@@ -14,18 +14,19 @@ public class CartProductVariantModel
     public required long Quality { get; set; }
 
 
-    public static CartProductVariantModel ConvertModelToEntity(ProductVariantEntity item)
+    public static CartProductVariantModel ConvertModelToEntity(
+        ProductVariantEntity item, long Quality)
     {
-        var productVariantModel = new CartProductVariantModel
+        var cartProductVariantModel = new CartProductVariantModel
         {
             Image = item.Image,
             Price = item.Price,
-            Quality = item.Quality,
+            Quality = Quality,
             ProductVariantName = item.ProductVariantName,
             VariantName = item.VariantName,
             ProductVariantId = item.ProductVariantId,
-            ProductId = item.ProductEntity.ProductId
+            ProductId = item.ProductEntity.Slug
         };
-        return productVariantModel;
+        return cartProductVariantModel;
     }
 }

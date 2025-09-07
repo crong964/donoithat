@@ -1,6 +1,7 @@
 'use server'
+import { iProductVariantCart } from "@/components/product/interface";
 import { api, errorResponse } from "@/lib/fetch"
-import Await from "@/util/Await";
+import { revalidatePath } from "next/cache";
 
 
 export const addProductCart = async (currentState: any, formData: FormData) => {
@@ -12,8 +13,6 @@ export const addProductCart = async (currentState: any, formData: FormData) => {
             mess: "Thiếu thông tin"
         }
     }
-
-
     try {
         let data = await api.post("/cart", {
             "productVariantId": productVariantId,
@@ -21,7 +20,7 @@ export const addProductCart = async (currentState: any, formData: FormData) => {
         })
         return {
             err: false,
-            mess: "ok"
+            mess: data.data.message
         }
     } catch (error) {
         return {
@@ -29,5 +28,37 @@ export const addProductCart = async (currentState: any, formData: FormData) => {
             mess: errorResponse(error).message || "Có lỗi"
         }
     }
+
+}
+
+
+export const getAllProductCart = async (): Promise<iProductVariantCart[]> => {
+    try {
+        let data = await api.get("/cart")
+        return data.data
+    } catch (error) {
+        console.log(error);
+
+        return []
+    }
+
+}
+
+export const deleteProductCart = async (currentState: any, formData: FormData) => {
+    const productVariantId = formData.get("productVariantId")
+    try {
+        let data = await api.delete("/cart", {
+            data: {
+                productVariantId: productVariantId
+            }
+        })
+
+    } catch (error) {
+        return {
+            err: true,
+            mess: "Xóa thất bại"
+        }
+    }
+    revalidatePath("/cart")
 
 }

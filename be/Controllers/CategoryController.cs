@@ -22,17 +22,15 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
         {
             ls = await _context.Category
                                .Where(x => x.CategoryParent == null)
-
                                .Include(x => x.CategoryChidlren)
                                 .OrderBy(x => x.Index)
                                 .ToListAsync();
         }
         else
         {
-            ls = await _context.Category
-                     .Where(x => x.CategoryParent == null && x.Status == categoryGet.Status)
-
-                     .Include(x => x.CategoryChidlren)
+            ls = await _context.Category.
+            Where(x => x.CategoryParent == null && x.Status == categoryGet.Status).
+            Include(x => x.CategoryChidlren)
                       .OrderBy(x => x.Index)
                       .ToListAsync();
         }

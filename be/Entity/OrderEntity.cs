@@ -29,11 +29,8 @@ public class OrderEntity
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
     public PayStatus Pay { get; set; } = PayStatus.No;
 
-    public required ProductVariantEntity ProductVariantEntity { get; set; }
-    public int Quality { get; set; }
 
     public required string Address { get; set; }
-    public long Price { get; set; }
     public required UserEntity UserEntity { get; set; }
-
+    public List<ProductVariantEntity> ProductVariantEntities { get; } = [];
 }

@@ -17,13 +17,18 @@ public class DatabaseContext : DbContext
     public DbSet<UserEntity> User { get; set; } = null!;
     public DbSet<OrderEntity> Order { get; set; } = null!;
     public DbSet<CartEntity> Cart { get; set; } = null!;
-
+    public DbSet<OrderDetailEntity> OrderDetail { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserEntity>()
        .HasMany(e => e.productVariantEntities)
-       .WithMany(e => e.userEntities)
+       .WithMany(e => e.UserEntities)
        .UsingEntity<CartEntity>();
+
+        modelBuilder.Entity<OrderEntity>()
+       .HasMany(e => e.ProductVariantEntities)
+       .WithMany(e => e.OrderEntities)
+       .UsingEntity<OrderDetailEntity>();
     }
 
 }

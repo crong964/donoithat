@@ -22,6 +22,8 @@ namespace be.Entity
 
         public required ProductEntity ProductEntity { set; get; }
 
-        public List<UserEntity> userEntities { get; } = [];
+        public List<UserEntity> UserEntities { get; } = [];
+
+         public List<OrderEntity> OrderEntities { get; } = [];
     }
 }

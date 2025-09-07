@@ -51,3 +51,12 @@ export interface iVariants {
 
 }
 
+export interface iProductVariantCart {
+    productVariantId: string
+    productId: string
+    productVariantName: string
+    variantName: string
+    price: number
+    image: string
+    quality: number
+}

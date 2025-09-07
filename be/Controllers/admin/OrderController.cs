@@ -22,13 +22,10 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<OrderGetModel>> Orders()
     {
-        _logger.LogInformation("vao");
         var ls = await _context.Order.
-         Include(x => x.UserEntity).Include(x => x.ProductVariantEntity).
+         Include(x => x.UserEntity).
            Select(x => OrderGetModel.ConvertEntity(x))
          .ToArrayAsync();
-
-
         return ls;
     }
 
@@ -88,69 +85,6 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         }
 
         return "ok";
-    }
-
-
-
-
-
-
-    [HttpPost]
-    public async Task<string> OrderAdd(IEnumerable<OrderAdd> orderAdds)
-    {
-        var id = _userService.GetUserId(HttpContext) ?? throw new Exception("chưa đăng nhập");
-
-        var userEntity = await _context.User.FindAsync(id) ?? throw new Exception("không tìm thấy người dùng này");
-        var transaction = await _context.Database.BeginTransactionAsync();
-        try
-        {
-            foreach (var item in orderAdds)
-            {
-                var productVariantEntity = await _context
-                .ProductVariant
-                .SingleOrDefaultAsync(x => x.ProductVariantId == item.ProductVariantId && x.Quality > 0);
-                if (productVariantEntity == null)
-                {
-                    continue;
-                }
-                if (productVariantEntity.Quality < item.Quality)
-                {
-                    continue;
-                }
-
-                await _context.ProductVariant.
-                 Where(x => x.ProductVariantId == item.ProductVariantId &&
-                 x.Quality == productVariantEntity.Quality)
-                 .ExecuteUpdateAsync(setters => setters
-                 .SetProperty(b => b.Quality, productVariantEntity.Quality - item.Quality));
-
-
-                var order = new OrderEntity
-                {
-                    Status = OrderStatus.Pending,
-                    UserEntity = userEntity,
-                    Address = item.Address,
-                    ProductVariantEntity = productVariantEntity,
-                    Quality = item.Quality,
-                    Price = productVariantEntity.Price,
-                };
-                await _context.Order.AddAsync(order);
-            }
-            await _context.SaveChangesAsync();
-            await _context.Database.CommitTransactionAsync();
-        }
-        catch (System.Exception e)
-        {
-            await transaction.RollbackAsync();
-            if (e != null)
-            {
-                _logger.LogError(e.Message);
-            }
-
-            throw new Exception("có lỗi");
-        }
-
-        return "";
     }
 
 

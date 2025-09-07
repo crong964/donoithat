@@ -6,14 +6,17 @@ public class UserInforModel
 {
     public required string FullName { get; set; }
     public required string Account { get; set; }
-
+    public required string PhoneNumber { get; set; }
+    public required string Address { get; set; }
 
     public static UserInforModel Convert(UserEntity userEntity)
     {
         return new UserInforModel
         {
             Account = userEntity.Account,
-            FullName = userEntity.FullName
+            FullName = userEntity.FullName,
+            Address = userEntity.Address,
+            PhoneNumber = userEntity.PhoneNumber
         };
     }
 }
