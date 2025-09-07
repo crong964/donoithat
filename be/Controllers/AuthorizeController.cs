@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using be.Entity;
 using be.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +13,13 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 
 namespace be.Controllers;
 
-
+[Authorize]
 [ApiController]
 [Route("/api/token")]
 public class AuthorizeController(DatabaseContext context) : ControllerBase
 {
     private readonly DatabaseContext _context = context;
+    [AllowAnonymous]
     [HttpPost]
     public async Task<ActionResult<string>> Login(LoginModel loginModel)
     {
@@ -59,6 +61,23 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
         return tokenHandler.WriteToken(token);
     }
 
+
+    [HttpGet("infor")]
+    public async Task<ActionResult> UserInfor()
+    {
+
+        var tokenStorage = HttpContext.Request.Headers.Authorization;
+        var handler = new JwtSecurityTokenHandler();
+        var token = handler.ReadJwtToken(tokenStorage[0]?.Replace("Bearer ", ""));
+        var id = token.Claims.First(claim => claim.Type == "id").Value;
+
+        var user = await _context.User.FindAsync(id);
+        if (user == null)
+        {
+            return NotFound(new { message = "" });
+        }
+        return Ok(UserInforModel.Convert(user));
+    }
 }
 
 

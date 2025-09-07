@@ -21,5 +21,7 @@ namespace be.Entity
         public int Weight { get; set; }
 
         public required ProductEntity ProductEntity { set; get; }
+
+        public List<UserEntity> userEntities { get; } = [];
     }
 }

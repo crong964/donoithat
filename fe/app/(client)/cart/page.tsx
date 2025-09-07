@@ -5,7 +5,7 @@ import ProductCart from "@/components/product/productcart";
 export default function CartPage() {
     return (
         <>
-            <Navi />
+            <Navi ls={[]} />
             <div className="flex max-md:flex-col">
                 <div className="md:basis-8/12 px-3.75 ">
                     <div className="shadow-pro bg-white">

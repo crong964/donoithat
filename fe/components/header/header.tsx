@@ -5,9 +5,14 @@ import Cart from "./Cart"
 import Sidebar from "./Sidebar"
 import Link from "next/link"
 import { getCategory } from "@/service/categoryService"
+import { getUserInfor } from "@/service/userService"
 
 export default async function Header() {
-    let data = await getCategory()
+    let datas = await Promise.all([getCategory(), getUserInfor()])
+    let data = datas[0]
+    let user = datas[1]
+    
+    
     return (
         <>
             <Link href="/">
@@ -31,7 +36,7 @@ export default async function Header() {
                                 <div className="hidden flex-1 lg:block">
                                     <Search />
                                 </div>
-                                <Sign />
+                                <Sign {...user} />
                                 <Cart />
                             </div>
                         </div>

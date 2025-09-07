@@ -54,13 +54,6 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
         return tokenHandler.WriteToken(token);
     }
 
-    [HttpGet("test")]
-    public ActionResult<string> Test2()
-    {
-
-        return "vào";
-    }
-
     [HttpGet]
     public ActionResult<string> Test()
     {

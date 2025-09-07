@@ -3,7 +3,11 @@
 import Link from "next/link"
 import { useState } from "react"
 
-export default function Sign() {
+export default function Sign(p: {
+    fullName?: string;
+    account?: string;
+} | undefined) {
+
     const [s, sS] = useState(false)
     return (
         <div className="lg:ml-5 relative mb-auto ">
@@ -16,14 +20,26 @@ export default function Sign() {
                         <path className="path2" d="M896 1024h-819.2c-42.347 0-76.8-34.451-76.8-76.8 0-3.485 0.712-86.285 62.72-168.96 36.094-48.126 85.514-86.36 146.883-113.634 74.957-33.314 168.085-50.206 276.797-50.206 108.71 0 201.838 16.893 276.797 50.206 61.37 27.275 110.789 65.507 146.883 113.634 62.008 82.675 62.72 165.475 62.72 168.96 0 42.349-34.451 76.8-76.8 76.8zM486.4 665.6c-178.52 0-310.267 48.789-381 141.093-53.011 69.174-54.195 139.904-54.2 140.61 0 14.013 11.485 25.498 25.6 25.498h819.2c14.115 0 25.6-11.485 25.6-25.6-0.006-0.603-1.189-71.333-54.198-140.507-70.734-92.304-202.483-141.093-381.002-141.093z"></path>
                     </svg>
                 </span>
-                <span className="max-lg:hidden text-[13px] leading-[19px]">
-                    Đăng nhập / Đăng ký
-                    <span className="block flex items-center gap-1">Tài khoản của tôi
-                        <svg className=" size-3.25" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 448 512">
-                            <path d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" /></svg>
-                    </span>
-                </span>
+                {
+                    p?.fullName == undefined ?
+                        <>
+                            <span className="max-lg:hidden text-[13px] leading-[19px]">
+                                Đăng nhập / Đăng ký
+                                <span className="block flex items-center gap-1">Tài khoản của tôi
+                                    <svg className=" size-3.25" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 448 512">
+                                        <path d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" /></svg>
+                                </span>
+                            </span></> :
+                        <>
+                            <span className="max-lg:hidden text-[13px] leading-[19px]">
+                                Tài khoản của
+                                <span className="block font-medium flex items-center gap-1">
+                                    {p.fullName}
+                                </span>
+                            </span>
+                        </>
+                }
             </button>
 
             <div className={s ? "" : "hidden"}>

@@ -35,7 +35,13 @@ export const loginUser = async (currentState: any, formData: FormData) => {
     try {
         let data = await api.post("/token", user)
         const cookieStore = await cookies()
-        cookieStore.set("token", data.data)
+        cookieStore.set("token", data.data, {
+            httpOnly: true,
+            maxAge: Date.now() / 1000 + 3600 * 24 * 7,
+            secure:true,
+            sameSite:"strict",
+            
+        })
     } catch (error: any) {
         return errorResponse(error).message
     }
@@ -44,13 +50,13 @@ export const loginUser = async (currentState: any, formData: FormData) => {
     redirect(`/`)
 }
 
-export const testLogin = async () => {
+export const getUserInfor = async (): Promise<{ fullName: string; account: string; } | undefined> => {
     try {
-        let data = await api.get("/admin/token")
+        let data = await api.get("/token/infor")
 
         return data.data
     } catch (error: any) {
-        return errorResponse(error).message
+        return undefined
     }
 }
 export const getToken = async () => {

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using be.Entity;
 
@@ -10,9 +11,11 @@ using be.Entity;
 namespace be.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250906160021_CartQuality")]
+    partial class CartQuality
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -20,15 +23,17 @@ namespace be.Migrations
             modelBuilder.Entity("be.Entity.CartEntity", b =>
                 {
                     b.Property<string>("ProductVariantEntityProductVariantId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserEntityAccount")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<long>("Quality")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ProductVariantEntityProductVariantId", "UserEntityAccount");
+                    b.Property<string>("UserEntityAccount")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasIndex("ProductVariantEntityProductVariantId");
 
                     b.HasIndex("UserEntityAccount");
 

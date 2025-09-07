@@ -3,16 +3,25 @@ import PriceFormat from "@/util/Price";
 import { iProduct } from "./interface";
 import Link from "next/link";
 import { Carousel, CarouselItem, useCarousel } from "../ui/carousel";
+import { useState } from "react";
+import { Eye } from "lucide-react";
 
 function ProductItem2(p: iProduct) {
     const { carouselRef, scrollNext, scrollPrev } = useCarousel()
+    const [s, S] = useState(false)
     return (
-        <div onMouseEnter={scrollNext}
-            onMouseLeave={() => { scrollPrev(); }} className="h-full">
+        <div onMouseEnter={() => {
+            scrollNext()
+            S(true)
+        }}
+            onMouseLeave={() => {
+                scrollPrev()
+                S(false)
+            }} className="h-full">
             <div
                 className="w-full bg-white flex flex-col h-full
                  shadow-pro hover:shadow-pro-hover duration-300">
-                <Link href={`/product/${p.slug}`} className="p-1.25">
+                <Link href={`/product/${p.slug}`} className="p-1.25 relative">
                     <div
                         ref={carouselRef}
                         className="overflow-hidden"
@@ -32,6 +41,14 @@ function ProductItem2(p: iProduct) {
                             }
                         </div>
                     </div>
+                    {
+                        s ?
+                            <div className="flex justify-center items-center absolute top-0 left-0 w-full h-full">
+                                <div className="p-2 rounded-full flex justify-center items-center bg-a">
+                                    <Eye />
+                                </div>
+                            </div> : <></>
+                    }
                 </Link>
                 <div className="py-2.5 flex flex-col h-full items-center text-center font-medium px-3.5">
                     <p className="mb-1.25 uppercase text-[12px] ">

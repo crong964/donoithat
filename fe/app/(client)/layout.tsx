@@ -4,7 +4,6 @@ import Header from "@/components/header/header";
 import Footer from "@/components/layout/footer";
 import ReduxClientComponent from "@/components/client/reduxClientComponent";
 import { ToastContainer, toast } from 'react-toastify';
-import { testLogin } from "@/service/userService";
 
 
 export const metadata: Metadata = {
@@ -17,9 +16,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let f = await testLogin()
-  console.log(f);
-
   return (
     <html lang="en">
       <head>
