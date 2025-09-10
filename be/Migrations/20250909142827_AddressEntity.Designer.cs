@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using be.Entity;
 
@@ -10,9 +11,11 @@ using be.Entity;
 namespace be.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250909142827_AddressEntity")]
+    partial class AddressEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -26,25 +29,24 @@ namespace be.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Lat")
-                        .HasColumnType("REAL");
+                    b.Property<long>("Lag")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<float>("Lng")
-                        .HasColumnType("REAL");
+                    b.Property<long>("Lat")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserEntityAccount")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("AddressId");
 
                     b.HasIndex("UserEntityAccount");
 
-                    b.ToTable("Address");
+                    b.ToTable("AddressEntity");
                 });
 
             modelBuilder.Entity("be.Entity.CartEntity", b =>
@@ -142,12 +144,6 @@ namespace be.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<float>("Lat")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("Lng")
-                        .HasColumnType("REAL");
 
                     b.Property<string>("Note")
                         .IsRequired()
@@ -314,9 +310,7 @@ namespace be.Migrations
                 {
                     b.HasOne("be.Entity.UserEntity", "UserEntity")
                         .WithMany("AddressEntities")
-                        .HasForeignKey("UserEntityAccount")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserEntityAccount");
 
                     b.Navigation("UserEntity");
                 });

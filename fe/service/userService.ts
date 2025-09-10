@@ -19,7 +19,7 @@ export const createUser = async (currentState: any, formData: FormData) => {
         let data = await api.post("/user/create", user)
 
     } catch (error: any) {
-        console.log("ooooooooooooooooooooo00000000000oooo");
+    
         return errorResponse(error).message
     }
 
@@ -54,7 +54,13 @@ export const logoutUser = async () => {
     cookieStore.delete("token")
     revalidatePath("/")
 }
-export const getUserInfor = async (): Promise<{ fullName: string; account: string; } | undefined> => {
+
+export const getUserInfor = async (): Promise<{
+    fullName: string;
+    account: string;
+    phoneNumber: string;
+    address: string
+} | undefined> => {
     try {
         let data = await api.get("/token/infor")
 
@@ -63,6 +69,16 @@ export const getUserInfor = async (): Promise<{ fullName: string; account: strin
         return undefined
     }
 }
+
+
+export const updateUser = async (currentState: any, formData: FormData) => {
+    const user: iLogin = {
+        account: formData.get("account")?.toString() || "",
+        password: formData.get("password")?.toString() || "",
+    }
+    return "ok"
+}
+
 export const getToken = async () => {
     const cookieStore = await cookies()
     return cookieStore.get("token")?.value

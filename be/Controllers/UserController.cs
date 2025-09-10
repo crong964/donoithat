@@ -32,6 +32,7 @@ public class UserController(DatabaseContext context) : ControllerBase
                 FullName = userCreateModel.FullName,
                 Password = userCreateModel.Password,
                 PhoneNumber = userCreateModel.PhoneNumber
+                
             });
             await _context.SaveChangesAsync();
             return Ok(new { message = "Đăng ký thành công" });

@@ -11,8 +11,6 @@ export default async function Header() {
     let datas = await Promise.all([getCategory(), getUserInfor()])
     let data = datas[0]
     let user = datas[1]
-    
-    
     return (
         <>
             <Link href="/">
@@ -36,7 +34,7 @@ export default async function Header() {
                                 <div className="hidden flex-1 lg:block">
                                     <Search />
                                 </div>
-                                <Sign {...user} />
+                                <Sign  {...user} />
                                 <Cart />
                             </div>
                         </div>

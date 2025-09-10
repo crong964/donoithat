@@ -28,8 +28,9 @@ public class OrderEntity
 
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
     public PayStatus Pay { get; set; } = PayStatus.No;
-
-
+    public required float Lat { get; set; }
+    public required float Lng { get; set; }
+    public required string Note { get; set; }
     public required string Address { get; set; }
     public required UserEntity UserEntity { get; set; }
     public List<ProductVariantEntity> ProductVariantEntities { get; } = [];

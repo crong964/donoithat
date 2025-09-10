@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useActionState, useEffect, useState } from "react"
 import { toast } from "react-toastify";
 import SubmitButton from "../button/submitbuttom";
+import { Dot } from "lucide-react";
 
 export default function Sign(p: {
     fullName?: string;
@@ -22,7 +23,7 @@ export default function Sign(p: {
         };
     }, [message]);
     const action = [
-        { name: "Tài khoản của tôi", hrel: "/" },
+        { name: "Tài khoản của tôi", hrel: "/user" },
         { name: "Danh sách địa chỉ", hrel: "/" },
     ]
     return (
@@ -140,7 +141,10 @@ export default function Sign(p: {
                             {
                                 action.map((v) => {
                                     return (
-                                        <li key={v.hrel} className="pl-2.5 mb-1.25 hover:text-f cursor-pointer">
+                                        <li key={v.hrel} className="relative pl-2.5 mb-1.25 hover:text-f cursor-pointer">
+                                            <div className="absolute top-0 -left-2.5 flex items-center ">
+                                                <Dot />
+                                            </div>
                                             <Link href={v.hrel} className="text-[14px]">
                                                 {v.name}
                                             </Link>
@@ -149,8 +153,11 @@ export default function Sign(p: {
                                 })
                             }
                             <Form action={logoutUser}>
-                                <button type="submit" className="pl-2.5 mb-1.25 hover:text-f cursor-pointer">
-                                    Đăng xuất
+                                <button type="submit" className="relative text-[14px] pl-2.5 mb-1.25 hover:text-f cursor-pointer">
+                                    <div className="absolute top-0 -left-2.5 flex items-center ">
+                                        <Dot />
+                                    </div>
+                                    <p>Đăng xuất</p>
                                 </button>
                             </Form>
                         </ul>

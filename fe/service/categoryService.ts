@@ -2,7 +2,12 @@
 import { api } from "@/lib/fetch"
 
 
-export const getCategory = async () => {
-    let data = await api.get("/category")
-    return data.data as MainCateGory[]
+export const getCategory = async (): Promise<MainCateGory[]> => {
+    try {
+        let data = await api.get("/category")
+        return data.data
+    } catch (error) {
+
+    }
+    return []
 }

@@ -18,6 +18,7 @@ public class DatabaseContext : DbContext
     public DbSet<OrderEntity> Order { get; set; } = null!;
     public DbSet<CartEntity> Cart { get; set; } = null!;
     public DbSet<OrderDetailEntity> OrderDetail { get; set; } = null!;
+    public DbSet<AddressEntity> Address { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserEntity>()

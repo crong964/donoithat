@@ -20,24 +20,36 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
     private readonly ILogger<OrderController> _logger = logger;
 
     [HttpGet]
-    public async Task<IEnumerable<OrderGetModel>> Orders()
+    public async Task<ActionResult<IEnumerable<OrderGetModel>>> Orders()
     {
+        var id = _userService.GetUserId(HttpContext);
+        if (id == null)
+        {
+            return BadRequest(new { message = "Chưa đăng nhập" });
+        }
+
+        var userEntity = await _context.User.FindAsync(id);
+        if (userEntity == null)
+        {
+            return BadRequest(new { message = "Không tìm thấy người dùng này" });
+        }
         var ls = await _context.Order.
+        Where(x => x.UserEntity.Account == id).
            Select(x => OrderGetModel.ConvertEntity(x))
          .ToArrayAsync();
-        return ls;
+        return Ok(ls);
     }
 
 
     [HttpPatch("updateStatus")]
-    public async Task<string> OrderUpdate(OrderUpdate orderUpdate)
+    public async Task<ActionResult> OrderUpdate(OrderUpdate orderUpdate)
     {
 
         var orderEntity = await _context.Order.FindAsync(orderUpdate.OrderId);
 
         if (orderEntity == null)
         {
-            throw new Exception("");
+            return BadRequest(new { message = "Đặt hàng chưa tồn tại " });
         }
         try
         {
@@ -52,10 +64,10 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         catch (System.Exception)
         {
 
-            throw;
+            return BadRequest(new { message = "Có lỗi " });
         }
 
-        return "ok";
+        return Ok(new { message = "Cập nhật thành công" });
     }
 
     [HttpPatch("payorder")]
@@ -86,14 +98,10 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         return "ok";
     }
 
-
-
-
-
-
     [HttpPost]
-    public async Task<ActionResult> OrderAdd(IEnumerable<OrderAdd> orderAdds)
+    public async Task<ActionResult> OrderAdd(OrderAdd orderAdds)
     {
+        var productVariant = orderAdds.ProductVariants;
         var id = _userService.GetUserId(HttpContext);
         if (id == null)
         {
@@ -111,15 +119,18 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
             Status = OrderStatus.Pending,
             UserEntity = userEntity,
             Address = userEntity.Address,
+            Note = orderAdds.Note,
+            Lat = orderAdds.Lat,
+            Lng = orderAdds.Lng
         };
         await _context.Order.AddAsync(orderEntity);
         try
         {
-            foreach (var item in orderAdds)
+            foreach (var item in productVariant)
             {
                 var productVariantEntity = await _context
                 .ProductVariant
-                .SingleOrDefaultAsync(x => x.ProductVariantId == item.ProductVariantId && x.Quality > 0);
+                .SingleOrDefaultAsync(x => x.ProductVariantId == item.ProductVariantId);
                 if (productVariantEntity == null)
                 {
                     continue;
@@ -139,10 +150,16 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
                 {
                     OrderEntity = orderEntity,
                     ProductVariantEntity = productVariantEntity,
-                    Quality = item.Quality
+                    Quality = item.Quality,
+                    Price = productVariantEntity.Price
                 };
-                _context.OrderDetail.Add(orderDetailEntity);
+                await _context.OrderDetail.AddAsync(orderDetailEntity);
+
+
             }
+            var ls = await _context.Cart.Where(x => x.UserEntity.Account == id).ToArrayAsync();
+            _context.Cart.RemoveRange(ls);
+
             await _context.SaveChangesAsync();
             await _context.Database.CommitTransactionAsync();
         }
@@ -154,7 +171,7 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
                 _logger.LogError(e.Message);
             }
 
-            throw new Exception("có lỗi");
+            return BadRequest(new { message = "Có lỗi" });
         }
 
         return Ok("");

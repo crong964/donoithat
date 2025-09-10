@@ -51,7 +51,7 @@ IUserService userService, ILogger<CartController> logger) : ControllerBase
     [HttpPost]
     public async Task<ActionResult> AddProductCart(CartProductAddModel cartProductAddModel)
     {
-
+        
         var productVariant = await _context.ProductVariant.FindAsync(cartProductAddModel.ProductVariantId);
         var userId = _userService.GetUserId(HttpContext);
 
@@ -140,6 +140,7 @@ IUserService userService, ILogger<CartController> logger) : ControllerBase
         {
             return BadRequest(new { message = "Không có sản phẩm trong giỏ" });
         }
+        _logger.LogInformation(cartProductUpdateModel.Quality+"");
         cartEntity.Quality = cartProductUpdateModel.Quality;
         _context.Cart.Update(cartEntity);
         await _context.SaveChangesAsync();

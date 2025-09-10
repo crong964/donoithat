@@ -1,10 +1,12 @@
-"use client"
+import { getAllProductCart } from "@/service/cartService"
 import Link from "next/link"
-import Category from "../category/category"
-import Search from "./search"
-import Sign from "./sign"
 
-export default function Cart() {
+
+export default async function Cart() {
+    const productVariantCarts = await getAllProductCart()
+    const count = productVariantCarts.reduce((pre, cur) => {
+        return pre + cur.quality
+    }, 0)
     return (
         <div className="lg:ml-5 lg:mb-auto">
             <Link href="/cart" className="flex h-10 gap-1 items-center">
@@ -15,11 +17,15 @@ export default function Cart() {
                             <path d="m1850 3209c-168-32-260-248-169-395 24-39 82-92 114-104 23-9 23-10 27-242 4-223 5-236 32-313 85-248 285-432 534-492 88-21 256-21 344 0 249 60 449 244 534 492 27 77 28 90 32 312l4 233 34 16c42 20 101 85 121 133 24 55 21 159-6 214-26 53-87 112-140 134-46 20-156 20-202 0-199-83-215-381-26-479l39-19-4-207c-5-237-17-291-88-400-225-349-715-349-940 0-71 109-83 164-88 400l-4 207 39 19c85 44 132 127 133 232 0 175-145 292-320 259z"></path>
                         </g>
                     </svg>
-                    <div className="absolute right-0 flex justify-center items-center top-0 size-5 -translate-y-1/2 translate-x-1/3 bg-red-500 rounded-full">
-                        <span className="text-[11px] leading-5 font-normal">
-                            12
-                        </span>
-                    </div>
+                    {
+                        count == 0 ?
+                            <></> :
+                            <div className="absolute right-0 flex justify-center items-center top-0 size-5 -translate-y-1/2 translate-x-1/3 bg-red-500 rounded-full">
+                                <span className="text-[11px] leading-5 font-normal">
+                                    {count}
+                                </span>
+                            </div>
+                    }
                 </div>
                 <span className="max-lg:hidden text-[13px] leading-[19px]">Giỏ hàng</span>
             </Link>

@@ -104,6 +104,19 @@
       max-height: max-content;
     }
   }
+
+
+
+  --animate-big: big 200ms ease-in;
+  @keyframes big {
+    0% {
+      transform: scale(0.01)
+    }
+
+    100% {
+      transform: scale(1)
+    }
+  }
 }
 
 body {

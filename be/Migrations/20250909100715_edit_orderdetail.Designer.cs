@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using be.Entity;
 
@@ -10,42 +11,14 @@ using be.Entity;
 namespace be.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250909100715_edit_orderdetail")]
+    partial class edit_orderdetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
-
-            modelBuilder.Entity("be.Entity.AddressEntity", b =>
-                {
-                    b.Property<string>("AddressId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<float>("Lat")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("Lng")
-                        .HasColumnType("REAL");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserEntityAccount")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("AddressId");
-
-                    b.HasIndex("UserEntityAccount");
-
-                    b.ToTable("Address");
-                });
 
             modelBuilder.Entity("be.Entity.CartEntity", b =>
                 {
@@ -142,12 +115,6 @@ namespace be.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<float>("Lat")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("Lng")
-                        .HasColumnType("REAL");
 
                     b.Property<string>("Note")
                         .IsRequired()
@@ -310,17 +277,6 @@ namespace be.Migrations
                     b.ToTable("WeatherForecastItems");
                 });
 
-            modelBuilder.Entity("be.Entity.AddressEntity", b =>
-                {
-                    b.HasOne("be.Entity.UserEntity", "UserEntity")
-                        .WithMany("AddressEntities")
-                        .HasForeignKey("UserEntityAccount")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserEntity");
-                });
-
             modelBuilder.Entity("be.Entity.CartEntity", b =>
                 {
                     b.HasOne("be.Entity.ProductVariantEntity", "ProductVariantEntity")
@@ -418,11 +374,6 @@ namespace be.Migrations
                     b.Navigation("ImageEntities");
 
                     b.Navigation("ProductVariantEntities");
-                });
-
-            modelBuilder.Entity("be.Entity.UserEntity", b =>
-                {
-                    b.Navigation("AddressEntities");
                 });
 #pragma warning restore 612, 618
         }

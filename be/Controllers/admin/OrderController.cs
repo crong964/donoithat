@@ -11,7 +11,7 @@ namespace be.Controllers.admin;
 
 [Authorize]
 [ApiController]
-[Route("api/order")]
+[Route("api/admin/order")]
 public class OrderController(DatabaseContext context,
 IUserService userService, ILogger<OrderController> logger) : ControllerBase
 {

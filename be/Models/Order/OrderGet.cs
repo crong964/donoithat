@@ -10,18 +10,18 @@ public class OrderGetModel
 
     public long OrderTime { get; set; }
 
-    public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
 
+    public OrderStatus Status { get; set; }
+    public PayStatus Pay { get; set; }
 
     public static OrderGetModel ConvertEntity(OrderEntity orderEntity)
     {
         return new OrderGetModel
         {
             OrderId = orderEntity.OrderId,
-
             OrderTime = orderEntity.OrderTime,
-
+            Pay = orderEntity.Pay,
             Status = orderEntity.Status
         };
     }

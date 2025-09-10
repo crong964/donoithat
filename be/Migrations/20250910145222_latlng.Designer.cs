@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using be.Entity;
 
@@ -10,9 +11,11 @@ using be.Entity;
 namespace be.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250910145222_latlng")]
+    partial class latlng
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -26,11 +29,11 @@ namespace be.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Lat")
-                        .HasColumnType("REAL");
+                    b.Property<long>("Lat")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<float>("Lng")
-                        .HasColumnType("REAL");
+                    b.Property<long>("Lng")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -143,11 +146,11 @@ namespace be.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Lat")
-                        .HasColumnType("REAL");
+                    b.Property<long>("Lat")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<float>("Lng")
-                        .HasColumnType("REAL");
+                    b.Property<long>("Lng")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Note")
                         .IsRequired()

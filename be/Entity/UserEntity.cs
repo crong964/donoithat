@@ -12,4 +12,5 @@ public class UserEntity
     public required string FullName { get; set; }
 
     public List<ProductVariantEntity> productVariantEntities { get; } = [];
+    public List<AddressEntity>? AddressEntities { get; set; }
 }

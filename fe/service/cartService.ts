@@ -18,6 +18,7 @@ export const addProductCart = async (currentState: any, formData: FormData) => {
             "productVariantId": productVariantId,
             "quality": parseInt(quality || "0")
         })
+        revalidatePath("/cart")
         return {
             err: false,
             mess: data.data.message
@@ -30,15 +31,11 @@ export const addProductCart = async (currentState: any, formData: FormData) => {
     }
 
 }
-
-
 export const getAllProductCart = async (): Promise<iProductVariantCart[]> => {
     try {
         let data = await api.get("/cart")
         return data.data
     } catch (error) {
-        console.log(error);
-
         return []
     }
 
@@ -57,6 +54,26 @@ export const deleteProductCart = async (currentState: any, formData: FormData) =
         return {
             err: true,
             mess: "Xóa thất bại"
+        }
+    }
+    revalidatePath("/cart")
+
+}
+
+
+export const updateProductCart = async (currentState: any, formData: FormData) => {
+    const productVariantId = formData.get("productVariantId")
+    const quality = formData.get("quality")
+    try {
+        let data = await api.patch("/cart", {
+            productVariantId: productVariantId,
+            quality: quality
+        })
+
+    } catch (error) {
+        return {
+            err: true,
+            mess: "Cập nhật thất bại"
         }
     }
     revalidatePath("/cart")
