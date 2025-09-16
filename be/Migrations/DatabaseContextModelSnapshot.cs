@@ -207,6 +207,9 @@ namespace be.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Suplier")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -229,6 +232,9 @@ namespace be.Migrations
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("ImportPrice")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Position")
                         .HasColumnType("INTEGER");

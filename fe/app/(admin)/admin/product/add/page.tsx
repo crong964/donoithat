@@ -1,4 +1,4 @@
-import AddProduct from "@/components/admin/product/addProduct";
+import AddProduct from "@/components/admin/product/add-product";
 
 export default async function AddPage() {
     return (

@@ -15,10 +15,10 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
     private readonly ILogger<ProductController> _logger = logger;
 
     [HttpGet]
-    public async Task<ActionResult<ProductListModel>> GetProductAll([FromQuery] ProductGetModel productGetModel)
+    public async Task<ActionResult<ProductListModelInAmin>> GetProductAll([FromQuery] ProductGetModel productGetModel)
     {
 
-        int limit = 20;
+        int limit = 40;
         IEnumerable<ProductEntity>? productEntities = null;
         CategoryEntity? categoryEntity = null;
 
@@ -27,12 +27,12 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         if (productGetModel.Slug == null || productGetModel.Slug == "all")
         {
             Total = await _context.Product.CountAsync();
-
         }
         else
         {
             categoryEntity = await _context.Category.Where(x => x.Slug == productGetModel.Slug).FirstOrDefaultAsync();
-            Total = await _context.Product.Where(x => x.CategoryEntity.Slug == productGetModel.Slug ||
+            Total = await _context.Product
+            .Where(x => x.CategoryEntity.Slug == productGetModel.Slug ||
            (x.CategoryEntity.CategoryParent != null && x.CategoryEntity.CategoryParent.Slug == productGetModel.Slug)).CountAsync();
         }
 
@@ -40,23 +40,27 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         {
 
             productEntities = await _context.Product.
+            Include(x => x.CategoryEntity).
+            Include(x => x.ProductVariantEntities).
             Skip(productGetModel.Page * limit - limit).Take(limit).
             Select(x => x).ToListAsync();
         }
         else
         {
-            productEntities = await _context.Product
-                 .Where(x => x.CategoryEntity.Slug == productGetModel.Slug ||
+            productEntities = await _context.Product.
+            Include(x => x.CategoryEntity).
+            Include(x => x.ProductVariantEntities).
+            Where(x => x.CategoryEntity.Slug == productGetModel.Slug ||
            (x.CategoryEntity.CategoryParent != null && x.CategoryEntity.CategoryParent.Slug == productGetModel.Slug)).
                  Skip(productGetModel.Page * limit - limit).Take(limit).
                  Select(x => x).ToListAsync();
         }
-        return new ProductListModel
+        return new ProductListModelInAmin
         {
             TotalPage = Total / limit + (Total % limit == 0 ? 0 : 1),
             Page = productGetModel.Page,
             TotalItem = Total,
-            ProductModels = [.. productEntities.Select(ProductModel.Converter)],
+            ProductModels = [.. productEntities.Select(ProductModelInAdmin.Converter)],
             NameCate = categoryEntity == null ? "" : categoryEntity.NameCategory
 
         };
@@ -170,6 +174,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                     VariantName = item.VariantName,
                     Position = item.Position,
                     Weight = item.Weight,
+                    ImportPrice = 0
                 };
                 _logger.LogInformation(productVariantEntity.ProductVariantId);
                 await _context.ProductVariant.AddAsync(productVariantEntity);
@@ -252,6 +257,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                         VariantName = item.VariantName,
                         Position = item.Position,
                         Weight = item.Weight,
+                        ImportPrice = 0
                     };
                     await _context.ProductVariant.AddAsync(productVariantEntity);
                 }

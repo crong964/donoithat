@@ -1,7 +1,7 @@
 import Navi, { iNavi } from "@/components/layout/navi"
-import ProductItem from "@/components/product/productitem"
-import Pagination from "@/components/uicustom/panination"
-import { getProduct } from "@/service/productService"
+import ProductItem from "@/components/product/product-item"
+import Pagination from "@/components/ui-custom/panination"
+import { getProduct } from "@/service/product-service"
 import Link from "next/link"
 
 export default async function Colection(params:
@@ -71,7 +71,7 @@ export default async function Colection(params:
                     <div>
                         <Pagination page={parseInt(searchParams.page || "1")}
                             total={data.totalPage}
-                            url={param.slug == null ? "/collections/all" : `/collections/${param.slug}`} />
+                            url={param.slug == null ? "/collections/all?" : `/collections/${param.slug}?`} />
                     </div>
                 </div>
             </div>

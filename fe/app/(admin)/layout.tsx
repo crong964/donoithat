@@ -3,7 +3,8 @@ import "@/app/globals.css";
 
 import { AppSidebar } from "@/components/admin/menu/menu";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import ReduxComponent from "@/components/admin/reduxComponent";
+import ReduxComponent from "@/components/admin/redux-component";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Create Next App2",
@@ -25,20 +26,26 @@ export default function RootLayout({
       <body
         className="bg-a overflow-x-hidden"
       >
-        <ReduxComponent children={
-          <>
-            <AppSidebar />
-            <SidebarInset>
-              <SidebarTrigger />
-              <main className="overflow-x-auto ">
-                <section>
-                  {children}
-                </section>
-              </main>
-            </SidebarInset>
+        <div className=" mx-auto">
+          <ToastContainer />
+          <ReduxComponent children={
+            <>
+              <AppSidebar />
+              <SidebarInset>
+                <SidebarTrigger />
+                <main className="overflow-x-auto ">
+                  <section>
+                    {children}
+                  </section>
 
-          </>
-        } />
+                </main>
+                <footer className="h-100">
+
+                </footer>
+              </SidebarInset>
+            </>
+          } />
+        </div>
 
       </body>
     </html>

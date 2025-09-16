@@ -1,11 +1,11 @@
 import Category from "../category/category"
 import Search from "./search"
 import Sign from "./sign"
-import Cart from "./Cart"
+import Cart from "./cart"
 import Sidebar from "./Sidebar"
 import Link from "next/link"
-import { getCategory } from "@/service/categoryService"
-import { getUserInfor } from "@/service/userService"
+import { getCategory } from "@/service/category-service"
+import { getUserInfor } from "@/service/user-service"
 
 export default async function Header() {
     let datas = await Promise.all([getCategory(), getUserInfor()])

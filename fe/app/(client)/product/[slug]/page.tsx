@@ -1,5 +1,5 @@
-import ProductSlug from "@/components/client/product/productSlug"
-import { getProductBySlug } from "@/service/productService"
+import ProductSlug from "@/components/client/product/product-slug"
+import { getProductBySlug } from "@/service/product-service"
 
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {

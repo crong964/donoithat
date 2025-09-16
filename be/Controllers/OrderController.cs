@@ -6,10 +6,10 @@ using be.Service;
 using be.Service.Implement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 namespace be.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/order")]
 public class OrderController(DatabaseContext context,
@@ -38,6 +38,34 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
            Select(x => OrderGetModel.ConvertEntity(x))
          .ToArrayAsync();
         return Ok(ls);
+    }
+
+    [HttpGet("detail")]
+    public async Task<ActionResult<OrderDetailGetModel>> Detail(string? orderId)
+    {
+        _logger.LogInformation(orderId);
+        var userId = _userService.GetUserId(HttpContext);
+        if (orderId == null || userId == null)
+        {
+            return BadRequest(new { message = "Không có hóa đơn này" });
+        }
+        var order = await _context.Order
+        .Include(x => x.UserEntity)
+        .Where(x => x.OrderId == orderId).FirstOrDefaultAsync();
+
+        if (order == null)
+        {
+            return BadRequest(new { message = "Không có hóa đơn này" });
+        }
+        var orderDetails = await _context.OrderDetail
+        .Include(x => x.ProductVariantEntity)
+        .Where(x => x.OrderEntity.OrderId == orderId).ToArrayAsync();
+        if (userId != order.UserEntity.Account)
+        {
+            return BadRequest(new { message = "Không có hóa đơn này" });
+        }
+        var data = OrderDetailGetModel.ConvertEntityToModel(orderDetails, order);
+        return Ok(data);
     }
 
 
@@ -113,16 +141,26 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         {
             return BadRequest(new { message = "Không tìm thấy người dùng này" });
         }
+        var addressEntity = await _context.Address.
+        Where(x => x.UserEntity == userEntity && x.AddressId == orderAdds.AddressId).FirstOrDefaultAsync();
+
+        if (addressEntity == null)
+        {
+            return BadRequest(new { message = "Không tìm thấy địa chỉ" });
+        }
+
         var transaction = await _context.Database.BeginTransactionAsync();
+
         var orderEntity = new OrderEntity
         {
             Status = OrderStatus.Pending,
             UserEntity = userEntity,
-            Address = userEntity.Address,
+            Address = addressEntity.Address,
             Note = orderAdds.Note,
-            Lat = orderAdds.Lat,
-            Lng = orderAdds.Lng
+            Lat = addressEntity.Lat,
+            Lng = addressEntity.Lng
         };
+
         await _context.Order.AddAsync(orderEntity);
         try
         {
@@ -171,7 +209,7 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
                 _logger.LogError(e.Message);
             }
 
-            return BadRequest(new { message = "Có lỗi" });
+            return BadRequest(new { message = "có lỗi" });
         }
 
         return Ok("");

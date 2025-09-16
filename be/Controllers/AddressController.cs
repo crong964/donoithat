@@ -4,6 +4,7 @@ using be.Models;
 using be.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace be.Controllers;
 
@@ -20,10 +21,10 @@ IUserService userService, ILogger<AddressController> logger) : ControllerBase
     private readonly ILogger<AddressController> _logger = logger;
 
     [HttpGet]
-    public ActionResult Get()
+    public async Task<ActionResult> Get()
     {
         var id = _userService.GetUserId(HttpContext);
-        var ls = _context.Address.Where(x => x.UserEntity.Account == id);
+        var ls = await _context.Address.Where(x => x.UserEntity.Account == id).ToListAsync();
         return Ok(ls);
     }
 
@@ -86,7 +87,7 @@ IUserService userService, ILogger<AddressController> logger) : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<ActionResult> Delete(string addressId)
+    public async Task<ActionResult> Delete(AddressDeleteModel addressDeleteModel)
     {
         var id = _userService.GetUserId(HttpContext);
         var user = await _context.User.FindAsync(id);
@@ -95,7 +96,7 @@ IUserService userService, ILogger<AddressController> logger) : ControllerBase
         {
             return BadRequest(new { message = "Không có người dùng này" });
         }
-        var address = await _context.Address.FindAsync(addressId);
+        var address = await _context.Address.FindAsync(addressDeleteModel.AddressId);
 
         if (address == null || address.UserEntity.Account != id)
         {

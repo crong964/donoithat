@@ -1,7 +1,7 @@
 import Coupon from "@/components/coupon/coupon";
 import { iGetProduct } from "@/components/product/interface";
-import ProductHome from "@/components/product/producthome";
-import ProductItem from "@/components/product/productitem";
+import ProductHome from "@/components/product/product-home";
+import ProductItem from "@/components/product/product-item";
 import { CarouselNext, CarouselPrevious, MainCarousel } from "@/components/ui/carousel";
 import Link from "next/link";
 

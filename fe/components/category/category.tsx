@@ -2,7 +2,7 @@
 import Link from "next/link"
 import { useState } from "react"
 
-export default function Category(p: MainCateGory) {
+export default function Category(p: iMainCateGory) {
     const [s, sS] = useState(false)
     const subCata = p.categoryChidlren.map((v) => {
         return (

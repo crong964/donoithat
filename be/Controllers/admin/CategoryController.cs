@@ -87,6 +87,28 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
         return lsmodel;
     }
 
+
+    [HttpGet("product")]
+    public async Task<ActionResult<IEnumerable<CategoryModel>>> GetProductAll()
+    {
+        IEnumerable<CategoryEntity>? ls = null;
+
+
+        ls = await _context.Category.ToListAsync();
+
+
+
+        var lsmodel = new List<CategoryModel>();
+
+        foreach (var item in ls)
+        {
+            var categoryModel = ConvertEntityToModel.Converter(item);
+            lsmodel.Add(categoryModel);
+
+        }
+        return lsmodel;
+    }
+
     [HttpPost]
     public async Task<ActionResult<string>> Add(CategoryAddModel categoryModel)
     {

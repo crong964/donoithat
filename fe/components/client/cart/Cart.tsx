@@ -1,14 +1,13 @@
 'use client'
-import { AddressComboBox } from "@/components/address/addresscombobox"
-import Address from "@/components/address/addressmodel"
+import { AddressComboBox } from "@/components/address/address-combo-box"
+import Address from "@/components/address/address-model"
 import { iAddress } from "@/components/address/interface"
-import MapLeafLet from "@/components/address/mapleafLet"
-import SubmitButton from "@/components/button/submitbuttom"
+import SubmitButton from "@/components/button/submit-buttom"
 import Coupon from "@/components/coupon/coupon"
 import Navi from "@/components/layout/navi"
 import { iProductVariantCart } from "@/components/product/interface"
-import ProductCart from "@/components/product/productcart"
-import { addOrder } from "@/service/orderService"
+import ProductCart from "@/components/product/product-cart"
+import { addOrder } from "@/service/order-service"
 import PriceFormat from "@/util/Price"
 import Form from "next/form"
 import { ChangeEvent, Fragment, useActionState, useEffect, useState } from "react"
@@ -22,10 +21,12 @@ export default function CartProduct(p: {
 
     const [infor, setInfor] = useState<{
         address: string,
-        note: string
+        note: string,
+        addressId: string
     }>({
         address: "",
-        note: ""
+        note: "",
+        addressId: ""
     })
     const productVariantCarts = p.ls
     const count = productVariantCarts.reduce((preValue, cur) => {
@@ -35,7 +36,7 @@ export default function CartProduct(p: {
         return preValue + cur.quality * cur.price
     }, 0)
     const handleChange = (v: ChangeEvent<any>) => {
-        const { name, value, type, checked } = v.target;
+        const { name, value } = v.target;
         for (const key in infor) {
             if (Object.prototype.hasOwnProperty.call(infor, key)) {
                 const element = infor as any;
@@ -51,14 +52,13 @@ export default function CartProduct(p: {
     }
     const [message, formAction, isPending] = useActionState(addOrder, null)
     const [address, setAddress] = useState(false)
-
     useEffect(() => {
         switch (message?.error) {
             case true:
                 toast.error(message.message);
                 break;
             case false:
-                toast.error(message.message);
+                toast.success(message.message);
                 break;
         }
         return () => {
@@ -146,7 +146,7 @@ export default function CartProduct(p: {
                                 </h1>
                                 <div className="py-2.5 flex items-center mb-2.5 border-y border-boder justify-between">
                                     <p className="text-[16px] leading-5.75 font-bold">Tổng tiền:</p>
-                                    <span className="text-[24px] leading-8.75 font-bold text-f">{PriceFormat((total / 100) + "")}₫</span>
+                                    <span className="text-[24px] leading-8.75 font-bold text-f">{PriceFormat((total) + "")}₫</span>
                                 </div>
                                 <div className="pt-2.25">
                                     <ul className="text-[14px] text-[#252a2b] font-normal list-disc pl-3.75">
@@ -173,16 +173,18 @@ export default function CartProduct(p: {
                                                 <div className=" pr-3.75 py-3.75">
                                                     <p className="text-[16px] leading-5.75 font-bold">Đại chỉ:</p>
                                                 </div>
+                                                <input type="hidden" name="addressId" value={infor.addressId} />
                                                 <div className=" pr-3.75 pb-3.75">
                                                     <input
                                                         value={infor.address}
-                                                        onChange={handleChange}
-                                                        name="address"
                                                         placeholder="Địa chỉ"
+                                                        required
                                                         type="text"
                                                         className="h-10 focus:outline-none px-3 w-full border-boder border py-1.5" />
                                                 </div>
-                                                <AddressComboBox addresses={p.addresses} onChang={() => { }} />
+                                                <AddressComboBox addresses={p.addresses} onChange={(v) => {
+                                                    setInfor({ ...infor, address: v.address, addressId: v.id })
+                                                }} />
                                                 <button type="button" onClick={() => setAddress(true)}
                                                     className="cursor-pointer text-center my-3.75 text-white text-[15px] leading-5.5 font-bold uppercase bg-f px-1.25 py-2.5 w-full " >
                                                     Thêm địa chỉ

@@ -1,4 +1,4 @@
-import { getToken } from "@/service/userService"
+import { getToken } from "@/service/user-service"
 import axios from "axios"
 
 const API_BASE_URL = "http://localhost:2000/api"
@@ -17,7 +17,7 @@ api.interceptors.request.use(async (config) => {
 })
 const errorResponse = (error: any): { message: string } => {
     return {
-        message: error?.response?.data?.message
+        message: error?.response?.data?.message || "Có lỗi hệ thống"
     }
 }
 

@@ -1,7 +1,7 @@
-import CartProduct from "@/components/client/cart/Cart";
-import { getAllAddresses } from "@/service/addressService";
-import { getAllProductCart } from "@/service/cartService";
-import { getUserInfor } from "@/service/userService";
+import CartProduct from "@/components/client/cart/cart";
+import { getAllAddresses } from "@/service/address-service";
+import { getAllProductCart } from "@/service/cart-service";
+import { getUserInfor } from "@/service/user-service";
 import { redirect } from "next/navigation";
 
 

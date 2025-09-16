@@ -1,6 +1,6 @@
 export interface iAddressComboBox {
     addresses: iAddress[],
-    onChang(p: iAddress): void
+    onChange(p: { id: string, address: string }): void
 }
 export interface iAddress {
     addressId: string
@@ -8,4 +8,9 @@ export interface iAddress {
     lng: number
     title: string
     address: string
+}
+
+export interface iLatLng {
+    lat: number
+    lng: number
 }

@@ -1,6 +1,6 @@
 'use client'
-import SubmitButton from "@/components/button/submitbuttom";
-import { loginUser } from "@/service/userService";
+import SubmitButton from "@/components/button/submit-buttom";
+import { loginUser } from "@/service/user-service";
 import Form from "next/form";
 import Link from "next/link";
 import { useActionState, useEffect } from "react";

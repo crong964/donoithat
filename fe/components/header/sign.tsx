@@ -1,11 +1,11 @@
 "use client"
 
-import { loginUser, logoutUser } from "@/service/userService";
+import { loginUser, logoutUser } from "@/service/user-service";
 import Form from "next/form";
 import Link from "next/link"
 import { useActionState, useEffect, useState } from "react"
 import { toast } from "react-toastify";
-import SubmitButton from "../button/submitbuttom";
+import SubmitButton from "../button/submit-buttom";
 import { Dot } from "lucide-react";
 
 export default function Sign(p: {
@@ -24,7 +24,8 @@ export default function Sign(p: {
     }, [message]);
     const action = [
         { name: "Tài khoản của tôi", hrel: "/user" },
-        { name: "Danh sách địa chỉ", hrel: "/" },
+        { name: "Danh sách địa chỉ", hrel: "/user/address" },
+        { name: "Danh sách đơn hàng", hrel: "/user/add/user/order" },
     ]
     return (
         <div className=" relative mb-auto ">
@@ -145,7 +146,7 @@ export default function Sign(p: {
                                             <div className="absolute top-0 -left-2.5 flex items-center ">
                                                 <Dot />
                                             </div>
-                                            <Link href={v.hrel} className="text-[14px]">
+                                            <Link href={v.hrel as any} className="text-[14px]">
                                                 {v.name}
                                             </Link>
                                         </li>

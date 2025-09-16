@@ -1,10 +1,10 @@
-interface CateGory {
+interface iCateGory {
     id: string
     nameCategory: string,
     slug:string,
     
 }
 
-interface MainCateGory extends CateGory {
-    categoryChidlren: CateGory[]
+export interface iMainCateGory extends iCateGory {
+    categoryChidlren: iCateGory[]
 }

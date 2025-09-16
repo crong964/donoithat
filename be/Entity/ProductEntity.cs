@@ -18,15 +18,11 @@ public class ProductEntity
     public required string ProductClassification { get; set; }
     public required string Suplier { get; set; }
     public required long MainPrice { get; set; }
-
-
+    public int Status { get; set; } = 1;
     public required string NameProduct { get; set; }
-
     public required long Quality { get; set; } = 0;
     public ICollection<ProductVariantEntity>? ProductVariantEntities { get; set; }
-
-
-    public required CategoryEntity CategoryEntity { get; set; }
+    public required CategoryEntity? CategoryEntity { get; set; }
     public ICollection<ImageEntity> ImageEntities { get; set; } = [];
 
 }

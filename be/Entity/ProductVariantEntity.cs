@@ -15,6 +15,7 @@ namespace be.Entity
         public required string VariantId { get; set; }
         public required string VariantName { get; set; }
         public required long Price { get; set; }
+        public required long ImportPrice { get; set; } = 0;
         public required string Image { get; set; }
         public long Quality { get; set; } = 0;
         public int Position { get; set; }
@@ -24,6 +25,6 @@ namespace be.Entity
 
         public List<UserEntity> UserEntities { get; } = [];
 
-         public List<OrderEntity> OrderEntities { get; } = [];
+        public List<OrderEntity> OrderEntities { get; } = [];
     }
 }

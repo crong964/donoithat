@@ -1,13 +1,8 @@
 'use client'
 import { category } from "@/tempdata/category"
-import CategoryItem from "./categoryitem"
-import { Input } from "antd"
-import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "@/redux/admin/reduxRoot"
-import { setCategory } from "@/redux/admin/category/categoryRedux"
-import removeAccents from "@/util/RemoveAccents"
-import AddCategoryForm from "./addCategoryForm"
-import EditCategoryForm from "./editCategoryForm"
+import CategoryItem from "./category-item"
+import AddCategoryForm from "./add-category-form"
+import EditCategoryForm from "./edit-category-form"
 
 
 export default function Categories() {

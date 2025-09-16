@@ -1,5 +1,5 @@
 import UserInfor from "@/components/client/user/userinfor"
-import { getUserInfor, logoutUser } from "@/service/userService"
+import { getUserInfor, logoutUser } from "@/service/user-service"
 import Form from "next/form"
 import Link from "next/link"
 import { redirect } from "next/navigation"

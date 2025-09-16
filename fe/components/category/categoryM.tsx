@@ -1,8 +1,9 @@
 "use client"
 import { Menu } from "antd"
 import { MenuItem } from "@/components/ui/menu"
+import { iMainCateGory } from "./interface"
 
-export default function CategoryM(p: MainCateGory) {
+export default function CategoryM(p: iMainCateGory) {
     const item: MenuItem[] =
         [{
             label: p.name,

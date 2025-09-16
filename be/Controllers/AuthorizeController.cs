@@ -52,7 +52,7 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
         {
             Issuer = domain,
             Audience = domain,
-            Expires = DateTime.UtcNow.AddHours(12),
+            Expires = DateTime.UtcNow.AddHours(24 + 7),
             SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
             Subject = new ClaimsIdentity(authClaims)
         };
