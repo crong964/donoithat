@@ -71,7 +71,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
 
         if (slug == null)
         {
-            throw new Exception("not found");
+            return BadRequest(new { mess = "Thiếu slug" });
         }
         var productEntity = await _context.Product
         .Include(x => x.CategoryEntity)
@@ -91,7 +91,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
 
             return RelatedProductsModel.ConvertEntityToModel(productEntity, productEntities);
         }
-        throw new Exception("not found");
+        return BadRequest(new { mess = "Không có sản phẩm này" });
     }
 
 }

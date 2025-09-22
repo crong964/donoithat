@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using be.Entity;
 using be.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace be.Controllers;
 
@@ -21,13 +22,12 @@ public class ProductVariantController(DatabaseContext context, ILogger<ProductVa
         {
             return BadRequest(new { message = "Không có loại này" });
         }
-      
+
         productVariant.Price = variantUpdateAdminModel.Price;
         productVariant.ImportPrice = variantUpdateAdminModel.ImportPrice;
         productVariant.Quality = variantUpdateAdminModel.Quality;
         try
         {
-            _context.ProductVariant.Update(productVariant);
             await _context.SaveChangesAsync();
         }
         catch (System.Exception)

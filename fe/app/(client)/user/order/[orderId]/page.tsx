@@ -1,6 +1,6 @@
 import { getOrderById } from "@/service/order-service"
 import DateFormat from "@/util/Date"
-import PriceFormat from "@/util/Price"
+import PriceFormat from "@/util/price-format"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 

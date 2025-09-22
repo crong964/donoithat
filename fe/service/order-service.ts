@@ -1,9 +1,10 @@
 'use server'
 
 import { iOrder, iOrderDetail } from "@/components/order/interface"
-import { api, errorResponse } from "@/lib/fetch"
+import { api,  } from "@/util/fetch"
 import Await from "@/util/Await"
 import { revalidatePath } from "next/cache"
+import { errorResponse } from "@/util/error-response"
 
 export const addOrder = async (currentState: any, formData: FormData) => {
     const quality = formData.getAll("quality")

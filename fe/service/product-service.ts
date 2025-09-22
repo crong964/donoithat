@@ -1,5 +1,5 @@
 import { iGetProduct, iProductDetail } from "@/components/product/interface"
-import { api } from "@/lib/fetch"
+import { api } from "@/util/fetch"
 
 
 export const getProduct = async (p?: { slug: string, page?: string } | undefined): Promise<iGetProduct | undefined> => {

@@ -28,7 +28,7 @@ public class ProductDetailModel
         var productModel = new ProductDetailModel
         {
             Description = productEntity.Description,
-            ImageEntities = productEntity.ImageEntities?.Select(x => x.ImageFiles).ToArray(),
+            ImageEntities = productEntity.ImageEntities?.Select(x => x.ImagePath).ToArray(),
             MainPrice = productEntity.MainPrice,
             NameProduct = productEntity.NameProduct,
             Slug = productEntity.Slug,

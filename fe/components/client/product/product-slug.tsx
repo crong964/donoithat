@@ -9,7 +9,7 @@ import ProductRelated from "@/components/product/product-related"
 import ProductSaw from "@/components/product/product-saw"
 import SaveProduct from "@/components/product/product-save"
 import { CarouselNext, CarouselPrevious, MainCarousel } from "@/components/ui/carousel"
-import PriceFormat from "@/util/Price"
+import PriceFormat from "@/util/price-format"
 import { Fragment, useEffect, useMemo, useState } from "react"
 import CartProductAddButton from "./cart-product-add-button"
 

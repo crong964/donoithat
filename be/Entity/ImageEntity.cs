@@ -8,6 +8,7 @@ public class ImageEntity
     [Key]
     public required string ImageFiles { get; set; }
 
+     public required string ImagePath { get; set; }
 
-    public required ProductEntity ProductEntity { get; set; }
+     public List<ProductEntity> ProductEntities { get; } = [];
 }

@@ -1,5 +1,5 @@
 'use client'
-import PriceFormat from "@/util/Price";
+import PriceFormat from "@/util/price-format";
 import { iProduct } from "./interface";
 import Link from "next/link";
 import { Carousel, CarouselItem, useCarousel } from "../ui/carousel";

@@ -10,8 +10,6 @@ export default async function UserPage() {
         redirect("/")
     }
     return (
-        <UserInfor {...infor}>
-
-        </UserInfor>
+        <UserInfor {...infor} />
     )
 }

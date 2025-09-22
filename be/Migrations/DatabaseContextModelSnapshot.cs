@@ -102,13 +102,11 @@ namespace be.Migrations
                     b.Property<string>("ImageFiles")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ProductEntityProductId")
+                    b.Property<string>("ImagePath")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ImageFiles");
-
-                    b.HasIndex("ProductEntityProductId");
 
                     b.ToTable("Image");
                 });
@@ -171,6 +169,21 @@ namespace be.Migrations
                     b.HasIndex("UserEntityAccount");
 
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("be.Entity.PhotoGalleryEntity", b =>
+                {
+                    b.Property<string>("ImageEntityImageFiles")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProductEntityProductId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ImageEntityImageFiles", "ProductEntityProductId");
+
+                    b.HasIndex("ProductEntityProductId");
+
+                    b.ToTable("PhotoGallery");
                 });
 
             modelBuilder.Entity("be.Entity.ProductEntity", b =>
@@ -275,10 +288,6 @@ namespace be.Migrations
                     b.Property<string>("Account")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -355,17 +364,6 @@ namespace be.Migrations
                     b.Navigation("CategoryParent");
                 });
 
-            modelBuilder.Entity("be.Entity.ImageEntity", b =>
-                {
-                    b.HasOne("be.Entity.ProductEntity", "ProductEntity")
-                        .WithMany("ImageEntities")
-                        .HasForeignKey("ProductEntityProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductEntity");
-                });
-
             modelBuilder.Entity("be.Entity.OrderDetailEntity", b =>
                 {
                     b.HasOne("be.Entity.OrderEntity", "OrderEntity")
@@ -396,6 +394,25 @@ namespace be.Migrations
                     b.Navigation("UserEntity");
                 });
 
+            modelBuilder.Entity("be.Entity.PhotoGalleryEntity", b =>
+                {
+                    b.HasOne("be.Entity.ImageEntity", "ImageEntity")
+                        .WithMany()
+                        .HasForeignKey("ImageEntityImageFiles")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("be.Entity.ProductEntity", "ProductEntity")
+                        .WithMany()
+                        .HasForeignKey("ProductEntityProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ImageEntity");
+
+                    b.Navigation("ProductEntity");
+                });
+
             modelBuilder.Entity("be.Entity.ProductEntity", b =>
                 {
                     b.HasOne("be.Entity.CategoryEntity", "CategoryEntity")
@@ -421,8 +438,6 @@ namespace be.Migrations
 
             modelBuilder.Entity("be.Entity.ProductEntity", b =>
                 {
-                    b.Navigation("ImageEntities");
-
                     b.Navigation("ProductVariantEntities");
                 });
 

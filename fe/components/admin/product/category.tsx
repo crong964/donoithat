@@ -1,26 +1,46 @@
+'use client'
+import { iMainCateGory } from "@/components/category/interface"
 import { setTypeProduct } from "@/redux/admin/product/productRedux"
 import { RootState } from "@/redux/admin/reduxRoot"
 import { category } from "@/tempdata/category"
 import { Select } from "antd"
-import { memo } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 function Category() {
     const dispatch = useDispatch()
     const typeProduct = useSelector((state: RootState) => state.product.typeProduct)
-    const select = category.map((v) => {
-        const children = v.con.map((vc) => {
+   
+    
+    const [data, setData] = useState<iMainCateGory[]>([])
+    useEffect(() => {
+        fetch("http://localhost:2000/api/category").then((v) => {
+            return v.json()
+        })
+            .then((v) => {
+                setData(v)
+
+            })
+        return () => {
+
+        };
+    }, []);
+    const select = useMemo(() => {
+        let s = data.map((v) => {
+            const children = v.categoryChidlren.map((vc) => {
+                return {
+                    label: <span>{vc.nameCategory}</span>,
+                    value: vc.slug
+                }
+            })
             return {
-                label: <span>{vc.name}</span>,
-                value: vc.id
+                label: <span>{v.nameCategory}</span>,
+                value: v.slug,
+                options: children
             }
         })
-        return {
-            label: <span>{v.name}</span>,
-            value: v.id,
-            options: children
-        }
-    })
+        return s
+    }, [data])
     return (
         <div className="mb-4">
             <section className="mb-1">

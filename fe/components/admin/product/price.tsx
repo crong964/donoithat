@@ -1,6 +1,6 @@
 import { setMainPriceProduct, setMinMaxPrice } from "@/redux/admin/product/productRedux"
 import { RootState } from "@/redux/admin/reduxRoot"
-import PriceFormat from "@/util/Price"
+import PriceFormat from "@/util/price-format"
 import { Input } from "antd"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -48,7 +48,7 @@ export default function Price() {
                         <Input placeholder="Giá" value={PriceFormat(mainPrice + "")}
                             required
                             onChange={(v) => {
-                                let n = parseInt(v.currentTarget.value.replaceAll(" ", ""))
+                                let n = parseInt(v.currentTarget.value.replaceAll(",", ""))
                                 if (v.currentTarget.value == "") {
                                     dispatch(setMainPriceProduct(0))
                                 }

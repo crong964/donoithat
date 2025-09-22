@@ -1,7 +1,7 @@
 'use client'
 import Link from "next/link";
 import { iProduct } from "./interface";
-import PriceFormat from "@/util/Price";
+import PriceFormat from "@/util/price-format";
 import { Carousel, CarouselItem, MainCarouselHover, useCarousel } from "../ui/carousel";
 import { Eye } from "lucide-react";
 import { useState } from "react";
@@ -32,7 +32,7 @@ function ProductHome2(p: iProduct) {
                                     .map((v, i) => {
                                         return (
                                             <CarouselItem key={v} className="basis-full ">
-                                                <img key={v} src={v} className=" max-h-60 h-auto w-full"
+                                                <img key={v} src={v} className=" h-60 object-cover  w-full"
                                                     alt={p.nameProduct}
                                                     srcSet="" />
                                             </CarouselItem>

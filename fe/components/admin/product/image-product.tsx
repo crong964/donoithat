@@ -48,12 +48,12 @@ export default function ImageProduct(p: IimageProduct) {
                                 <div className="grid grid-cols-5 gap-2.5 ">
                                     {imageurls.map((v, i) => {
                                         return (
-                                            <div key={v} className="aspect-square col-span-1">
-                                                <button onClick={() => {
+                                            <div key={v.url} className="aspect-square col-span-1">
+                                                <button type="button" onClick={() => {
                                                     p.onchange(i)
                                                     dispatch(setOpen(false))
                                                 }} className="w-full hover:shadow-2xl h-full cursor-pointer" >
-                                                    <img src={v} className="w-full h-full object-cover" />
+                                                    <img src={v.url} className="w-full h-full object-cover" />
                                                 </button>
                                             </div>
                                         )

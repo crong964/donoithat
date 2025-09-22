@@ -1,9 +1,10 @@
 'use server'
 
 import { iAddress } from "@/components/address/interface"
-import { api, errorResponse } from "@/lib/fetch"
+import { api } from "@/util/fetch"
 import Await from "@/util/Await"
 import { revalidatePath } from "next/cache"
+import { errorResponse } from "@/util/error-response"
 
 
 export const getAllAddresses = async (): Promise<iAddress[]> => {

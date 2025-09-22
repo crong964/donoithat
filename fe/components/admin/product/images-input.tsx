@@ -1,7 +1,7 @@
 'use client'
 import { Button } from "antd"
 import { CloudUpload, Trash, Trash2 } from "lucide-react"
-import { useEffect, useState } from "react"
+import React, { Fragment, useEffect, useState } from "react"
 import {
     DndContext,
     closestCenter,
@@ -23,7 +23,7 @@ import {
 import { IinputImage } from "./interface";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/admin/reduxRoot";
-import { addImageUrls, addStringFiles, removeImageUrls, removeStringFiles, swapImage } from "@/redux/admin/product/productRedux";
+import { addImageUrlFiles, iImageInput, removeImageUrls, swapImage } from "@/redux/admin/product/productRedux";
 
 export default function ImagesInput() {
     const sensors = useSensors(
@@ -37,38 +37,55 @@ export default function ImagesInput() {
         })
     );
     const imageurls = useSelector((state: RootState) => state.product.imageurls)
-    const imageFiles = useSelector((state: RootState) => state.product.imageFiles)
     const dispatch = useDispatch()
     const [active, setActiveId] = useState()
     const dropHandler = (ev: React.DragEvent<any>) => {
-        let urls: string[] = []
-        let files: File[] = []
         ev.preventDefault();
+        let urls: iImageInput[] = []
         if (ev.dataTransfer.items) {
             [...ev.dataTransfer.items].map((item) => {
-                if (item.kind === "file") {
+                if (item.kind === "file" && item.type.indexOf("image") >= 0) {
                     const file = item.getAsFile();
                     if (file == null) {
                         return
                     }
-                    urls.push(URL.createObjectURL(file))
-                    files.push(file)
+                    urls.push({
+                        file: file,
+                        url: URL.createObjectURL(file)
+                    })
                 }
             });
         }
 
 
-        dispatch(addImageUrls(urls))
-        dispatch(addStringFiles(files))
+        dispatch(addImageUrlFiles(urls))
     }
     const drawOverHandler = (ev: React.DragEvent<any>) => {
         ev.preventDefault();
     }
     const removeImage = (urli: number) => {
         dispatch(removeImageUrls(urli))
-        dispatch(removeStringFiles(urli))
     }
 
+    const handlerFileInput = (v: React.ChangeEvent<HTMLInputElement>) => {
+        let vfiles = v.currentTarget.files
+        if (vfiles == null) {
+            return
+        }
+        let urls: iImageInput[] = []
+
+
+        for (let i = 0; i < vfiles.length; i++) {
+            const e = vfiles[i];
+            if (e.type.indexOf("image") >= 0) {
+                urls.push({
+                    file: e,
+                    url: URL.createObjectURL(e)
+                })
+            }
+        }
+        dispatch(addImageUrlFiles(urls))
+    }
     return (
         <>
             <header>
@@ -83,34 +100,22 @@ export default function ImagesInput() {
                 <div
                     onDrop={dropHandler} onDragOver={drawOverHandler}
                     className="grid gap-2 grid-cols-6 justify-center">
-                    {
-                        imageurls.length > 0 ?
-                            <>
-                            </>
-                            :
-                            <div className="size-70  col-span-2 row-span-2">
-                                <label htmlFor="imageurls" className="flex flex-col cursor-pointer p-2 border-2 border-black rounded-2xl  h-full justify-center items-center">
-                                    <CloudUpload />
-                                    <p>Draw anh Drop</p>
-                                </label>
-                                <input type="file" onChange={(v) => {
-                                    let vfiles = v.currentTarget.files
-                                    if (vfiles == null) {
-                                        return
-                                    }
-                                    let urls: string[] = []
-                                    let files: File[] = []
-                                    for (let i = 0; i < vfiles.length; i++) {
-                                        const e = vfiles[i];
-                                        files.push(e)
-                                        urls.push(URL.createObjectURL(e))
-                                    }
-                                    dispatch(addImageUrls(urls))
-                                    dispatch(addStringFiles(files))
+                    <Fragment>
 
-                                }} multiple id="imageurls" className="hidden" />
-                            </div>
-                    }
+                        {
+                            imageurls.length > 0 ?
+                                <>
+                                </>
+                                :
+                                <div className="size-70  col-span-2 row-span-2">
+                                    <label htmlFor="imageurls" className="flex flex-col cursor-pointer p-2 border-2 border-black rounded-2xl  h-full justify-center items-center">
+                                        <CloudUpload />
+                                        <p>Draw anh Drop</p>
+                                    </label>
+                                    <input type="file" onChange={handlerFileInput} multiple id="imageurls" className="hidden" />
+                                </div>
+                        }
+                    </Fragment>
                     <DndContext
                         sensors={sensors}
                         collisionDetection={closestCenter}
@@ -135,13 +140,14 @@ export default function ImagesInput() {
                     >
                         <SortableContext
                             items={imageurls.map((v, i) => {
-                                return v
+                                return v.url
                             })}
                             strategy={verticalListSortingStrategy}
                         >
-                            <>
+                            <Fragment>
                                 {imageurls
-                                    .map((url, i) => {
+                                    .map((data, i) => {
+                                        let url = data.url
                                         if (i == 0) {
                                             return (
                                                 <div className="size-70  col-span-2 row-span-2">
@@ -160,11 +166,6 @@ export default function ImagesInput() {
                                                             </SortableItem>
                                                             :
                                                             <>
-                                                                <label htmlFor="imageurls" className="flex flex-col cursor-pointer p-2 border-2 border-black rounded-2xl  h-full justify-center items-center">
-                                                                    <CloudUpload />
-                                                                    <p>Draw anh Drop</p>
-                                                                </label>
-                                                                <input type="file" multiple id="imageurls" className="hidden" />
                                                             </>
                                                     }
                                                 </div>
@@ -186,7 +187,7 @@ export default function ImagesInput() {
                                         )
                                     })}
                                 {
-                                    imageurls.length == 0 && imageurls.length < 9 ?
+                                    imageurls.length == 0 ?
                                         <></> :
                                         <div className="col-span-1 p-2 aspect-square">
                                             <label htmlFor="imageurls"
@@ -195,16 +196,16 @@ export default function ImagesInput() {
                                                 <CloudUpload />
                                                 <p>Draw anh Drop</p>
                                             </label>
-                                            <input type="file" multiple id="imageurls" className="hidden" />
+                                            <input type="file" onChange={handlerFileInput} multiple id="imageurls" className="hidden" />
                                         </div>
                                 }
-                            </>
+                            </Fragment>
                             {
                                 active ?
                                     <DragOverlay>
                                         <div className="p-2">
                                             <div className="relative">
-                                                <img src={imageurls[active]} className="aspect-square shadow-2xl object-center object-cover" alt="" />
+                                                <img src={imageurls[active].url} className="aspect-square shadow-2xl object-center object-cover" alt="" />
                                             </div>
                                         </div>
                                     </DragOverlay> : <></>

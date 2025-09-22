@@ -1,5 +1,5 @@
 import { iGetProduct, iProductDetail } from "@/components/product/interface-admin"
-import { api } from "@/lib/fetch"
+import { api } from "@/util/fetch"
 
 
 export const getProduct = async (p?: { slug: string, page?: string } | undefined): Promise<iGetProduct | undefined> => {
@@ -15,8 +15,10 @@ export const getProduct = async (p?: { slug: string, page?: string } | undefined
 
 export const getProductBySlug = async (slug: string): Promise<iProductDetail | undefined> => {
 
-    let data = await api.get(`/product/getProductBySlug?slug=${slug}`)
-
-
-    return data.data
+    try {
+        let data = await api.get(`/admin/product/getProductBySlug?slug=${slug}`)
+        return data.data
+    } catch (error) {
+        return undefined
+    }
 }

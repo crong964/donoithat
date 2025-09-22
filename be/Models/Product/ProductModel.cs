@@ -23,7 +23,7 @@ public class ProductModel
             NameProduct = productEntity.NameProduct,
             Slug = productEntity.Slug,
             Quality = productEntity.Quality,
-            ImageUrls = [.. productEntity.ImageEntities.Select(x => x.ImageFiles).Take(2)]
+            ImageUrls = [.. productEntity.ImageEntities.Select(x => x.ImagePath).Take(2)]
         };
         return productModel;
     }

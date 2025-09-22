@@ -1,10 +1,12 @@
 'use server'
 import { iLogin, iUser } from "@/components/user/interface";
-import { api, errorResponse } from "@/lib/fetch";
+import { api } from "@/util/fetch";
 import Await from "@/util/Await";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { errorResponse } from "@/util/error-response";
+import { message } from "antd";
 
 export const createUser = async (currentState: any, formData: FormData) => {
     const user: iUser = {
@@ -19,7 +21,7 @@ export const createUser = async (currentState: any, formData: FormData) => {
         let data = await api.post("/user/create", user)
 
     } catch (error: any) {
-    
+
         return errorResponse(error).message
     }
 
@@ -72,11 +74,19 @@ export const getUserInfor = async (): Promise<{
 
 
 export const updateUser = async (currentState: any, formData: FormData) => {
-    const user: iLogin = {
-        account: formData.get("account")?.toString() || "",
-        password: formData.get("password")?.toString() || "",
+    const user = {
+        fullName: formData.get("fullName")?.toString() || "",
     }
-    return "ok"
+    try {
+        await api.patch("/user", user)
+    } catch (error) {
+        return {
+            err: true,
+            message: errorResponse(error).message,
+            d: Date.now()
+        }
+    }
+    return revalidatePath("/")
 }
 
 export const getToken = async () => {

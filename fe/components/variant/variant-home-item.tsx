@@ -3,7 +3,7 @@ import SubmitButton from "@/components/button/submit-buttom";
 import { Button } from "@/components/ui/button";
 import { Fragment, useActionState, useEffect, useState } from "react";
 import { updateVarient } from "@/service/admin/variant-service";
-import PriceFormat from "@/util/Price";
+import PriceFormat from "@/util/price-format";
 import { iProductVariant } from "@/components/product/interface-admin";
 import {
     AlertDialog,

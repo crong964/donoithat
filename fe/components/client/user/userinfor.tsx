@@ -2,7 +2,8 @@
 import SubmitButton from "@/components/button/submit-buttom";
 import { updateUser } from "@/service/user-service";
 import Form from "next/form";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function UserInfor(p: {
     fullName: string;
@@ -11,6 +12,14 @@ export default function UserInfor(p: {
     address: string;
 }) {
     const [message, formAction, pending] = useActionState(updateUser, null)
+    useEffect(() => {
+        if (message?.err) {
+            toast.error(message.message)
+        }
+        return () => {
+
+        };
+    }, [message]);
     const infor = p
     return (
         <>

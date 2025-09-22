@@ -23,6 +23,6 @@ public class ProductEntity
     public required long Quality { get; set; } = 0;
     public ICollection<ProductVariantEntity>? ProductVariantEntities { get; set; }
     public required CategoryEntity? CategoryEntity { get; set; }
-    public ICollection<ImageEntity> ImageEntities { get; set; } = [];
+    public List<ImageEntity> ImageEntities { get; } = [];
 
 }

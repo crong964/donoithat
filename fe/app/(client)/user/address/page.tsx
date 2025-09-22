@@ -1,3 +1,4 @@
+import AddressAdd from "@/components/address/address-add"
 import AddressRow from "@/components/address/address-row"
 import { Button } from "@/components/ui/button"
 import { getAllAddresses } from "@/service/address-service"
@@ -7,9 +8,7 @@ export default async function AddressPage() {
     return (
         <>
             <div className="p-3.75">
-                <Button variant={"default"} >
-                    Thêm địa chỉ mới
-                </Button>
+                <AddressAdd />
             </div>
             <div className="p-3">
                 <table className="table-auto w-full">

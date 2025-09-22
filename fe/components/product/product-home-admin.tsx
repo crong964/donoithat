@@ -1,5 +1,5 @@
 'use client'
-import PriceFormat from "@/util/Price";
+import PriceFormat from "@/util/price-format";
 import { Switch } from "../ui/switch";
 import { iProduct } from "./interface-admin";
 import { Badge } from "../ui/badge";
@@ -14,7 +14,7 @@ import SubmitButton from "../button/submit-buttom";
 import VariantsHomeItem from "../variant/variant-home-item";
 
 export default function ProductHomeAdmin(p: iProduct) {
-    const total = p.variants.reduce((pre, cur) => {
+    const total = p.productVariants.reduce((pre, cur) => {
         return pre + cur.quality
     }, 0)
 
@@ -57,8 +57,10 @@ export default function ProductHomeAdmin(p: iProduct) {
                 </td>
                 <td>
                     <div className="flex space-x-2.5 justify-end">
-                        <SquarePen />
-                        <PencilLine />
+
+                        <Link href={`/admin/product/${p.slug}`} >
+                            <SquarePen />
+                        </Link>
                     </div>
                 </td>
             </tr>
@@ -68,14 +70,14 @@ export default function ProductHomeAdmin(p: iProduct) {
                         <CollapsibleTrigger asChild>
                             <div className="my-5 text-center">
                                 <Button variant={"outline"}>
-                                    Mở rộng {p.variants.length}
+                                    Mở rộng {p.productVariants.length}
                                 </Button>
                             </div>
                         </CollapsibleTrigger>
                         <CollapsibleContent asChild>
                             <div className="grid grid-cols-2">
                                 {
-                                    p.variants.map((v) => {
+                                    p.productVariants.map((v) => {
                                         return (
                                             <VariantsHomeItem key={v.productVariantId} {...v} />
                                         )

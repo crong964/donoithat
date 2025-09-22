@@ -1,4 +1,4 @@
-export interface ICcategoryItem {
+export interface iCategoryItem {
     name: string,
     id: string,
     con: {

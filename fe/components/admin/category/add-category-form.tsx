@@ -1,6 +1,6 @@
 import { setCategory } from "@/redux/admin/category/categoryRedux"
 import { RootState } from "@/redux/admin/reduxRoot"
-import removeAccents from "@/util/RemoveAccents"
+import removeAccents from "@/util/remove-accents"
 import { Button, Input } from "antd"
 import { Ban, Settings, SquarePlus, Trash } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"

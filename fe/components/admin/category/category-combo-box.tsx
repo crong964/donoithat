@@ -19,9 +19,10 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import Link from "next/link"
+import { iMainCateGory } from "@/components/category/interface"
 
 
-export default function CategoryCombobox(p: { ls: iCateGory[] }) {
+export default function CategoryCombobox(p: { ls: iMainCateGory[] }) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
     const categories = p.ls

@@ -1,6 +1,7 @@
 'use server'
 import { iProductVariantCart } from "@/components/product/interface";
-import { api, errorResponse } from "@/lib/fetch"
+import { errorResponse } from "@/util/error-response";
+import { api, } from "@/util/fetch"
 import { revalidatePath } from "next/cache";
 
 

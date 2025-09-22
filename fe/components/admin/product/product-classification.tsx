@@ -5,7 +5,7 @@ import { ArrowUpToLine, Image, Trash2, X } from "lucide-react"
 import { Fragment, useEffect, useMemo, useState } from "react"
 import { IPrice, IProductVariantsDetailPros } from "./interface"
 import Count from "@/util/Count"
-import PriceFormat from "@/util/Price"
+import PriceFormat from "@/util/price-format"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/redux/admin/reduxRoot"
 import {
@@ -15,11 +15,13 @@ import {
     setMinMaxPrice,
     setProductClassifications,
     setProductVariants,
+    setQuality,
 } from "@/redux/admin/product/productRedux"
 import ProductClassificationItem from "./product-classification-item"
 import ImageProduct from "./image-product"
 import { setOpen } from "@/redux/admin/product/mediaLibraryRedux"
 import MinMaxPrice from "./price"
+import { createOption } from "./ulti"
 
 
 
@@ -29,14 +31,9 @@ export default function ProductClassification() {
     const imageurls = useSelector((state: RootState) => state.product.imageurls)
     const imageVariants = useSelector((state: RootState) => state.product.imageVariants)
     const mainPrice = useSelector((state: RootState) => state.product.mainPrice)
+    const quality = useSelector((state: RootState) => state.product.quality)
     const dispatch = useDispatch()
-    const createOption = () => {
-        const d = new Date()
-        return {
-            id: `${d.getHours()}${d.getMinutes()}${d.getSeconds()}`,
-            name: ""
-        }
-    }
+
 
     const sl = useMemo(() => {
         let f = 1
@@ -76,7 +73,7 @@ export default function ProductClassification() {
                 variantId: variantId.trim(),
                 variantName: variantName.trim(),
                 price: 0,
-                quality: "",
+                quality: "0",
                 image: -1
             }
         })))
@@ -155,10 +152,11 @@ export default function ProductClassification() {
                     </div>
                     <div className="flex-1">
                         <Input placeholder="Giá" value={PriceFormat(mainPrice + "")} required onChange={(v) => {
-                            let n = parseInt(v.currentTarget.value.replaceAll(" ", ""))
+                            let n = parseInt(v.currentTarget.value.replaceAll(",", ""))
                             if (v.currentTarget.value == "") {
                                 dispatch(setMainPriceProduct(0))
                             }
+
                             if (isNaN(n)) {
                                 return
                             }
@@ -173,7 +171,9 @@ export default function ProductClassification() {
                         </div>
                     </div>
                     <div className="flex-1">
-                        <Input required placeholder="Tồn kho" />
+                        <Input value={quality} onChange={(v) => {
+                            dispatch(setQuality(parseInt(v.currentTarget.value)))
+                        }} required placeholder="Tồn kho" />
 
                     </div>
                 </div>
@@ -197,13 +197,13 @@ export default function ProductClassification() {
                                                 return (
                                                     <li className="py-2">
                                                         <div key={v.id} className="flex items-center gap-x-3">
-                                                            <button onClick={() => {
+                                                            <button type="button" onClick={() => {
                                                                 dispatch(setOpen(true))
                                                                 setVariantsKey(v.id)
                                                             }} className="size-20 border flex justify-center items-center rounded-lg">
                                                                 {imageVariants[v.id] == undefined ?
                                                                     <Image size={20} /> :
-                                                                    <img src={imageurls[imageVariants[v.id]]} className="w-full h-full object-cover " alt="" />}
+                                                                    <img src={imageurls[imageVariants[v.id]].url} className="w-full h-full object-cover " alt="" />}
                                                             </button>
                                                             <p className="font-bold text-2xl">{v.name}</p>
                                                         </div>
@@ -244,12 +244,12 @@ export default function ProductClassification() {
                 <ul>
                     {productVariants.
                         map((productVariant, i) => {
-                            let url = imageurls[productVariant.image]
+                            let url = imageurls[productVariant.image]?.url
                             return (
                                 <li key={productVariant.variantId} className="flex py-4 gap-x-3">
                                     <div className="basis-1/3">
                                         <span className="inline-block px-1">
-                                            <button onClick={() => {
+                                            <button type="button" onClick={() => {
                                                 dispatch(setOpen(true))
                                                 setProductVariantI(i)
                                             }} className="aspect-square flex cursor-pointer justify-center items-center size-25 border">
@@ -272,7 +272,7 @@ export default function ProductClassification() {
                                             let temp = productVariants.map((v) => {
                                                 return { ...v }
                                             })
-                                            temp[i].price = parseInt(f.replaceAll(' ', ''))
+                                            temp[i].price = parseInt(f.replaceAll(',', ''))
                                             dispatch(setProductVariants(temp))
                                         }} placeholder="Giá sản phẩm" value={PriceFormat(productVariant.price + "")} className="basis-2/5">
                                         </Input>

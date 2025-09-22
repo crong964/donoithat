@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using be.Service.Implement;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.OpenApi.Any;
+using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -62,7 +63,8 @@ builder.Services.AddSwaggerGen(c =>
             }
         });
         c.SchemaFilter<EnumSchemaFilter>();
-
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });
 
 builder.Services.AddCors(options =>
@@ -70,7 +72,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("_myAllowSpecificOrigins",
                       policy =>
                       {
-                          policy.WithOrigins("http://example.com");
+                          policy.WithOrigins("*");
                       });
 });
 //https://blog.nashtechglobal.com/authentication-and-authorization-in-asp-net-core-web-using-jwt/

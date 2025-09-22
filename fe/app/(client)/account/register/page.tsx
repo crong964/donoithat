@@ -40,14 +40,6 @@ export default function RegisterPage() {
                         </div>
                         <div className="mb-6.25">
                             <label htmlFor="">
-                                <input required type="text"
-                                    value="a"
-                                    name="address" className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
-                                    placeholder="Địa chỉ" />
-                            </label>
-                        </div>
-                        <div className="mb-6.25">
-                            <label htmlFor="">
                                 <input value="a" required type="text" name="phoneNumber" className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
                                     placeholder="Số điện thoại" />
                             </label>

@@ -1,9 +1,11 @@
 export interface IProductClassification {
     name: string
     id: string
-    options: { 
+    edit: boolean
+    options: {
         id: string
         name: string
+        edit: boolean
     }[]
 }
 export interface IProductVariant {

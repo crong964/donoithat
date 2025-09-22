@@ -9,32 +9,33 @@ export default async function ProductHomePage({ searchParams }: { searchParams: 
     if (product == null) {
         return <></>
     }
-
     const items = product.productModels
     return (
         <section className="p-7 relative">
-            <table className="table-auto w-full text-[13px] text-black!">
-                <thead className=" ">
-                    <tr className="">
-                        <th className="text-center pb-2 w-50">Tình trạng</th>
-                        <th className="text-center pb-2 w-100">Sản phẩm</th>
-                        <th className="text-center pb-2">Danh mục</th>
-                        <th className=" pb-2">Đơn giá</th>
-                        <th className=" pb-2">Số lượng</th>
-                        <th className=" pb-2 text-right">Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        items.map((p) => {
-                            return (
-                                <ProductHomeAdmin {...p} key={p.slug} />
-                            )
-                        })
-                    }
+            <div className="min-h-100">
+                <table className="table-auto w-full text-[13px] text-black!">
+                    <thead className=" ">
+                        <tr className="">
+                            <th className="text-center pb-2 w-50">Tình trạng</th>
+                            <th className="text-center pb-2 w-100">Sản phẩm</th>
+                            <th className="text-center pb-2">Danh mục</th>
+                            <th className=" pb-2">Đơn giá</th>
+                            <th className=" pb-2">Số lượng</th>
+                            <th className=" pb-2 text-right">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            items.map((p) => {
+                                return (
+                                    <ProductHomeAdmin {...p} key={p.slug} />
+                                )
+                            })
+                        }
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
             <div>
                 <Pagination page={parseInt(page || "1")}
                     total={product.totalPage}

@@ -1,19 +1,27 @@
 'use client'
 import { IProductClassification, IProductVariant } from '@/components/admin/product/interface'
+import { createClassificationFormSaveToHandle } from '@/components/admin/product/ulti'
+import { iProductDetail } from '@/components/product/interface-admin'
+import data from '@/tempdata/data'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-export interface ProductState {
+
+export interface iImageInput {
+    file: File | undefined,
+    url: string
+}
+export interface iProductState {
     productVariants: IProductVariant[]
     productClassifications: IProductClassification[]
-    imageFiles: File[]
-    imageurls: string[],
+    imageurls: iImageInput[],
     nameProduct: string,
     typeProduct: string
     description: string
     mainPrice: number
     minPrice: number
     maxPrice: number
+    quality: number
     imageVariants: { [key: string]: number }
     vendor: string,
     weightProduct: {
@@ -22,10 +30,9 @@ export interface ProductState {
     }
 }
 
-const initialState: ProductState = {
+const initialState: iProductState = {
     productVariants: [],
     productClassifications: [],
-    imageFiles: [],
     imageurls: [],
     maxPrice: 0,
     minPrice: 0,
@@ -35,6 +42,7 @@ const initialState: ProductState = {
     mainPrice: 0,
     imageVariants: {},
     vendor: "",
+    quality: 0,
     weightProduct: {
         measure: "",
         value: 0
@@ -53,10 +61,6 @@ export const productSlice = createSlice({
             state.imageurls[i1] = state.imageurls[i2]
             state.imageurls[i2] = temp
 
-            const tempFile = state.imageFiles[i1]
-            state.imageFiles[i1] = state.imageFiles[i2]
-            state.imageFiles[i2] = tempFile
-
         },
         addProductVariants: (state, action: PayloadAction<IProductVariant>) => {
             state.productVariants.push(action.payload)
@@ -72,10 +76,11 @@ export const productSlice = createSlice({
         },
         addOptionInProductClassifications: (state, action: PayloadAction<{
             data: {
-                id: string, name: string
+                id: string, name: string, edit: boolean
             },
             pci: number
         }>) => {
+
             state.productClassifications[action.payload.pci].options.push(action.payload.data)
         },
         removeOptionInProductClassifications: (state, action: PayloadAction<{
@@ -111,23 +116,16 @@ export const productSlice = createSlice({
         setProductVariants: (state, action: PayloadAction<IProductVariant[]>) => {
             state.productVariants = [...action.payload]
         },
-        addImageUrls: (state, action: PayloadAction<string[]>) => {
+        addImageUrlFiles: (state, action: PayloadAction<iImageInput[]>) => {
             state.imageurls = [...state.imageurls, ...action.payload]
         },
-        addStringFiles: (state, action: PayloadAction<File[]>) => {
-            state.imageFiles = [...state.imageFiles, ...action.payload]
-        },
+
         removeImageUrls: (state, action: PayloadAction<number>) => {
             state.imageurls = state.imageurls.filter((_, i) => {
                 return i != action.payload
             })
         }
         ,
-        removeStringFiles: (state, action: PayloadAction<number>) => {
-            state.imageFiles = state.imageFiles.filter((_, i) => {
-                return i != action.payload
-            })
-        },
         setNameProduct: (state, action: PayloadAction<string>) => {
             state.nameProduct = action.payload
         },
@@ -161,12 +159,58 @@ export const productSlice = createSlice({
 
             state.weightProduct.value = action.payload.value
             state.weightProduct.measure = action.payload.measure
+        },
+        setQuality: (state, action: PayloadAction<number>) => {
+            state.quality = action.payload
+        },
+        setResetProductData: (state) => {
+            localStorage.removeItem("temp")
+            return initialState
+        },
+        setProductData: (state, action: PayloadAction<iProductDetail>) => {
+            let tmp = action.payload
+            let d: IProductClassification[] = createClassificationFormSaveToHandle(JSON.parse(tmp.productClassification))
+
+            let data: iProductState = {
+                description: tmp.description,
+                imageurls: tmp.imageUrls.map((v) => {
+                    return {
+                        file: undefined,
+                        url: v
+                    }
+                }),
+                imageVariants: {},
+                mainPrice: tmp.mainPrice,
+                maxPrice: 0,
+                minPrice: 0,
+                nameProduct: tmp.nameProduct,
+                productClassifications: d,
+                productVariants: tmp.productVariants.map(v => {
+                    return {
+                        image: v.position,
+                        price: v.price,
+                        quality: v.quality + "",
+                        variantId: v.variantId,
+                        variantName: v.variantName
+                    }
+                }),
+                quality: tmp.quality,
+                typeProduct: tmp.categorySlug,
+                vendor: tmp.suplier,
+                weightProduct: {
+                    measure: "kg",
+                    value: 1
+                }
+            }
+
+            return data
         }
     },
 })
 
 export const {
     swapImage,
+    setQuality,
     addProductClassifications,
     addProductVariants,
     setProductClassifications,
@@ -176,16 +220,14 @@ export const {
     addOptionInProductClassifications,
     removeOptionInProductClassifications,
     removeProductClassifications,
-    addImageUrls,
-    addStringFiles,
+    addImageUrlFiles,
     removeImageUrls,
-    removeStringFiles,
     setDescriptionProduct,
     setNameProduct,
     setTypeProduct,
     setIamgeVariants,
     setMainPriceProduct,
     setVendor, setMinMaxPrice,
-    setWeightProduct } = productSlice.actions
+    setWeightProduct, setResetProductData, setProductData } = productSlice.actions
 
 export default productSlice.reducer

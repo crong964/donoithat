@@ -24,7 +24,7 @@ public class OrderEntity
     [Key]
     public string OrderId { get; set; } = Guid.NewGuid().ToString();
 
-    public long OrderTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    public long OrderTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
     public PayStatus Pay { get; set; } = PayStatus.No;

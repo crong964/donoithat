@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace be.Entity;
 
@@ -19,6 +20,7 @@ public class DatabaseContext : DbContext
     public DbSet<CartEntity> Cart { get; set; } = null!;
     public DbSet<OrderDetailEntity> OrderDetail { get; set; } = null!;
     public DbSet<AddressEntity> Address { get; set; } = null!;
+    public DbSet<PhotoGalleryEntity> PhotoGallery { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserEntity>()
@@ -30,6 +32,17 @@ public class DatabaseContext : DbContext
        .HasMany(e => e.ProductVariantEntities)
        .WithMany(e => e.OrderEntities)
        .UsingEntity<OrderDetailEntity>();
-    }
 
+        modelBuilder.Entity<ProductEntity>()
+       .HasMany(e => e.ImageEntities)
+       .WithMany(e => e.ProductEntities)
+       .UsingEntity<PhotoGalleryEntity>();
+    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder
+            .LogTo(
+                Console.WriteLine,
+                (eventId, logLevel) => logLevel > LogLevel.Information
+                                       || eventId == RelationalEventId.ConnectionOpened
+                                       || eventId == RelationalEventId.ConnectionClosed);
 }

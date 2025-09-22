@@ -10,7 +10,7 @@ export interface iProduct {
     status: number
     categoryName: string
     categorySlug: string
-    variants: iProductVariant[]
+    productVariants: iProductVariant[]
 }
 export interface iGetProduct {
     productModels: iProduct[],
@@ -34,22 +34,18 @@ export interface iProductVariant {
 }
 
 export interface iProductDetail {
-    productDetail: {
-        slug: string;
-        description: string;
-        productClassification: string;
-        mainPrice: number;
-        nameProduct: string;
-        quality: number;
-        suplier: string;
-        productVariantModels: iProductVariant[];
-        imageEntities: string[];
-        categotyProductDetail: {
-            slug: string,
-            nameCategory: string
-        },
-    }
-    relatedProducts: iProduct[]
+    productId?: string
+    slug: string;
+    description: string;
+    productClassification: string;
+    mainPrice: number;
+    nameProduct: string;
+    quality: number;
+    suplier: string;
+    productVariants: iProductVariant[];
+    imageUrls: string[];
+    categorySlug: string,
+    nameCategory: string
 }
 
 export interface iVariants {

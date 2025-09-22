@@ -2,21 +2,17 @@
 import { PlusOutlined } from "@ant-design/icons"
 import { Button, Input } from "antd"
 import { ArrowUpToLine, Trash2, X } from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
-import { IPrice, IProductClassification, IProductVariantsDetailPros } from "./interface"
-import Count from "@/util/Count"
-import PriceFormat from "@/util/Price"
+import { Fragment, useEffect, useMemo, useState } from "react"
+import { IPrice, IProductClassification, } from "./interface"
 import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "@/redux/admin/reduxRoot"
 import {
     addOptionInProductClassifications,
-    addProductClassifications,
+
     editOptionInProductClassifications,
     editProductClassifications,
     removeOptionInProductClassifications,
     removeProductClassifications,
-    setProductClassifications,
-    setProductVariants,
+
 } from "@/redux/admin/product/productRedux"
 
 
@@ -29,10 +25,10 @@ export default function ProductClassificationItem(p: {
     const pci = p.pci
     const [collapse, setCollapses] = useState<boolean>(false)
     const createOption = () => {
-        const d = new Date()
         return {
-            id: `${d.getHours()}${d.getMinutes()}${d.getSeconds()}`,
-            name: ""
+            id: `${Date.now()}`,
+            name: "",
+            edit: true
         }
     }
     const dispatch = useDispatch()
@@ -48,10 +44,10 @@ export default function ProductClassificationItem(p: {
                 <div className="flex-1 px-2">
                     {
                         collapse ?
-                            <button className="cursor-pointer w-full text-left" onClick={() => {
+                            <button type="button" className="cursor-pointer w-full text-left" onClick={() => {
                                 setCollapses(false)
                             }} >
-                                <span >{productClassification.name}</span>
+                                <span className="font-bold">{productClassification.name}</span>
                             </button> :
                             <Input placeholder="Nhập"
                                 value={productClassification.name}
@@ -86,7 +82,8 @@ export default function ProductClassificationItem(p: {
                                 </button> :
                                 <>
                                     {
-                                        productClassification.options
+                                        productClassification
+                                            .options
                                             .map((option, oi) => {
                                                 return (
                                                     <div key={`${productClassification.id} ${option.id}`} className="basis-1/2 p-2.5">
@@ -101,6 +98,7 @@ export default function ProductClassificationItem(p: {
                                                                             data: createOption(),
                                                                             pci: pci
                                                                         }))
+
                                                                     }
                                                                     dispatch(editOptionInProductClassifications({
                                                                         data: tempoption.name,
@@ -111,7 +109,7 @@ export default function ProductClassificationItem(p: {
 
                                                                 }} placeholder="Nhập" />
                                                             {
-                                                                productClassification.options.length != oi + 1 ?
+                                                                productClassification.options.length != oi + 1 && option.edit ?
                                                                     <Button
                                                                         onClick={() => {
                                                                             dispatch(removeOptionInProductClassifications({
@@ -135,18 +133,21 @@ export default function ProductClassificationItem(p: {
                     <div className=" p-2.5 flex justify-between">
                         {
                             collapse ?
-                                <></> : <>
-                                    <Button onClick={() => {
-                                        dispatch(removeProductClassifications(p.data.id))
-                                    }}>
-                                        <Trash2 size={14} />
-                                    </Button>
+                                <Fragment /> :
+                                <Fragment>
+                                    {p.data.edit ?
+                                        <Button onClick={() => {
+                                            dispatch(removeProductClassifications(p.data.id))
+                                        }}>
+                                            <Trash2 size={14} />
+                                        </Button> :
+                                        <Fragment />}
                                     <Button onClick={() => {
                                         setCollapses(true)
                                     }} icon={<ArrowUpToLine size={14} />}>
 
                                     </Button>
-                                </>
+                                </Fragment>
                         }
                     </div>
                 </div>

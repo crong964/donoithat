@@ -20,6 +20,14 @@ IUserService userService, ILogger<AddressController> logger) : ControllerBase
     private readonly IUserService _userService = userService;
     private readonly ILogger<AddressController> _logger = logger;
 
+    /// <summary>
+    /// Lấy danh sách địa chỉ của người dùng
+    /// </summary>
+    /// <remarks>
+    /// API này trả về toàn bộ danh sách địa chỉ của người dùng
+    /// </remarks>
+    /// <response code="200">Danh sách sản phẩm</response>
+    /// <response code="404">Không tìm thấy dữ liệu</response>
     [HttpGet]
     public async Task<ActionResult> Get()
     {
