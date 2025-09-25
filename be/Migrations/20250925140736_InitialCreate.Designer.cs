@@ -11,7 +11,7 @@ using be.Entity;
 namespace be.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250920152329_InitialCreate")]
+    [Migration("20250925140736_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -73,6 +73,9 @@ namespace be.Migrations
                     b.Property<string>("CategoryId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("CategoryImage")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CategoryParentCategoryId")
                         .HasColumnType("TEXT");
 
@@ -94,8 +97,7 @@ namespace be.Migrations
 
                     b.HasIndex("CategoryParentCategoryId");
 
-                    b.HasIndex("Slug")
-                        .IsUnique();
+                    b.HasIndex("Slug");
 
                     b.ToTable("Category");
                 });

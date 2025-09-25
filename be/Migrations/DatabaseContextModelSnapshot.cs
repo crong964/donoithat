@@ -70,6 +70,9 @@ namespace be.Migrations
                     b.Property<string>("CategoryId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("CategoryImage")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CategoryParentCategoryId")
                         .HasColumnType("TEXT");
 
@@ -91,8 +94,7 @@ namespace be.Migrations
 
                     b.HasIndex("CategoryParentCategoryId");
 
-                    b.HasIndex("Slug")
-                        .IsUnique();
+                    b.HasIndex("Slug");
 
                     b.ToTable("Category");
                 });

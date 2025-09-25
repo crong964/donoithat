@@ -6,10 +6,14 @@ namespace be.Entity;
 [JsonConverter(typeof(JsonStringEnumConverter<OrderStatus>))]
 public enum OrderStatus
 {
-    Pending,
+    [JsonStringEnumMemberName("Đang xử lý")]
     Processing,
+    [JsonStringEnumMemberName("Đang giao")]
     Shipped,
+    [JsonStringEnumMemberName("Đã giao")]
     Delivered,
+
+    [JsonStringEnumMemberName("Đã hủy")]
     Cancelled
 }
 
@@ -17,7 +21,11 @@ public enum OrderStatus
 [JsonConverter(typeof(JsonStringEnumConverter<PayStatus>))]
 public enum PayStatus
 {
-    No, Yes
+    [JsonStringEnumMemberName("Chưa thanh toán")]
+    No,
+
+     [JsonStringEnumMemberName("Đã thanh toán")]
+    Yes
 }
 public class OrderEntity
 {
@@ -26,7 +34,7 @@ public class OrderEntity
 
     public long OrderTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-    public OrderStatus Status { get; set; } = OrderStatus.Pending;
+    public OrderStatus Status { get; set; } = OrderStatus.Processing;
     public PayStatus Pay { get; set; } = PayStatus.No;
     public required float Lat { get; set; }
     public required float Lng { get; set; }

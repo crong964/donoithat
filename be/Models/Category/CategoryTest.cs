@@ -5,7 +5,7 @@ public class CategoryTest
 {
     public required string Name { get; set; }
     public required string Id { get; set; }
-
+    public string? Image { get; set; }
     public ICollection<CategoryTest2>? Con { get; set; }
 }
 

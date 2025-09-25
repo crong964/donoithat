@@ -1,12 +1,10 @@
-'use client'
-import { category } from "@/tempdata/category"
-import CategoryItem from "./category-item"
-import AddCategoryForm from "./add-category-form"
-import EditCategoryForm from "./edit-category-form"
+import CategoryCombobox from "@/components/admin/category/category-combo-box";
+import CategoryItem from "@/components/admin/category/category-item";
+import { getCategory, getCategoryInProduct } from "@/service/admin/category-service";
 
-
-export default function Categories() {
-
+export default async function Layout({ children }: { children: React.ReactNode }) {
+    const data = await getCategory()
+    const category = data
     return (
         <>
             <div className="flex px-10 gap-3">
@@ -18,16 +16,16 @@ export default function Categories() {
                             </h1>
                         </header>
                         <main>
+
                             {category.map((v, i) => {
-                                return <CategoryItem data={v} i={i} key={v.id} />
+                                return <CategoryItem key={v.categoryId || i} data={v} />
                             })}
                         </main>
                     </div>
                 </section>
                 <section className="flex-1 shrink grow px-2">
                     <div className="w-full  sticky pb-10 top-0 right-0">
-                        <AddCategoryForm />
-                        <EditCategoryForm />
+                        {children}
                     </div>
                 </section>
             </div>

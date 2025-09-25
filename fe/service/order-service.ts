@@ -1,7 +1,7 @@
 'use server'
 
-import { iOrder, iOrderDetail } from "@/components/order/interface"
-import { api,  } from "@/util/fetch"
+import { iOrder, iOrderDetail, iOrderInAdmin } from "@/components/order/interface"
+import { api, } from "@/util/fetch"
 import Await from "@/util/Await"
 import { revalidatePath } from "next/cache"
 import { errorResponse } from "@/util/error-response"
@@ -39,14 +39,7 @@ export const addOrder = async (currentState: any, formData: FormData) => {
 
 }
 
-export const getOrders = async (): Promise<iOrder[]> => {
-    try {
-        let data = await api.get("/order")
-        return data.data
-    } catch (error) {
-        return []
-    }
-}
+
 
 export const getOrderById = async (orderId: string): Promise<iOrderDetail | undefined> => {
     try {
@@ -54,7 +47,7 @@ export const getOrderById = async (orderId: string): Promise<iOrderDetail | unde
         return data.data
     } catch (error) {
         console.log((error as any)?.response?.data);
-        
+
         return undefined
     }
 }

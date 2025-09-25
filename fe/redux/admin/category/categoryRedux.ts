@@ -1,23 +1,25 @@
 
 import { IProductClassification, IProductVariant } from '@/components/admin/product/interface'
+import { iCateGory } from '@/components/category/interface'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface categoryState {
-    categoryItem: {
-        id: string,
-        name: string
-    }[],
-    id: string,
-    name: string
+    categoryItem: iCateGory[],
     action: "add" | "edit",
     i: number
+    mainCategory: iCateGory
 }
 
 const initialState: categoryState = {
-    categoryItem: [{ id: "", name: "" }],
-    id: "",
-    name: "",
+    categoryItem: [{ id: "", nameCategory: "", slug: "" }],
+    mainCategory: {
+        id: "",
+        nameCategory: "",
+        slug: "",
+        categoryId: "",
+        categoryImage: ""
+    },
     action: "add",
     i: -1
 }
@@ -27,20 +29,21 @@ export const categorySlice = createSlice({
     initialState,
     reducers: {
         setCategory: (state, action: PayloadAction<{
-            categoryItem: {
-                id: string,
-                name: string
-            }[],
-            id: string,
-            name: string
+            categoryItem: iCateGory[],
+            mainCategory: iCateGory
         }>) => {
-            state.id = action.payload.id
-            state.name = action.payload.name
             state.categoryItem = action.payload.categoryItem
+            state.mainCategory = action.payload.mainCategory
         },
-        setIdEdit: (state, action: PayloadAction<number>) => {
-            state.i = action.payload
+        setIdEdit: (state, action: PayloadAction<{
+            index: number,
+            categoryItem: iCateGory[],
+            mainCategory: iCateGory
+        }>) => {
+            state.i = action.payload.index
             state.action = 'edit'
+            state.categoryItem = action.payload.categoryItem
+            state.mainCategory = action.payload.mainCategory
         },
         cancelEdit: (state) => {
             state.i = -1

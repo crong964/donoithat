@@ -1,3 +1,4 @@
+import { iMainCateGory } from "@/components/category/interface";
 import Coupon from "@/components/coupon/coupon";
 import { iGetProduct } from "@/components/product/interface";
 import ProductHome from "@/components/product/product-home";
@@ -5,12 +6,12 @@ import ProductItem from "@/components/product/product-item";
 import { CarouselNext, CarouselPrevious, MainCarousel } from "@/components/ui/carousel";
 import Link from "next/link";
 
-export default function Home(data: iGetProduct) {
+export default function Home(data: { products: iGetProduct, categories: iMainCateGory[] }) {
 
-    if (data == null || data.productModels == null) {
+    if (data == null || data.products == null) {
         return <></>
     }
-    const product = data.productModels
+    const product = data.products.productModels
     return (
         <>
             <div className="lg:px-3.75">
@@ -104,7 +105,7 @@ export default function Home(data: iGetProduct) {
                 </MainCarousel>
             </section>
             <section className="pb-17.5">
-                <div className="px-3.75" >
+                <div className="px-3.75 min-h-40" >
                     <div style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/categorize_img.jpg")` }}
                         className="w-full bg-contain lg:px-5 py-1.75 flex items-center ">
                         <div className="px-3.75 basis-1/6 max-lg:hidden">
@@ -117,26 +118,24 @@ export default function Home(data: iGetProduct) {
                                 </div>
                             </div>
                         </div>
-                        <div className="basis-5/6 overflow-x-hidden">
+                        <div className="lg:basis-5/6 overflow-x-hidden">
                             <div className="lg:px-3.75  lg:mx-3.75">
-                                <MainCarousel className="flex justify-between">
-                                    {Array.from({ length: 8 })
+                                <MainCarousel className="flex justify-between list-none">
+                                    {data.categories
                                         .map((_, i) => {
                                             return (
-                                                <div key={i} className="max-lg:basis-1/3 my-2 basis-33 grow-0 shrink-0">
-                                                    <div className="flex cursor-pointer flex-col justify-around items-center px-3.75">
-                                                        <div className="mx-1.25">
-                                                            <div className="bg-white hover:shadow-cate-hover w duration-500 rounded-full p-2.5">
-                                                                <img src="/categorize_1_img.jpg" className="w-full" alt="" srcSet="" />
-                                                            </div>
-                                                        </div>
+                                                <li key={_.slug} className=" max-lg:basis-1/3 my-2 basis-33 grow-0 shrink-0">
+                                                    <Link href={`/collections/${_.slug}`} className="flex cursor-pointer flex-col justify-around items-center px-3.75">
+                                                        <picture className="mx-1.25">
+                                                            <figure className="bg-white hover:shadow-cate-hover duration-500 rounded-full p-1">
+                                                                <img src={_.categoryImage} className="aspect-square object-cover rounded-full" alt={_.nameCategory} srcSet="" />
+                                                            </figure>
+                                                        </picture>
                                                         <div className=" text-white my-3.5">
-                                                            <h3>
-                                                                <Link className="" href="/">Ghê</Link>
-                                                            </h3>
+                                                            <p className="text-sm text-center">{_.nameCategory}</p>
                                                         </div>
-                                                    </div>
-                                                </div>
+                                                    </Link>
+                                                </li>
                                             )
                                         })}
                                 </MainCarousel>

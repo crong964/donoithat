@@ -1,110 +1,129 @@
-import { setCategory } from "@/redux/admin/category/categoryRedux"
-import { RootState } from "@/redux/admin/reduxRoot"
-import { category } from "@/tempdata/category"
-import removeAccents from "@/util/remove-accents"
-import { Button, Input } from "antd"
-import { Ban, Settings } from "lucide-react"
-import { useDispatch, useSelector } from "react-redux"
+'use client'
+import SubmitButton from "@/components/button/submit-buttom";
+import { iCateGory, iMainCateGory } from "@/components/category/interface";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { addCategory, addChildren, editCategory, removeCategoryById } from "@/service/admin/category-service";
+import removeAccents from "@/util/remove-accents";
+import { Ban, ImageUp, Pen, Plus, SquarePlus, Trash } from "lucide-react";
+import Form from "next/form";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import EditMainCategoryForm from "./edit-main-caregory-form";
 
-export default function AddCategoryForm() {
 
-    const action = useSelector((state: RootState) => state.category.action)
-    const i = useSelector((state: RootState) => state.category.i)
-    const dispatch = useDispatch()
-    if (action != 'edit') {
-        return <></>
-    }
-    const con = category[i].con
-    const mainCategory = category[i]
+export default function EditCategoryForm(p: iMainCateGory) {
+    const [chidlrenItem, setChidlrenItem] = useState<iCateGory[]>([])
+    const [mess2, formeditAction, pending2] = useActionState(editCategory, null)
+    const [mess3, formeChildrenAction, pending3] = useActionState(addChildren, null)
+
+
+
+    useEffect(() => {
+        setChidlrenItem([...p.categoryChidlren, { id: "", nameCategory: "", slug: "" }])
+        return () => {
+        };
+    }, [p.id]);
+
+    useEffect(() => {
+        if (mess2?.error) {
+            toast.error(mess2.message)
+        }
+        return () => {
+
+        };
+    }, [mess2]);
+    useEffect(() => {
+        if (mess3?.error) {
+            toast.error(mess3.message)
+        }
+        return () => {
+
+        };
+    }, [mess3]);
+
     return (
         <>
             <header>
                 <h1 className="text-2xl font-bold">
-                    <p>Chỉnh sửa thể loại </p>
+                    <p>Chỉnh sửa thể loại</p>
                 </h1>
             </header>
-            <main className=" bg-white p-2 rounded-sm shadow-form">
-                <section className="my-3.75">
-                    <div className="flex">
-                        <div className="basis-3/12">
-                            <p>Tên loại chính</p>
-                        </div>
-                        <div className="flex-1">
-                            <Input onChange={(v) => {
-                                let text = v.currentTarget.value
-                                dispatch(setCategory({
-                                    categoryItem: con,
-                                    id: removeAccents(text),
-                                    name: text
-                                }))
+            <EditMainCategoryForm {...p} />
 
-                            }} value={mainCategory.name} />
-                        </div>
-                    </div>
-                </section>
-                <section className="my-3.75">
-                    <div className="flex">
-                        <div className="basis-3/12">
-                            <p>Slug</p>
-                        </div>
-                        <div className="flex-1">
-                            <Input onChange={(v) => {
-                                let text = v.currentTarget.value
-                                dispatch(setCategory({
-                                    categoryItem: con,
-                                    id: text,
-                                    name: mainCategory.name
-                                }))
-                            }} value={mainCategory.id} />
-                        </div>
-                    </div>
-                </section>
-                <section>
-                    <div className="flex">
-                        <div className="basis-3/12">
-                            <p>Tên loại phụ</p>
-                        </div>
-                        <div className="flex-1">
-                            {
-                                con.map((v, i) => {
-                                    return (
-                                        <div className="flex">
-                                            <Input key={i} onChange={(tv) => {
-                                                let text = tv.currentTarget.value
-                                                if (i == con.length - 1) {
-                                                    con.push({ id: i + 1 + "", name: "" })
-                                                }
-                                                v.name = text
-                                                v.id = removeAccents(v.name)
-                                                dispatch(setCategory({
-                                                    categoryItem: con,
-                                                    id: mainCategory.id,
-                                                    name: mainCategory.name
-                                                }))
-                                            }} placeholder="Nhập" value={v.name} />
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
+            <section className="bg-white p-2 rounded-sm shadow-form">
+                <div >
+                    <p className="text-center font-bold">Tên loại phụ</p>
+                </div>
+                <div className="flex">
+                    <div className="flex-1">
+                        {
+                            chidlrenItem.map((v, i) => {
+                                return (
+                                    <div key={v.categoryId || i} className="flex mb-3.75 space-x-3">
+                                        <Input key={i} onChange={(tv) => {
+                                            let text = tv.currentTarget.value
+                                            if (i == chidlrenItem.length - 1) {
+                                                chidlrenItem.push({ id: i + 1 + "", nameCategory: "", slug: "", categoryImage: "" })
+                                            }
+                                            let tmp = [...chidlrenItem]
+                                            tmp[i].nameCategory = text
+                                            tmp[i].slug = removeAccents(text)
+                                            setChidlrenItem([...tmp])
+                                        }} placeholder="Nhập" name="chidlrenName" value={v.nameCategory} />
+                                        <input type="hidden" name="chidlrenSlug" value={v.slug} />
+                                        {
+                                            i != chidlrenItem.length - 1 && v.categoryId ?
+                                                <>
+                                                    <Button variant={"destructive"} color="" type="button">
+                                                        <Trash />
+                                                    </Button>
+                                                    <Form action={formeditAction}>
+                                                        <input type="hidden" name="categoryId" value={v.categoryId} />
+                                                        <input type="hidden" name="nameCategory" value={v.nameCategory} />
+                                                        <input type="hidden" name="slug" value={v.slug} />
+                                                        <SubmitButton loading={
+                                                            <Button variant={"default"} type="button">
+                                                                <Pen />
+                                                            </Button>}>
+                                                            <Button variant={"blue"} type="submit">
+                                                                <Pen />
+                                                            </Button>
+                                                        </SubmitButton>
+                                                    </Form>
 
+                                                </>
+                                                :
+                                                <></>
+                                        }
+                                        {
+                                            v.categoryId == undefined && i != chidlrenItem.length - 1 ?
+                                                <>
+                                                    <Form action={formeChildrenAction}>
+                                                        <input type="hidden" name="parentId" value={p.categoryId} />
+                                                        <input type="hidden" name="nameCategory" value={v.nameCategory} />
+                                                        <input type="hidden" name="slug" value={v.slug} />
+                                                        <SubmitButton loading={
+                                                            <Button variant={"default"} type="button">
+                                                                <Plus color="white" />
+                                                            </Button>}>
+                                                            <Button variant={"blue"} type="submit">
+                                                                <Plus color="white" />
+                                                            </Button>
+                                                        </SubmitButton>
+
+                                                    </Form>
+
+                                                </> : <></>
+                                        }
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
-                </section>
-                <footer className="mt-3.75">
-                    <ul className="flex justify-between">
-                        <li>
-                            <Button icon={<Ban size={15} />} type="primary" variant="solid" color="red">
-                                Hủy
-                            </Button>
-                        </li>
-                        <li>
-                            <Button icon={<Settings size={15} />} type="primary" >
-                                Chỉnh sửa
-                            </Button>
-                        </li>
-                    </ul>
-                </footer>
-            </main>
+
+                </div>
+            </section>
         </>
     )
 }

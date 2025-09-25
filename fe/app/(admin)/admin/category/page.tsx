@@ -1,13 +1,10 @@
-import Categories from "@/components/admin/category/categories";
+import AddCategoryForm from "@/components/admin/category/add-category-form";
+import { getCategory } from "@/service/admin/category-service";
 
-export default function CategoryPage() {
+export default async function CategoryPage() {
+
     return (
-        <div className="flex justify-center">
-
-            <Categories />
-
-        </div >
-
+        <AddCategoryForm key={Date.now()} />
     )
 }
 

@@ -26,6 +26,7 @@ class ConvertEntityToModel
             NameCategory = categoryEntity.NameCategory,
             Slug = categoryEntity.Slug,
             CategoryId = categoryEntity.CategoryId,
+            CategoryImage = categoryEntity.CategoryImage,
             CategoryChidlren = ls
         };
 

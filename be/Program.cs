@@ -134,9 +134,8 @@ app.UseStaticFiles(new StaticFileOptions
 });
 //http://localhost:2000/swagger/index.html
 
-app.MapControllers(
-
-);
+app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 //var port = Environment.GetEnvironmentVariable("PORT") ?? "3000";
 app.Run();

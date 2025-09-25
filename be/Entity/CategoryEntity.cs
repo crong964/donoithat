@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore;
 namespace be.Entity;
 
 
-[Index("Slug", IsUnique = true)]
+[Index("Slug")]
 public class CategoryEntity
 {
     [Key]
     public string CategoryId { get; set; } = Guid.NewGuid().ToString();
 
+    public string? CategoryImage { get; set; }
     public required string Slug { get; set; }
     public int Index { get; set; }
 

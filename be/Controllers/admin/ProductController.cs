@@ -315,6 +315,20 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     [HttpPost("addProducts_test")]
     public async Task<ActionResult<string>> AddProducts(IEnumerable<ProductAddModel> productAddModels)
     {
@@ -348,7 +362,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                         imageEntity = new ImageEntity
                         {
                             ImageFiles = item,
-                            ImagePath = "http://localhost:2000/sta/" + item
+                            ImagePath = item
                         };
                         await _context.Image.AddAsync(imageEntity);
                     }
@@ -382,7 +396,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch (System.Exception e)
+            catch (System.Exception )
             {
                 _logger.LogInformation(productAddModel.NameProduct);
                 await transaction.RollbackAsync();

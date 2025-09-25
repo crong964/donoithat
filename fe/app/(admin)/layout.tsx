@@ -33,14 +33,12 @@ export default function RootLayout({
               <AppSidebar />
               <SidebarInset>
                 <SidebarTrigger />
-                <main className="overflow-x-auto ">
+                <main className="">
                   <section>
                     {children}
                   </section>
-
                 </main>
                 <footer className="h-100">
-
                 </footer>
               </SidebarInset>
             </>

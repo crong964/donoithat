@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Text.Json;
 using System.Threading.Tasks;
 using be.Entity;
 using be.Models;
@@ -19,15 +20,28 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
     private readonly IUserService _userService = userService;
     private readonly ILogger<OrderController> _logger = logger;
 
+
     [HttpGet]
-    public async Task<IEnumerable<OrderGetModel>> Orders()
+    public async Task<IEnumerable<OrderAdminGet>> Orders(OrderStatus? orderStatus)
     {
-        var ls = await _context.Order.
-         Include(x => x.UserEntity).
-           Select(x => OrderGetModel.ConvertEntity(x))
-         .ToArrayAsync();
+        OrderAdminGet[] ls = [];
+        if (orderStatus == null)
+        {
+            ls = await _context.Order.
+                       Include(x => x.UserEntity).
+                         Select(x => OrderAdminGet.ConvertEntity(x))
+                       .ToArrayAsync();
+            return ls;
+        }
+        ls = await _context.Order.
+        Include(x => x.UserEntity).
+        Where(x => x.Status == orderStatus).
+          Select(x => OrderAdminGet.ConvertEntity(x))
+        .ToArrayAsync();
         return ls;
     }
+
+
 
 
     [HttpPatch("updateStatus")]

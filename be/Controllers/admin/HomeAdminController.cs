@@ -23,7 +23,8 @@ public class HomeController(DatabaseContext context) : ControllerBase
         {
             TotalOrder = totalOrder,
             TotalProduct = totalProduct,
-            TotalUser = totalUser
+            TotalUser = totalUser,
+            Status = [OrderStatus.Processing, OrderStatus.Shipped, OrderStatus.Delivered, OrderStatus.Cancelled],
         };
         return Ok(home);
     }

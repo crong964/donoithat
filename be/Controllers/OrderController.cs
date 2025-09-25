@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 using be.Entity;
 using be.Models;
 using be.Service;
-using be.Service.Implement;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using Microsoft.EntityFrameworkCore;
 namespace be.Controllers;
 
@@ -153,7 +152,7 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
 
         var orderEntity = new OrderEntity
         {
-            Status = OrderStatus.Pending,
+            Status = OrderStatus.Processing,
             UserEntity = userEntity,
             Address = addressEntity.Address,
             Note = orderAdds.Note,

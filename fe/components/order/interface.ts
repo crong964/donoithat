@@ -10,6 +10,18 @@ export interface iOrder {
     status: string
     pay: string
 }
+export interface iOrderInAdmin {
+    orderId: string
+    orderTime: string
+    lat: string
+    lng: string
+    note: string
+    address: string
+    status: string
+    pay: string,
+    userAccount: string
+    userName: string
+}
 export interface iProductVariantDetail {
     productId: any;
     productVariantId: string;
@@ -17,7 +29,7 @@ export interface iProductVariantDetail {
     variantName: string;        // ví dụ: "Tự nhiên Gỗ cao su/plywood D50.5xW49.5xH80"
     price: number;              // 79900000
     image: string;              // URL
-    productName:string
+    productName: string
     quality: number;            // 6
     weight: number;             // 0
 }

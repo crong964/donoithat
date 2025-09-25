@@ -25,7 +25,7 @@ export default function Sign(p: {
     const action = [
         { name: "Tài khoản của tôi", hrel: "/user" },
         { name: "Danh sách địa chỉ", hrel: "/user/address" },
-        { name: "Danh sách đơn hàng", hrel: "/user/add/user/order" },
+        { name: "Danh sách đơn hàng", hrel: "/user/order" },
     ]
     return (
         <div className=" relative mb-auto ">

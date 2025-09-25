@@ -16,6 +16,7 @@ namespace be.Migrations
                 columns: table => new
                 {
                     CategoryId = table.Column<string>(type: "TEXT", nullable: false),
+                    CategoryImage = table.Column<string>(type: "TEXT", nullable: true),
                     Slug = table.Column<string>(type: "TEXT", nullable: false),
                     Index = table.Column<int>(type: "INTEGER", nullable: false),
                     NameCategory = table.Column<string>(type: "TEXT", nullable: false),
@@ -265,8 +266,7 @@ namespace be.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Category_Slug",
                 table: "Category",
-                column: "Slug",
-                unique: true);
+                column: "Slug");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_UserEntityAccount",

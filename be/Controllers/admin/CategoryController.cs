@@ -8,7 +8,7 @@ namespace be.Controllers.admin;
 
 [ApiController]
 [Route("api/admin/category")]
-public class CategoryController(ILogger<CategoryController> logger, DatabaseContext context)
+public class CategoryController(ILogger<CategoryController> logger, DatabaseContext context) : ControllerBase
 {
     private readonly DatabaseContext _context = context;
     private readonly ILogger<CategoryController> _logger = logger;
@@ -25,7 +25,8 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
             {
                 NameCategory = item.Name,
                 Index = i += 1,
-                Slug = item.Id
+                Slug = item.Id,
+                CategoryImage = item.Image
             };
             await _context.Category.AddAsync(categoryParent);
             var j = 0;
@@ -87,6 +88,20 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
         return lsmodel;
     }
 
+    [HttpGet("id")]
+    public async Task<ActionResult> GetById(string categoryId)
+    {
+        var category = await _context.Category.Include(x => x.CategoryChidlren).
+
+        Where(x => x.CategoryId == categoryId).FirstOrDefaultAsync();
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(ConvertEntityToModel.Converter(category));
+    }
+
 
     [HttpGet("product")]
     public async Task<ActionResult<IEnumerable<CategoryModel>>> GetProductAll()
@@ -110,11 +125,29 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     }
 
     [HttpPost]
-    public async Task<ActionResult<string>> Add(CategoryAddModel categoryModel)
+    public async Task<ActionResult> Add(CategoryAddModel categoryModel)
     {
+        if (categoryModel.CategoryImage != null)
+        {
+            var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
+            var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+            var sourceFileName = tmp + categoryModel.CategoryImage;
+            var destFileName = sta + categoryModel.CategoryImage;
+            try
+            {
+                System.IO.File.Move(sourceFileName, destFileName);
+                categoryModel.CategoryImage = "http://localhost:2000/sta/" + categoryModel.CategoryImage;
+            }
+            catch (System.Exception e)
+            {
+                _logger.LogError(e.Message);
+                return BadRequest(new { mess = "Chuyển thất bại" });
+            }
+        }
+
         if (categoryModel == null)
         {
-            return "";
+            return BadRequest(new { mess = "Chuyển thất bại" });
         }
         var count = await _context.Category.Where(x => x.CategoryParent == null).CountAsync();
         var transaction = await _context.Database.BeginTransactionAsync();
@@ -124,7 +157,8 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
             {
                 NameCategory = categoryModel.NameCategory,
                 Index = count,
-                Slug = categoryModel.Slug
+                Slug = categoryModel.Slug,
+                CategoryImage = categoryModel.CategoryImage
             };
             await _context.Category.AddAsync(category);
             if (categoryModel.CategoryChidlren != null)
@@ -146,23 +180,72 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-
             await transaction.RollbackAsync();
+            return BadRequest(new { message = e.Message });
         }
-        return "";
+        return Ok();
     }
+
 
     [HttpPatch]
     public async Task<ActionResult<string>> Update(CategoryUpdateModel categoryUpdateModel)
     {
-        var category = await _context.Category.FindAsync(new Guid(categoryUpdateModel.CategoryId)) ?? throw new Exception("not found");
+        var category = await _context.Category.FindAsync(categoryUpdateModel.CategoryId);
+        if (category == null)
+        {
+            return NotFound();
+        }
+        if (categoryUpdateModel.CategoryImage != null)
+        {
+            try
+            {
+                var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
+                var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+                var sourceFileName = tmp + categoryUpdateModel.CategoryImage;
+                var destFileName = sta + categoryUpdateModel.CategoryImage;
+                System.IO.File.Move(sourceFileName, destFileName);
+            }
+            catch (System.Exception)
+            {
+
+
+            }
+            categoryUpdateModel.CategoryImage = "http://localhost:2000/sta/" + categoryUpdateModel.CategoryImage;
+            var image = category.CategoryImage?.Replace("http://localhost:2000/sta/", "");
+            try
+            {
+                if (image != null && image.Length > 0)
+                {
+                    var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
+                    var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+                    var sourceFileName = tmp + image;
+                    var destFileName = sta + image;
+                    System.IO.File.Move(destFileName, sourceFileName);
+                }
+
+                var imageEntity = await _context.Image.FindAsync(image);
+                if (imageEntity != null)
+                {
+                    _context.Remove(imageEntity);
+                    await _context.SaveChangesAsync();
+                }
+
+            }
+            catch (System.Exception)
+            {
+
+
+            }
+        }
+
         category.NameCategory = categoryUpdateModel.NameCategory;
         category.Slug = categoryUpdateModel.Slug;
-        category.CategoryId = categoryUpdateModel.CategoryId;
-        category.Status = categoryUpdateModel.Status;
-        _context.Update(category);
+        category.CategoryImage = categoryUpdateModel.CategoryImage == null ? category.CategoryImage : categoryUpdateModel.CategoryImage;
+
+
+
         await _context.SaveChangesAsync();
         return "ok";
     }
@@ -205,7 +288,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     {
         var category = await _context.Category
         .Include(x => x.CategoryChidlren)
-        .Where(x => x.Slug.Equals(categoryAddChidlren.ParentSlug) && x.CategoryParent == null)
+        .Where(x => x.CategoryId == categoryAddChidlren.ParentId && x.CategoryParent == null)
         .FirstOrDefaultAsync();
         if (category == null)
         {
@@ -231,14 +314,61 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     }
 
     [HttpDelete]
-    public async Task<ActionResult<CategoryModel>> Delete(CategoryDeleteModel CategorySlug)
+    public async Task<ActionResult> Delete(CategoryDeleteModel CategorySlug)
     {
-        var category = await _context.Category.Where(x => x.Slug.Equals(CategorySlug.Slug)).FirstOrDefaultAsync();
-        if (category == null)
+
+        var transaction = await _context.Database.BeginTransactionAsync();
+        var category = await _context.Category
+        .Where(x => x.CategoryId == CategorySlug.categoryId)
+        .FirstOrDefaultAsync();
+
+        var image = "";
+        try
         {
-            throw new Exception("not found");
+            if (category != null)
+            {
+                var categorys = await _context.Category
+                .Where(x => x.CategoryParent != null && x.CategoryParent.CategoryId == category.CategoryId)
+                .ToArrayAsync();
+                image = category.CategoryImage?.Replace("http://localhost:2000/sta/", "");
+
+                _context.RemoveRange(categorys);
+                _context.Remove(category);
+                await _context.SaveChangesAsync();
+
+            }
+            await transaction.CommitAsync();
         }
-        return ConvertEntityToModel.Converter(category);
+        catch (System.Exception)
+        {
+            await transaction.RollbackAsync();
+            return BadRequest();
+        }
+        try
+        {
+            if (image != null && image.Length > 0)
+            {
+                var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
+                var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+                var sourceFileName = tmp + image;
+                var destFileName = sta + image;
+                System.IO.File.Move(destFileName, sourceFileName);
+            }
+
+            var imageEntity = await _context.Image.FindAsync(image);
+            if (imageEntity != null)
+            {
+                _context.Remove(imageEntity);
+                await _context.SaveChangesAsync();
+            }
+
+        }
+        catch (System.Exception)
+        {
+
+
+        }
+        return Ok();
     }
 
 
