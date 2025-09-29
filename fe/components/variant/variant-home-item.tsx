@@ -70,8 +70,6 @@ export default function VariantsHomeItem(v: iProductVariant) {
                         <p className="px-1.5 py-1">Số lượng</p>
                     </div>
                     <div >
-
-
                         <input required
                             autoComplete="off"
                             className="px-1.5 py-1"

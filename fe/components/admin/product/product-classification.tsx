@@ -28,6 +28,7 @@ import { createOption } from "./ulti"
 export default function ProductClassification() {
     const productClassifications = useSelector((state: RootState) => state.product.productClassifications)
     const productVariants = useSelector((state: RootState) => state.product.productVariants)
+    const tmpEdit = useSelector((state: RootState) => state.product.productVariantsInEdit)
     const imageurls = useSelector((state: RootState) => state.product.imageurls)
     const imageVariants = useSelector((state: RootState) => state.product.imageVariants)
     const mainPrice = useSelector((state: RootState) => state.product.mainPrice)
@@ -69,15 +70,17 @@ export default function ProductClassification() {
                 variantName += `${option?.name} `
                 variantId += `${option?.id} `
             })
+            variantId = variantId.trim()
+            variantName = variantName.trim()
             return {
                 variantId: variantId.trim(),
                 variantName: variantName.trim(),
-                price: 0,
-                quality: "0",
-                image: -1
+                price: tmpEdit[variantId]?.price || 0,
+                quality: tmpEdit[variantId]?.quality || "0",
+                image: tmpEdit[variantId]?.image || -1
             }
         })))
-    }, [sl, productClassifications])
+    }, [sl, productClassifications, tmpEdit])
 
 
     const [variantKey, setVariantsKey] = useState("-1")
@@ -234,10 +237,10 @@ export default function ProductClassification() {
                             }
                         </ul>
                     </div>
-                    <div className="basis-2/5">
+                    <div className="basis-1/5">
                         <p className="font-bold text-lg">Giá</p>
                     </div>
-                    <div className="basis-2/5">
+                    <div className="basis-1/5">
                         <p className="font-bold text-lg">Số lượng</p>
                     </div>
                 </div>
@@ -266,7 +269,7 @@ export default function ProductClassification() {
                                             {productVariant.variantName}
                                         </span>
                                     </div>
-                                    <div>
+                                    <div className="basis-1/5">
                                         <Input onChange={(v) => {
                                             let f = v.currentTarget.value
                                             let temp = productVariants.map((v) => {
@@ -274,18 +277,18 @@ export default function ProductClassification() {
                                             })
                                             temp[i].price = parseInt(f.replaceAll(',', ''))
                                             dispatch(setProductVariants(temp))
-                                        }} placeholder="Giá sản phẩm" value={PriceFormat(productVariant.price + "")} className="basis-2/5">
+                                        }} placeholder="Giá sản phẩm" value={PriceFormat(productVariant.price + "")} >
                                         </Input>
                                     </div>
-                                    <div>
+                                    <div className="basis-1/5">
                                         <Input onChange={(v) => {
                                             let f = v.currentTarget.value
                                             let temp = productVariants.map((v) => {
                                                 return { ...v }
                                             })
-                                            temp[i].quality = PriceFormat(f)
+                                            temp[i].quality = parseInt(f.replaceAll(',', '')) + ""
                                             dispatch(setProductVariants(temp))
-                                        }} placeholder="Số lượng" value={productVariant.quality} className="basis-2/5"></Input>
+                                        }} placeholder="Số lượng" value={PriceFormat(productVariant.quality + "")}/>
 
                                     </div>
                                 </li>

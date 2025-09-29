@@ -94,6 +94,66 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         return BadRequest(new { mess = "Không có sản phẩm này" });
     }
 
+
+    [HttpGet("searchQuickly")]
+    public async Task<ActionResult<ProductListModel>> SearchQuicklyProduct(string? name)
+    {
+
+        if (name == null)
+        {
+            return BadRequest(new { mess = "Thiếu name" });
+        }
+        _logger.LogInformation(name);
+        var productEntities = await _context.Product
+        .Include(x => x.ImageEntities).
+        Where(x => EF.Functions.Like(x.NameProduct, "%" + name.Replace(" ", "%") + "%"))
+        .Take(20)
+        .ToArrayAsync();
+
+        var count = await _context.Product.
+               Where(x => EF.Functions.Like(x.NameProduct, "%" + name.Replace(" ", "%") + "%"))
+               .CountAsync();
+
+        return new ProductListModel
+        {
+            ProductModels = [.. productEntities.Select(ProductModel.Converter)],
+            NameCate = "",
+            TotalItem = count
+        };
+
+    }
+
+    [HttpGet("search")]
+    public async Task<ActionResult<ProductListModel>> SearchProduct(string? title, int page = 1)
+    {
+
+        int limit = 20;
+        IEnumerable<ProductEntity>? productEntities = null;
+        if (title == null)
+        {
+            return BadRequest(new { mess = "Thiếu name" });
+        }
+
+        productEntities = await _context.Product
+        .Include(x => x.ImageEntities)
+        .Where(x => EF.Functions.Like(x.NameProduct, "%" + title.Replace(" ", "%") + "%"))
+        .Skip(page * limit - limit).Take(limit)
+        .ToArrayAsync();
+
+        var count = await _context.Product
+        .Where(x => EF.Functions.Like(x.NameProduct, "%" + title.Replace(" ", "%") + "%"))
+        .CountAsync();
+
+        return new ProductListModel
+        {
+            ProductModels = [.. productEntities.Select(ProductModel.Converter)],
+            NameCate = "",
+            TotalItem = count,
+            Page = page
+        };
+
+    }
+
 }
 
 

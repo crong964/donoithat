@@ -1,5 +1,5 @@
 'use client'
-
+import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { iLatLng } from "./interface";
@@ -8,11 +8,18 @@ export default function MapLeafLet(p: { onChange?(lat: number, lng: number): voi
     const refmap = useRef<any>(null)
     useEffect(() => {
         const f = async () => {
+
             const latlng = p.latlng
             const L = await import("leaflet")
+            var greenIcon = L.icon({
+                className:"",
+                iconUrl: '/map-pin.svg',
+                iconSize: [20, 95], // size of the icon
+            });
             let mark: L.Marker = new L.Marker([latlng?.lat || 10.906132709550574,
             latlng?.lng || 106.8849634786165], {
-                alt: "vị trí của bạn", draggable: true,
+                alt: "vị trí của bạn", draggable: p.onChange != undefined,
+                icon: greenIcon
             });
             mark.on("dragend", (ev) => {
                 if (p.onChange == undefined) {

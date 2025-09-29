@@ -60,7 +60,7 @@ export default function Home(data: { products: iGetProduct, categories: iMainCat
                             })}
                     </MainCarousel>
                     <div className="flex text-[14px] mt-3.75 leading-4 justify-center">
-                        <Link href="#" className="py-3 px-1.25 flex space-x-4 justify-center rounded-sm items-center bg-white min-w-80">
+                        <Link href="/collections" className="py-3 px-1.25 flex space-x-4 justify-center rounded-sm items-center bg-white min-w-80">
                             <span> Xem tất cả</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 className="inline-block fill-black" viewBox="0 0 16 16">
@@ -112,7 +112,9 @@ export default function Home(data: { products: iGetProduct, categories: iMainCat
                             <div className="text-white flex-col flex items-end">
                                 <p className="text-[18px] leading-6.25 font-semibold mb-2">Xu hướng tìm kiếm</p>
                                 <div>
-                                    <Link style={{ lineHeight: "normal" }} className="uppercase text-[13px] font-medium py-1.25 px-3.75 rounded-2xl bg-f" href="/">
+                                    <Link style={{ lineHeight: "normal" }}
+                                        className="uppercase text-[13px] font-medium py-1.25 px-3.75 rounded-2xl bg-f"
+                                        href="/">
                                         xem ngay
                                     </Link>
                                 </div>
@@ -182,7 +184,7 @@ export default function Home(data: { products: iGetProduct, categories: iMainCat
                     </div>
                 </div>
                 <div className="mt-6.25 text-center">
-                    <Link href="#" className="px-6.25 py-2.5 tracking-wider border text-center text-f border-f text-sm hover:text-white rounded-sm hover:bg-f ">
+                    <Link href="/collections" className="px-6.25 py-2.5 tracking-wider border text-center text-f border-f text-sm hover:text-white rounded-sm hover:bg-f ">
                         Xem tất cả <strong>Sản phẩm mới </strong>
                     </Link>
                 </div>

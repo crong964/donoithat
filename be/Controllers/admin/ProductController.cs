@@ -308,10 +308,10 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
 
                 }
             }
-            return BadRequest(new { mess = "Thêm thất bại" });
+            return BadRequest(new { mess = "Cập nhật thất bại" });
         }
 
-        return Ok(new { mess = "Thêm thành công" });
+        return Ok(new { mess = "Cập nhật thành công" });
     }
 
 
@@ -350,7 +350,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                     MainPrice = productAddModel.MainPrice,
                     ProductClassification = productAddModel.ProductClassification,
                     NameProduct = productAddModel.NameProduct,
-                    Quality = productAddModel.Quality,
+                    Quality = productAddModel.Quality + 20,
                     ImageUrl = productAddModel.ImageFiles[0]
                 };
                 await _context.Product.AddAsync(mainProduct);
@@ -383,7 +383,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                         Image = item.Image,
                         Price = item.Price,
                         ProductEntity = mainProduct,
-                        Quality = item.Quality,
+                        Quality = item.Quality + 20,
                         VariantId = item.VariantId,
                         VariantName = item.VariantName,
                         Position = item.Position,
@@ -396,7 +396,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch (System.Exception )
+            catch (System.Exception)
             {
                 _logger.LogInformation(productAddModel.NameProduct);
                 await transaction.RollbackAsync();

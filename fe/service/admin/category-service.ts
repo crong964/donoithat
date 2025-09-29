@@ -123,8 +123,6 @@ export const editCategory = async (currentState: any, formData: FormData) => {
             message: "Tải file thất bại"
         }
     }
-    console.log(image);
-    
     const data = {
         "categoryId": formData.get("categoryId"),
         "nameCategory": formData.get("nameCategory"),

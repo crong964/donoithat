@@ -3,11 +3,8 @@ import { iMainCateGory } from "@/components/category/interface";
 import { api } from "@/util/fetch";
 
 export async function GET(request: Request) {
-    console.log("ds");
     try {
         let data = await api.get("category")
-
-
         return new Response(JSON.stringify(data.data), {
             status: 201,
             headers: { 'Content-Type': 'application/json' }

@@ -15,8 +15,23 @@ export const getProduct = async (p?: { slug: string, page?: string } | undefined
 
 export const getProductBySlug = async (slug: string): Promise<iProductDetail | undefined> => {
 
-    let data = await api.get(`/product/getProductBySlug?slug=${slug}`)
+    try {
+        let data = await api.get(`/product/getProductBySlug?slug=${slug}`)
+        return data.data
+    } catch (error) {
+        return undefined
+    }
+}
+
+export const searchProduct = async (name: string, page?: string): Promise<iGetProduct | undefined> => {
 
 
-    return data.data
+    try {
+        let data = await api.get(`/product/search?title=${name.trim()}&page=${page || 1}`)
+        return data.data
+    } catch (error) {
+        console.log((error as any)?.response?.data);
+
+        return undefined
+    }
 }

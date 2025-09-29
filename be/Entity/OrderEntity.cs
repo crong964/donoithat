@@ -14,7 +14,10 @@ public enum OrderStatus
     Delivered,
 
     [JsonStringEnumMemberName("Đã hủy")]
-    Cancelled
+    Cancelled,
+
+    [JsonStringEnumMemberName("Hoàn thanh")]
+    Complete
 }
 
 

@@ -41,18 +41,61 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         return ls;
     }
 
+    [HttpGet("status")]
+    public ActionResult Status()
+    {
+        OrderStatus[] home = {
+            OrderStatus.Processing,
+            OrderStatus.Shipped,
+             OrderStatus.Delivered,
+              OrderStatus.Cancelled,OrderStatus.Complete
+               };
+        return Ok(home);
+    }
 
+
+    [HttpGet("detail")]
+    public async Task<ActionResult<OrderDetailGetModel>> Detail(string? orderId)
+    {
+
+        var order = await _context.Order
+        .Include(x => x.UserEntity)
+        .Where(x => x.OrderId == orderId).FirstOrDefaultAsync();
+
+        if (order == null)
+        {
+            return BadRequest(new { message = "Không có hóa đơn này" });
+        }
+        var orderDetails = await _context.OrderDetail
+        .Include(x => x.ProductVariantEntity)
+        .Where(x => x.OrderEntity.OrderId == orderId).ToArrayAsync();
+
+        var data = OrderDetailGetModel.ConvertEntityToModel(orderDetails, order);
+        return Ok(data);
+    }
 
 
     [HttpPatch("updateStatus")]
-    public async Task<string> OrderUpdate(OrderUpdate orderUpdate)
+    public async Task<ActionResult> OrderUpdate(OrderUpdate orderUpdate)
     {
 
         var orderEntity = await _context.Order.FindAsync(orderUpdate.OrderId);
 
         if (orderEntity == null)
         {
-            throw new Exception("");
+            return BadRequest(new { message = "Không có hóa đơn này" });
+        }
+        if (orderEntity.Pay != PayStatus.Yes && orderUpdate.Status == OrderStatus.Complete)
+        {
+            return BadRequest(new { message = "Đơn này chưa thành toán không thể hoàn thành" });
+        }
+        if (orderEntity.Pay == PayStatus.Yes && orderUpdate.Status == OrderStatus.Cancelled)
+        {
+            return BadRequest(new { message = "Đơn này đã thanh toán không thể huy" });
+        }
+        if (orderEntity.Status == OrderStatus.Complete)
+        {
+            return BadRequest(new { message = "Đơn này đã hoàn thành không thể thay đổi" });
         }
         try
         {
@@ -67,26 +110,31 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         catch (System.Exception)
         {
 
-            throw;
+            return BadRequest(new { message = "Không có hóa đơn này" });
         }
 
-        return "ok";
+        return Ok(new { message = "Cập nhật thành công" });
     }
 
     [HttpPatch("payorder")]
-    public async Task<string> OrderPay(OrderPay orderPay)
+    public async Task<ActionResult> OrderPay(OrderPay orderPay)
     {
-        var id = _userService.GetUserId(HttpContext) ?? throw new Exception("chưa đăng nhập");
 
-        var userEntity = await _context.User.FindAsync(id) ?? throw new Exception("không tìm thấy người dùng này");
 
-        var orderEntity = await _context.Order.FindAsync(orderPay.OrderId) ?? throw new Exception("");
-
+        var orderEntity = await _context.Order.FindAsync(orderPay.OrderId);
+        if (orderEntity == null)
+        {
+            return BadRequest(new { message = "Không có hóa đơn này" });
+        }
+        if (orderEntity.Status == OrderStatus.Complete)
+        {
+            return BadRequest(new { message = "Đơn này đã hoàn thành không thể thay đổi" });
+        }
         try
         {
             await _context
             .Order.
-            Where(x => x.OrderId == orderPay.OrderId && x.UserEntity.Account == id)
+            Where(x => x.OrderId == orderPay.OrderId)
             .ExecuteUpdateAsync((setters) =>
             setters.SetProperty(b => b.Pay, orderPay.Pay));
 
@@ -95,10 +143,10 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         catch (System.Exception)
         {
 
-            throw;
+            return BadRequest(new { message = "Không có thanh toán dc" });
         }
 
-        return "ok";
+        return Ok(new { message = "Cập nhật tc" });
     }
 
 

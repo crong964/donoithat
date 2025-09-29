@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link"
 import { useState } from "react"
+import { iMainCateGory } from "./interface"
 
 export default function Category(p: iMainCateGory) {
     const [s, sS] = useState(false)

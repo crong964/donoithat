@@ -12,7 +12,7 @@ export default async function ProductHomePage({ searchParams }: { searchParams: 
     const items = product.productModels
     return (
         <section className="p-7 relative">
-            <div className="min-h-100">
+            <div className="min-h-100 overflow-x-auto">
                 <table className="table-auto w-full text-[13px] text-black!">
                     <thead className=" ">
                         <tr className="">

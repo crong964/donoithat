@@ -2,7 +2,7 @@
 
 import { Button, Input } from "antd"
 import TextArea from "antd/es/input/TextArea"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import ImagesInput from "./images-input"
 import { useDispatch, useSelector } from "react-redux"
 import ProductClassification from "./product-classification"
@@ -22,6 +22,12 @@ export default function AddProduct() {
     const nameProduct = useSelector((state: RootState) => state.product.nameProduct)
     const description = useSelector((state: RootState) => state.product.description)
     const product = useSelector((state: RootState) => state.product)
+    useEffect(() => {
+        dispatch(setResetProductData())
+        return () => {
+            
+        };
+    }, []);
     const onSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
         ev.preventDefault()
         const validate = validateData(product)

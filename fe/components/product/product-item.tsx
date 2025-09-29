@@ -21,7 +21,7 @@ function ProductItem2(p: iProduct) {
             <div
                 className="w-full bg-white flex flex-col h-full
                  shadow-pro hover:shadow-pro-hover duration-300">
-                <Link href={`/product/${p.slug}`} className="p-1.25 relative">
+                <Link href={`/product/${p.slug}.html`} className="p-1.25 relative">
                     <div
                         ref={carouselRef}
                         className="overflow-hidden"

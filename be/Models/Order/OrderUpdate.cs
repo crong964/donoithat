@@ -7,7 +7,7 @@ namespace be.Models;
 public class OrderUpdate
 {
     
-    public string OrderId { get; set; } = Guid.NewGuid().ToString();
+    public required string OrderId { get; set; } 
     public OrderStatus Status { get; set; }
 
    

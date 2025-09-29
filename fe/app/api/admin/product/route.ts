@@ -7,8 +7,6 @@ import { api } from "@/util/fetch";
 
 export async function POST(request: Request) {
     let s = await request.json()
-    console.log(s);
-    
     try {
         var data = await api.post("/admin/product", s)
         return new Response(JSON.stringify(data.data), {
@@ -29,8 +27,6 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
     let s = await request.json()
-    console.log(s);
-    
     try {
         var data = await api.patch("/admin/product", s)
         return new Response(JSON.stringify(data.data), {

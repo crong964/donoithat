@@ -75,7 +75,7 @@ export default function ProductHomeAdmin(p: iProduct) {
                             </div>
                         </CollapsibleTrigger>
                         <CollapsibleContent asChild>
-                            <div className="grid grid-cols-2">
+                            <div className="grid grid-cols-1 lg:grid-cols-2">
                                 {
                                     p.productVariants.map((v) => {
                                         return (

@@ -33,7 +33,7 @@ export default function CategoryCombobox(p: { ls: iMainCateGory[] }) {
                     variant="outline"
                     role="combobox"
 
-                    className="w-150 justify-between"
+                    className="w-full lg:w-150 justify-between"
                 >
                     {value
                         ? categories.find((category) => category.slug === value)?.nameCategory
@@ -41,7 +41,7 @@ export default function CategoryCombobox(p: { ls: iMainCateGory[] }) {
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-150 p-0">
+            <PopoverContent className="w-full lg:w-150 p-0">
                 <Command>
                     <CommandInput placeholder="Search framework..." className="h-9" />
                     <CommandList>

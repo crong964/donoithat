@@ -13,6 +13,7 @@ export interface iImageInput {
 }
 export interface iProductState {
     productVariants: IProductVariant[]
+    productVariantsInEdit: { [key: string]: IProductVariant | undefined }
     productClassifications: IProductClassification[]
     imageurls: iImageInput[],
     nameProduct: string,
@@ -33,6 +34,7 @@ export interface iProductState {
 const initialState: iProductState = {
     productVariants: [],
     productClassifications: [],
+    productVariantsInEdit: {},
     imageurls: [],
     maxPrice: 0,
     minPrice: 0,
@@ -53,7 +55,6 @@ export const productSlice = createSlice({
     name: 'product',
     initialState,
     reducers: {
-
         swapImage: (state, action: PayloadAction<{ i1: number, i2: number }>) => {
             const i1 = action.payload.i1
             const i2 = action.payload.i2
@@ -119,7 +120,6 @@ export const productSlice = createSlice({
         addImageUrlFiles: (state, action: PayloadAction<iImageInput[]>) => {
             state.imageurls = [...state.imageurls, ...action.payload]
         },
-
         removeImageUrls: (state, action: PayloadAction<number>) => {
             state.imageurls = state.imageurls.filter((_, i) => {
                 return i != action.payload
@@ -171,6 +171,18 @@ export const productSlice = createSlice({
             let tmp = action.payload
             let d: IProductClassification[] = createClassificationFormSaveToHandle(JSON.parse(tmp.productClassification))
 
+            var tmpEdit: { [key: string]: IProductVariant } = {}
+            for (let index = 0; index < tmp.productVariants.length; index++) {
+                const v = tmp.productVariants[index];
+                tmpEdit[v.variantId] = {
+                    image: v.position,
+                    price: v.price,
+                    quality: v.quality + "",
+                    variantId: v.variantId,
+                    variantName: v.variantName
+                }
+            }
+
             let data: iProductState = {
                 description: tmp.description,
                 imageurls: tmp.imageUrls.map((v) => {
@@ -179,6 +191,7 @@ export const productSlice = createSlice({
                         url: v
                     }
                 }),
+                productVariantsInEdit: tmpEdit,
                 imageVariants: {},
                 mainPrice: tmp.mainPrice,
                 maxPrice: 0,

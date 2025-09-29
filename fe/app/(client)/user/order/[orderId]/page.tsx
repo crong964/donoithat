@@ -68,13 +68,13 @@ export default async function OrderDetailPage({
                                             {p.productVariantId}
                                         </td>
                                         <td className="text-center pb-3.75">
-                                            {PriceFormat((p.price / 100) + "")}₫
+                                            {PriceFormat((p.price) + "")}₫
                                         </td>
                                         <td className="text-center pb-3.75">
                                             {p.quality}
                                         </td>
                                         <td className="text-right pb-3.75">
-                                            {PriceFormat((p.price * p.quality / 100) + "")}₫
+                                            {PriceFormat((p.price * p.quality) + "")}₫
                                         </td>
                                     </tr>
                                 )
