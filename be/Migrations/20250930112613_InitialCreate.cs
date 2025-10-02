@@ -46,6 +46,22 @@ namespace be.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Suplier",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    SuplierId = table.Column<string>(type: "TEXT", nullable: false),
+                    SuplierName = table.Column<string>(type: "TEXT", nullable: false),
+                    SuplierPhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    SuplierEmail = table.Column<string>(type: "TEXT", nullable: false),
+                    SuplierAddress = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Suplier", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -88,6 +104,7 @@ namespace be.Migrations
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     NameProduct = table.Column<string>(type: "TEXT", nullable: false),
                     Quality = table.Column<long>(type: "INTEGER", nullable: false),
+                    SuplierEntityId = table.Column<string>(type: "TEXT", nullable: true),
                     CategoryEntityCategoryId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -98,6 +115,11 @@ namespace be.Migrations
                         column: x => x.CategoryEntityCategoryId,
                         principalTable: "Category",
                         principalColumn: "CategoryId");
+                    table.ForeignKey(
+                        name: "FK_Product_Suplier_SuplierEntityId",
+                        column: x => x.SuplierEntityId,
+                        principalTable: "Suplier",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -295,9 +317,19 @@ namespace be.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Product_SuplierEntityId",
+                table: "Product",
+                column: "SuplierEntityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductVariant_ProductEntityProductId",
                 table: "ProductVariant",
                 column: "ProductEntityProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Suplier_SuplierId",
+                table: "Suplier",
+                column: "SuplierId");
         }
 
         /// <inheritdoc />
@@ -335,6 +367,9 @@ namespace be.Migrations
 
             migrationBuilder.DropTable(
                 name: "Category");
+
+            migrationBuilder.DropTable(
+                name: "Suplier");
         }
     }
 }

@@ -21,6 +21,7 @@ public class ProductEntity
     public int Status { get; set; } = 1;
     public required string NameProduct { get; set; }
     public required long Quality { get; set; } = 0;
+    public  SuplierEntity? SuplierEntity { get; set; }
     public ICollection<ProductVariantEntity>? ProductVariantEntities { get; set; }
     public required CategoryEntity? CategoryEntity { get; set; }
     public List<ImageEntity> ImageEntities { get; } = [];

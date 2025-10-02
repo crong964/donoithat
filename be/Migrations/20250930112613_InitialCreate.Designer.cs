@@ -11,7 +11,7 @@ using be.Entity;
 namespace be.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250929091744_InitialCreate")]
+    [Migration("20250930112613_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -232,12 +232,17 @@ namespace be.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SuplierEntityId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryEntityCategoryId");
 
                     b.HasIndex("Slug")
                         .IsUnique();
+
+                    b.HasIndex("SuplierEntityId");
 
                     b.ToTable("Product");
                 });
@@ -286,6 +291,38 @@ namespace be.Migrations
                     b.HasIndex("ProductEntityProductId");
 
                     b.ToTable("ProductVariant");
+                });
+
+            modelBuilder.Entity("be.Entity.SuplierEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SuplierAddress")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SuplierEmail")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SuplierId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SuplierName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SuplierPhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SuplierId");
+
+                    b.ToTable("Suplier");
                 });
 
             modelBuilder.Entity("be.Entity.UserEntity", b =>
@@ -424,7 +461,13 @@ namespace be.Migrations
                         .WithMany()
                         .HasForeignKey("CategoryEntityCategoryId");
 
+                    b.HasOne("be.Entity.SuplierEntity", "SuplierEntity")
+                        .WithMany()
+                        .HasForeignKey("SuplierEntityId");
+
                     b.Navigation("CategoryEntity");
+
+                    b.Navigation("SuplierEntity");
                 });
 
             modelBuilder.Entity("be.Entity.ProductVariantEntity", b =>

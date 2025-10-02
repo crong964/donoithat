@@ -332,7 +332,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
     [HttpPost("addProducts_test")]
     public async Task<ActionResult<string>> AddProducts(IEnumerable<ProductAddModel> productAddModels)
     {
-
+        
         foreach (var productAddModel in productAddModels)
         {
             var transaction = await _context.Database.BeginTransactionAsync();
@@ -351,7 +351,8 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                     ProductClassification = productAddModel.ProductClassification,
                     NameProduct = productAddModel.NameProduct,
                     Quality = productAddModel.Quality + 20,
-                    ImageUrl = productAddModel.ImageFiles[0]
+                    ImageUrl = productAddModel.ImageFiles[0],
+                    
                 };
                 await _context.Product.AddAsync(mainProduct);
                 foreach (var item in productAddModel.ImageFiles)

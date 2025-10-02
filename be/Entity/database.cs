@@ -21,6 +21,7 @@ public class DatabaseContext : DbContext
     public DbSet<OrderDetailEntity> OrderDetail { get; set; } = null!;
     public DbSet<AddressEntity> Address { get; set; } = null!;
     public DbSet<PhotoGalleryEntity> PhotoGallery { get; set; } = null!;
+    public DbSet<SuplierEntity> Suplier { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserEntity>()

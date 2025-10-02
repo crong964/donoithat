@@ -22,7 +22,11 @@ export const createUser = async (currentState: any, formData: FormData) => {
 
     } catch (error: any) {
 
-        return errorResponse(error).message
+        return {
+            d: Date.now(),
+            mess: errorResponse(error).message,
+            err: true
+        }
     }
 
     redirect(`/account/login`)

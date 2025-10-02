@@ -14,7 +14,7 @@ export default function CategorySelectInput() {
     const dispatch = useDispatch()
     const typeProduct = useSelector((state: RootState) => state.product.typeProduct)
     React.useEffect(() => {
-        fetch("http://localhost:2000/api/category").then((v) => {
+        fetch("/api/category").then((v) => {
             return v.json()
         })
             .then((v) => {

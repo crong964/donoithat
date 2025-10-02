@@ -1,5 +1,6 @@
 'use client'
 import SubmitButton from "@/components/button/submit-buttom";
+import MessageAlert from "@/components/form/message-alert";
 import { createUser } from "@/service/user-service";
 import Form from "next/form";
 import Link from "next/link";
@@ -8,15 +9,10 @@ import { toast } from "react-toastify";
 
 export default function RegisterPage() {
     const [message, formAction, isPending] = useActionState(createUser, null);
-    useEffect(() => {
-        toast.error(message)
 
-        return () => {
-
-        };
-    }, [message]);
     return (
         <div className="px-3.75">
+            <MessageAlert {...message} />
             <div className="px-7.5 pb-7.5 pt-6.25 mt-6.75">
                 <div className="max-w-155 mx-auto mt-8.75 mb-12.5 px-7.5 pb-7.5 pt-6.25 bg-white">
                     <div className="mb-11.25 flex text-[24px]  font-bold justify-center">
