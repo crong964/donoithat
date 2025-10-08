@@ -15,7 +15,7 @@ public class CategoryEntity
     public required string Slug { get; set; }
     public int Index { get; set; }
 
-    [Length(maximumLength: 20, minimumLength: 1)]
+   
     public required string NameCategory { get; set; }
 
     public bool Status { get; set; } = true;

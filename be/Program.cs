@@ -14,6 +14,7 @@ using be.Service.Implement;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.OpenApi.Any;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -102,6 +103,30 @@ builder.Services.AddAuthentication(options =>
            });
 
 
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        var errors = context.ModelState
+            .Where(e => e.Value.Errors.Count > 0)
+            .Select(e => new
+            {
+                Field = e.Key,
+                Message = e.Value.Errors.First().ErrorMessage
+            });
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+        var result = new
+        {
+            Success = false,
+            Message = "Dữ liệu không hợp lệ",
+            Errors = errors
+        };
+
+        return new BadRequestObjectResult(result);
+    };
+});
 
 
 

@@ -141,7 +141,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
             catch (System.Exception e)
             {
                 _logger.LogError(e.Message);
-                return BadRequest(new { mess = "Chuyển thất bại" });
+                
             }
         }
 

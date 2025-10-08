@@ -4,7 +4,7 @@ import { memo } from "react"
 import { Button } from "@/components/ui/button"
 import { iSuplier } from "../suplier/interface"
 
-function CsvInput() {
+function CsvInput(p: { onChange(s: string): void }) {
     const onChange = async (v: React.ChangeEvent<HTMLInputElement>) => {
         const files = v.target.files
         if (files == null) {
@@ -12,24 +12,9 @@ function CsvInput() {
         }
         const file = files[0]
         let s = await file.text()
-        let data = s.split("\n")
-        console.log(data[0].split(",")[2].trim());
-        let dataTmp: iSuplier[] = []
-        data.forEach((v) => {
-            let vs = v.split(",")
-            console.log(vs);
-            
-            dataTmp.push({
-                id: "",
-                suplierAddress: "",
-                suplierEmail: vs[2].trim(),
-                suplierId: vs[0].trim(),
-                suplierName: vs[0],
-                suplierPhoneNumber: vs[1]
-            })
-        })
-        console.log(dataTmp);
-        
+        p.onChange(s)
+
+
     }
     return (
         <>

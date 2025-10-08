@@ -1,4 +1,5 @@
 import CsvInput from "@/components/form/csv-input";
+import { iSuplier } from "@/components/suplier/interface";
 import { Button } from "@/components/ui/button";
 import { getSupliers } from "@/service/admin/suplier-service";
 import { Eye, Plus } from "lucide-react";
@@ -13,7 +14,23 @@ export default async function SuplierIndexPage() {
             <div className="p-4 border flex justify-between border-[#00000014]">
                 <p className="text-sm">  Danh sách nhà cung cấp</p>
                 <div className="space-x-2">
-                    <CsvInput />
+                    <CsvInput onChange={(s) => {
+                        let data = s.split("\n")
+                        console.log(data[0].split(",")[2].trim());
+                        let dataTmp: iSuplier[] = []
+                        data.forEach((v) => {
+                            let vs = v.split(",")
+                            dataTmp.push({
+                                id: "",
+                                suplierAddress: "",
+                                suplierEmail: vs[2].trim(),
+                                suplierId: vs[0].trim(),
+                                suplierName: vs[0],
+                                suplierPhoneNumber: vs[1]
+                            })
+                        })
+
+                    }} />
                     <Link href={"/admin/suplier/add"}>
                         <Button type="button" variant={"blue"} >
                             <Plus />
