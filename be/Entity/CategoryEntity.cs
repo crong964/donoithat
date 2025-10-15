@@ -9,13 +9,14 @@ namespace be.Entity;
 public class CategoryEntity
 {
     [Key]
+
     public string CategoryId { get; set; } = Guid.NewGuid().ToString();
 
     public string? CategoryImage { get; set; }
     public required string Slug { get; set; }
     public int Index { get; set; }
 
-   
+
     public required string NameCategory { get; set; }
 
     public bool Status { get; set; } = true;

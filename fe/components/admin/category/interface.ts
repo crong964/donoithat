@@ -6,3 +6,13 @@ export interface iCategoryItem {
         id: string
     }[]
 }
+
+export interface iCategoryBackup {
+    categoryId: string
+    categoryImage: string | null
+    slug: string
+    index: string
+    nameCategory: string
+    status: boolean,
+    categoryParentId: string
+}

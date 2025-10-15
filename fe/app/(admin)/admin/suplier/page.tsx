@@ -1,3 +1,4 @@
+import SuplierHeaderLayout from "@/components/admin/suplier/suplier-header-layout";
 import CsvInput from "@/components/form/csv-input";
 import { iSuplier } from "@/components/suplier/interface";
 import { Button } from "@/components/ui/button";
@@ -11,34 +12,9 @@ export default async function SuplierIndexPage() {
 
     return (
         <div className="p-4">
-            <div className="p-4 border flex justify-between border-[#00000014]">
-                <p className="text-sm">  Danh sách nhà cung cấp</p>
-                <div className="space-x-2">
-                    <CsvInput onChange={(s) => {
-                        let data = s.split("\n")
-                        console.log(data[0].split(",")[2].trim());
-                        let dataTmp: iSuplier[] = []
-                        data.forEach((v) => {
-                            let vs = v.split(",")
-                            dataTmp.push({
-                                id: "",
-                                suplierAddress: "",
-                                suplierEmail: vs[2].trim(),
-                                suplierId: vs[0].trim(),
-                                suplierName: vs[0],
-                                suplierPhoneNumber: vs[1]
-                            })
-                        })
+            <SuplierHeaderLayout/>
 
-                    }} />
-                    <Link href={"/admin/suplier/add"}>
-                        <Button type="button" variant={"blue"} >
-                            <Plus />
-                            Thêm
-                        </Button>
-                    </Link>
-                </div>
-            </div>
+           
             <div className="p-4 overflow-x-auto w-full">
                 <table className="table-auto w-max lg:w-full text-left">
                     <tr className="text-sm">

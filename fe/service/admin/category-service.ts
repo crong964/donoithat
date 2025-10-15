@@ -82,7 +82,7 @@ export const getCategoryById = async (categoryId: string): Promise<iMainCateGory
         let data = await api.get("/admin/category/id?categoryId=" + categoryId)
         return data.data
     } catch (error) {
-        console.log((error as any).response.data);
+        console.log((error as any).response?.data);
 
     }
     return undefined

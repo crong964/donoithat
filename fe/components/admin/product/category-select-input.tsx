@@ -18,6 +18,8 @@ export default function CategorySelectInput() {
             return v.json()
         })
             .then((v) => {
+                console.log(v);
+                
                 setData(v)
 
             })

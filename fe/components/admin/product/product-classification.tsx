@@ -198,8 +198,8 @@ export default function ProductClassification() {
                                                     return
                                                 }
                                                 return (
-                                                    <li className="py-2">
-                                                        <div key={v.id} className="flex items-center gap-x-3">
+                                                    <li key={v.id} className="py-2">
+                                                        <div  className="flex items-center gap-x-3">
                                                             <button type="button" onClick={() => {
                                                                 dispatch(setOpen(true))
                                                                 setVariantsKey(v.id)

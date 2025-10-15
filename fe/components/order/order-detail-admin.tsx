@@ -110,8 +110,8 @@ export default function OrderDetailAdmin(p: {
                     </div>
 
                 </div>
-                <div className=" p-4">
-                    <table className="table-auto w-full ">
+                <div className=" p-4 w-full overflow-x-auto">
+                    <table className="table-auto w-max lg:w-full ">
                         <thead>
                             <tr>
                                 <th className="text-center pb-2 w-2/5">Sản phẩm</th>
@@ -149,13 +149,13 @@ export default function OrderDetailAdmin(p: {
                                                 {p.productVariantId}
                                             </td>
                                             <td className="text-center pb-3.75">
-                                                {priceFormat((p.price / 100) + "")}₫
+                                                {priceFormat((p.price) + "")}₫
                                             </td>
                                             <td className="text-center pb-3.75">
                                                 {p.quality}
                                             </td>
                                             <td className="text-right pb-3.75">
-                                                {priceFormat((p.price * p.quality / 100) + "")}₫
+                                                {priceFormat((p.price * p.quality) + "")}₫
                                             </td>
                                         </tr>
                                     )
@@ -171,7 +171,7 @@ export default function OrderDetailAdmin(p: {
                                             Giá sản phẩm:
                                         </p>
                                         <p className="text-right text-f font-bold text-2xl">
-                                            {priceFormat(tottal / 100 + "")}
+                                            {priceFormat(tottal + "")}
                                         </p>
                                     </div>
                                 </td>

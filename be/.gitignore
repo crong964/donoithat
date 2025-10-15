@@ -22,5 +22,6 @@ artifacts/
 
 # Others
 *.log
-StaticFiles/
+StaticFiles
 Migrations
+Tmp

@@ -1,3 +1,4 @@
+import CategoryHeaderLayout from "@/components/admin/category/categery-hearder-layout";
 import CategoryCombobox from "@/components/admin/category/category-combo-box";
 import CategoryItem from "@/components/admin/category/category-item";
 import { getCategory, getCategoryInProduct } from "@/service/admin/category-service";
@@ -10,11 +11,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             <div className="flex px-10 gap-3">
                 <section className="basis-1/2">
                     <div className="">
-                        <header>
-                            <h1 className="font-bold text-2xl">
-                                Danh sách loại sản phẩm
-                            </h1>
-                        </header>
+                        <CategoryHeaderLayout />
                         <main>
 
                             {category.map((v, i) => {

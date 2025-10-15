@@ -11,15 +11,13 @@ import { useDispatch, useSelector } from "react-redux"
 function Vendor() {
     const dispatch = useDispatch()
     const vendor = useSelector((state: RootState) => state.product.vendor)
-    const [data, setData] =useState<iSuplier[]>([])
+    const [data, setData] = useState<iSuplier[]>([])
 
     useEffect(() => {
         fetch("/api/admin/suplier").then((v) => {
             return v.json()
         })
             .then((v) => {
-                console.log(v);
-                
                 setData(v)
 
             })

@@ -9,13 +9,13 @@ public class CategoryAddModel
 
     [Required(ErrorMessage = "Vui lòng nhập tên")]
     [StringLength(50, ErrorMessage = "Tên không được dài quá 50 ký tự")]
-    public string? NameCategory { get; set; }
+    public string? NameCategory { get; set; } = "";
 
     [Required(ErrorMessage = "Vui lòng slug")]
     [StringLength(50, ErrorMessage = "Tên không được dài quá 50 ký tự")]
-    public string? Slug { get; set; }
+    public string? Slug { get; set; } = "";
 
-    
+
     public string? CategoryParentId { get; set; }
     public string? CategoryImage { get; set; }
 
