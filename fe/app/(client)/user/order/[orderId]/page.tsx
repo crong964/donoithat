@@ -57,7 +57,7 @@ export default async function OrderDetailPage({
                                                         <h3 className="text-[15px] max-md:line-clamp-1 leading-4.5 ">
                                                             {p.productName}
                                                         </h3>
-                                                        <h4 className="text-[15px] text-[#777] max-md:line-clamp-1 leading-4.25 ">
+                                                        <h4 className="text-[12px] text-[#777] max-md:line-clamp-1 leading-4.25 ">
                                                             {p.variantName}
                                                         </h4>
                                                     </div>
@@ -81,14 +81,15 @@ export default async function OrderDetailPage({
                             })
                         }
                         <tr>
-                            <td colSpan={3} className="pt-3.75">
-                                <p className="font-bold">
-                                    Giá sản phẩm
-                                </p>
+                            <td colSpan={4} className="pt-3.75">
+
                             </td>
-                            <td colSpan={2} className="pt-3.75">
-                                <p className="text-right">
-                                    {PriceFormat(tottal / 100 + "")}
+                            <td colSpan={1} className="pt-3.75 flex items-center justify-end gap-2">
+                                <p className="font-bold text-lg">
+                                    Giá sản phẩm:
+                                </p>
+                                <p className="text-right font-bold text-lg">
+                                    {PriceFormat(tottal + "")}
                                 </p>
                             </td>
                         </tr>

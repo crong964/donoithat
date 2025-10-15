@@ -14,43 +14,6 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     private readonly ILogger<CategoryController> _logger = logger;
 
 
-    [HttpPost("data_test")]
-    public async Task<string> DataTestAsync(ICollection<CategoryTest> categoryTests)
-    {
-        int i = 0;
-        foreach (var item in categoryTests)
-        {
-            var transaction = await _context.Database.BeginTransactionAsync();
-            var categoryParent = new CategoryEntity
-            {
-                NameCategory = item.Name,
-                Index = i += 1,
-                Slug = item.Id,
-                CategoryImage = item.Image
-            };
-            await _context.Category.AddAsync(categoryParent);
-            var j = 0;
-            if (item.Con != null)
-            {
-                foreach (var itemCon in item.Con)
-                {
-                    var categoryChild = new CategoryEntity
-                    {
-                        NameCategory = itemCon.Name,
-                        Index = j += 1,
-                        Slug = itemCon.Id,
-                        CategoryParent = categoryParent
-                    };
-                    await _context.Category.AddAsync(categoryChild);
-                }
-            }
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-
-        }
-        return "";
-    }
-
 
 
     [HttpGet]
@@ -141,7 +104,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
             catch (System.Exception e)
             {
                 _logger.LogError(e.Message);
-                
+
             }
         }
 
@@ -372,6 +335,87 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     }
 
 
+    [HttpPost("data_test")]
+    public async Task<string> DataTestAsync(ICollection<CategoryTest> categoryTests)
+    {
+        int i = 0;
+        foreach (var item in categoryTests)
+        {
+            var transaction = await _context.Database.BeginTransactionAsync();
+            var categoryParent = new CategoryEntity
+            {
+                NameCategory = item.Name,
+                Index = i += 1,
+                Slug = item.Id,
+                CategoryImage = item.Image
+            };
+            await _context.Category.AddAsync(categoryParent);
+            var j = 0;
+            if (item.Con != null)
+            {
+                foreach (var itemCon in item.Con)
+                {
+                    var categoryChild = new CategoryEntity
+                    {
+                        NameCategory = itemCon.Name,
+                        Index = j += 1,
+                        Slug = itemCon.Id,
+                        CategoryParent = categoryParent
+                    };
+                    await _context.Category.AddAsync(categoryChild);
+                }
+            }
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
 
+        }
+        return "";
+    }
+
+
+    [HttpGet("backup")]
+    public async Task<ActionResult<CategoryBackupAdmin[]>> Backup()
+    {
+        var ls = await _context.Category
+        .Include(x => x.CategoryParent)
+        .Select(x => CategoryBackupAdmin.Convert(x)).ToArrayAsync();
+        return Ok(ls);
+    }
+    [HttpPost("backup")]
+    public async Task<ActionResult> AddList(CategoryBackupAdmin[] categoryBackupAdmins)
+    {
+
+        int i = 0;
+        try
+        {
+
+            foreach (var item in categoryBackupAdmins)
+            {
+                var transaction = await _context.Database.BeginTransactionAsync();
+               
+                var categoryParent = await _context.Category.Where(x => x.CategoryId == item.CategoryParentId).FirstOrDefaultAsync();
+                var category = new CategoryEntity
+                {
+                    NameCategory = item.NameCategory,
+                    Index = i += 1,
+                    Slug = item.Slug,
+                    CategoryImage = item.CategoryImage,
+                    CategoryId = item.CategoryId,
+                    Status = item.Status,
+                    CategoryParent = categoryParent
+                };
+                await _context.Category.AddAsync(category);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+
+        }
+        catch (System.Exception)
+        {
+
+            return BadRequest();
+        }
+        return Ok();
+    }
 }
 

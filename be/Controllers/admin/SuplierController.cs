@@ -92,4 +92,44 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
         }
     }
 
+
+    [HttpPost("backup")]
+    public async Task<ActionResult<SuplierGetAdminModel[]>> AddList(List<SuplierAddAdminModel> suplierAddAdminModels)
+    {
+        foreach (var suplierAddAdminModel in suplierAddAdminModels)
+        {
+            var suplierTmp = await _context.Suplier.Where(x => x.SuplierId == suplierAddAdminModel.SuplierId).FirstOrDefaultAsync();
+            if (suplierTmp != null)
+            {
+                continue;
+            }
+            var suplier = new SuplierEntity
+            {
+                SuplierEmail = suplierAddAdminModel.SuplierEmail,
+                SuplierAddress = suplierAddAdminModel.SuplierAddress,
+                SuplierId = suplierAddAdminModel.SuplierId,
+                SuplierName = suplierAddAdminModel.SuplierName,
+                SuplierPhoneNumber = suplierAddAdminModel.SuplierPhoneNumber
+            };
+
+            try
+            {
+                await _context.Suplier.AddAsync(suplier);
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception)
+            {
+            }
+
+        }
+        return Ok();
+    }
+
+    [HttpGet("backup")]
+    public async Task<ActionResult<SuplierAdminBackupModel[]>> Backup()
+    {
+        var ls = await _context.Suplier.Select(x => SuplierAdminBackupModel.Convert(x)).ToArrayAsync();
+        return Ok(ls);
+    }
+
 }

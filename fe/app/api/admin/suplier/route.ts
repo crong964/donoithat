@@ -10,7 +10,7 @@ export async function GET(request: Request) {
             headers: { 'Content-Type': 'application/json' }
         });
     } catch (error) {
-        return new Response(JSON.stringify({ mess: "Lỗi" }), {
+        return new Response(JSON.stringify([]), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         });
