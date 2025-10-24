@@ -13,8 +13,8 @@ export default async function Header() {
     let user = datas[1]
     return (
         <>
-            <Link href="/">
-                <img src="/topbar_img.jpg" className="w-full h-auto" alt="" srcSet="" />
+            <Link href="/" className="flex justify-center">
+                <img src="/topbar_img.jpg" className="max-w-450 w-full h-auto" alt="" srcSet="" />
             </Link>
             <header className="">
                 <div className="bg-f pt-2.5 pb-2.5 lg:pt-4.5 lg:pb-3.5">

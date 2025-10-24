@@ -10,7 +10,7 @@ public class CategoryEntity
 {
     [Key]
 
-    public string CategoryId { get; set; } = Guid.NewGuid().ToString();
+    public string CategoryId { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
 
     public string? CategoryImage { get; set; }
     public required string Slug { get; set; }

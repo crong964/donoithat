@@ -33,7 +33,7 @@ public enum PayStatus
 public class OrderEntity
 {
     [Key]
-    public string OrderId { get; set; } = Guid.NewGuid().ToString();
+    public string OrderId { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
 
     public long OrderTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 

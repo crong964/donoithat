@@ -99,6 +99,41 @@ namespace be.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("be.Entity.CouponEntity", b =>
+                {
+                    b.Property<string>("CouponId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CouponCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CouponName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("CouponStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("DiscountAmount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ExpireTime")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("MinimumOrderAmount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StartTime")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CouponId");
+
+                    b.ToTable("Coupon");
+                });
+
             modelBuilder.Entity("be.Entity.ImageEntity", b =>
                 {
                     b.Property<string>("ImageFiles")

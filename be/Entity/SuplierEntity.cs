@@ -8,7 +8,7 @@ namespace be.Entity;
 public class SuplierEntity
 {
     [Key]
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string Id { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
     public required string SuplierId { get; set; }
     public required string SuplierName { get; set; }
     public required string SuplierPhoneNumber { get; set; }

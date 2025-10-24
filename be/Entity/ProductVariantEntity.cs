@@ -10,7 +10,7 @@ namespace be.Entity
     public class ProductVariantEntity
     {
         [Key]
-        public string ProductVariantId { get; set; } = Guid.NewGuid().ToString();
+        public string ProductVariantId { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
         public required string ProductVariantName { get; set; }
         public required string VariantId { get; set; }
         public required string VariantName { get; set; }

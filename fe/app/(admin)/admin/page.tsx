@@ -1,13 +1,14 @@
 import CategoryCombobox from "@/components/admin/category/category-combo-box";
 import CardHome from "@/components/admin/home/card-home";
 import OrderLink from "@/components/admin/home/order-link";
+import ProductSaleChart from "@/components/chart/product-sale-chart";
 import { getHomeAdmin } from "@/service/admin/home-Service";
 import { Fragment } from "react";
 
 export default async function Admin() {
     let stat = await getHomeAdmin()
     if (stat == undefined) {
-        return <></>
+        return <><ProductSaleChart /></>
     }
     return (
         <Fragment>
@@ -25,6 +26,7 @@ export default async function Admin() {
                     des="Tổng người dùng có trong của hàng"
                     title="Tổng người dùng" />
             </div>
+            <ProductSaleChart />
         </Fragment>
     )
 }

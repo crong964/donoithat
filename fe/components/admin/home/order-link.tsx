@@ -10,8 +10,8 @@ export default function OrderLink(p: { ls: string[] }) {
     return (
         <div className="my-3.75  px-2">
             <ul className="bg-a rounded-2xl flex">
-                <Link className="" href={`/admin/order`}>
-                    <p className={`${pathname == undefined ? "border-b-f" : "border-b-white"} border-b-4 text-center py-4 hover:text-f font-normal`}>
+                <Link className="flex-1" href={`/admin/order`}>
+                    <p data-path={pathname == undefined} className="data-[path=true]:border-b-f data-[path=false]:border-b-white border-b-4 text-center py-4 hover:text-f font-normal">
                         Tất cả đơn hàng
                     </p>
                 </Link>
@@ -19,7 +19,7 @@ export default function OrderLink(p: { ls: string[] }) {
                     return (
                         <li className="flex-1 bg-a ">
                             <Link key={v} className="" href={`/admin/order?type=${i}`}>
-                                <p className={`${pathname == `${i}` ? "border-b-f" : "border-b-white"} border-b-4 text-center py-4 hover:text-f font-normal`}>
+                                <p data-path={pathname == i + ""} className="data-[path=true]:border-b-f data-[path=false]:border-b-white border-b-4 text-center py-4 hover:text-f font-normal">
                                     {v}
                                 </p>
                             </Link>

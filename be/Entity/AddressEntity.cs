@@ -5,7 +5,7 @@ namespace be.Entity;
 public class AddressEntity
 {
     [Key]
-    public string AddressId { get; set; } = Guid.NewGuid().ToString();
+    public string AddressId { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
     public required float Lat { get; set; }
     public required float Lng { get; set; }
     public required string Title { get; set; }

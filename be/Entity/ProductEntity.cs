@@ -11,7 +11,7 @@ public class ProductEntity
 {
 
     [Key]
-    public string ProductId { get; set; } = Guid.NewGuid().ToString();
+    public string ProductId { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
     public required string Slug { get; set; }
     public required string Description { get; set; }
     public required string ImageUrl { get; set; }

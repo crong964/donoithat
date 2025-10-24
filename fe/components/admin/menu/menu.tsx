@@ -1,5 +1,5 @@
 
-import { Calendar, ChevronRight, Home, Inbox, Network, Package, Search, Settings, Shirt, Sofa, Store } from "lucide-react"
+import { Calendar, ChevronRight, Home, Inbox, Network, Package, Search, Settings, Shirt, Sofa, Store, TicketPercent } from "lucide-react"
 
 import {
     Sidebar,
@@ -57,9 +57,13 @@ const items = [
     {
         title: "Nhà cung cấp",
         url: "/admin/suplier",
-        icon: Store ,
+        icon: Store,
     },
-
+    {
+        title: "Chường trình khuyến mãi",
+        url: "/admin/coupon",
+        icon: TicketPercent,
+    },
 ]
 
 export function AppSidebar() {
