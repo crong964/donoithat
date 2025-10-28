@@ -115,11 +115,11 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         {
             var categoryEntity = await _context.Category
             .Where(x => x.Slug == productAddModel.TypeProduct).SingleOrDefaultAsync();
-
+            var BrandEntity = await _context.Brand
+            .Where(x => x.BrandId == productAddModel.BrandId).SingleOrDefaultAsync();
             var mainProduct = new ProductEntity
             {
-                Suplier = productAddModel.Suplier,
-                ImageUrl = "http://localhost:2000/sta/" + productAddModel.ImageFiles[0],
+
                 CategoryEntity = categoryEntity,
                 Description = productAddModel.Description,
                 MainPrice = productAddModel.MainPrice,
@@ -148,6 +148,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
             {
                 var productVariantEntity = new ProductVariantEntity
                 {
+                    BrandEntity = BrandEntity,
                     ProductVariantName = mainProduct.NameProduct,
                     Image = "http://localhost:2000/sta/" + item.Image,
                     Price = item.Price,
@@ -220,9 +221,6 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
             {
                 return BadRequest(new { mess = "Không có sản phẩm này" });
             }
-
-            mainProduct.Suplier = productAddModel.Suplier;
-            mainProduct.ImageUrl = "http://localhost:2000/sta/" + productAddModel.ImageFiles[0];
             mainProduct.CategoryEntity = categoryEntity;
             mainProduct.Description = productAddModel.Description;
             mainProduct.MainPrice = productAddModel.MainPrice;
@@ -234,6 +232,8 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
             var p = await _context.PhotoGallery.Where(x => x.ProductEntity == mainProduct).ToArrayAsync();
             _context.PhotoGallery.RemoveRange(p);
 
+            var BrandEntity = await _context.Brand
+                       .Where(x => x.BrandId == productAddModel.BrandId).SingleOrDefaultAsync();
             foreach (var item in productAddModel.ImageFiles)
             {
                 var imageEntity = await _context.Image.Where(x => x.ImageFiles == item).FirstOrDefaultAsync();
@@ -258,6 +258,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 {
                     var productVariantEntity = new ProductVariantEntity
                     {
+                        BrandEntity = BrandEntity,
                         ProductVariantName = mainProduct.NameProduct,
                         Image = "http://localhost:2000/sta/" + item.Image,
                         Price = item.Price,
@@ -332,27 +333,27 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
     [HttpPost("addProducts_test")]
     public async Task<ActionResult<string>> AddProducts(IEnumerable<ProductAddModel> productAddModels)
     {
-        
+
         foreach (var productAddModel in productAddModels)
         {
             var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
+                var BrandEntity = await _context.Brand
+           .Where(x => x.BrandId == productAddModel.BrandId).SingleOrDefaultAsync();
                 var categoryEntity = await _context.Category
                 .Where(x => x.Slug == productAddModel.TypeProduct).SingleOrDefaultAsync() ?? throw new Exception("not found category");
 
                 var mainProduct = new ProductEntity
                 {
                     Slug = productAddModel.Slug,
-                    Suplier = productAddModel.Suplier,
                     CategoryEntity = categoryEntity,
                     Description = productAddModel.Description,
                     MainPrice = productAddModel.MainPrice,
                     ProductClassification = productAddModel.ProductClassification,
                     NameProduct = productAddModel.NameProduct,
                     Quality = productAddModel.Quality + 20,
-                    ImageUrl = productAddModel.ImageFiles[0],
-                    
+
                 };
                 await _context.Product.AddAsync(mainProduct);
                 foreach (var item in productAddModel.ImageFiles)
@@ -379,6 +380,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 {
                     var productVariantEntity = new ProductVariantEntity
                     {
+                        BrandEntity = BrandEntity,
                         ProductVariantId = item.ProductVariantId,
                         ProductVariantName = mainProduct.NameProduct,
                         Image = item.Image,

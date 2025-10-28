@@ -10,7 +10,7 @@ public class ProductUpdateModel
     public required string Slug { get; set; }
     public required long MainPrice { get; set; }
 
-    public required string Suplier { get; set; }
+    public required string BrandId { get; set; }
     public required string NameProduct { get; set; }
 
     public required long Quality { get; set; } = 0;

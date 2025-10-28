@@ -10,7 +10,6 @@ public class ProductDetailModel
     public required string Description { get; set; }
     public required string Slug { get; set; }
     public required string ProductClassification { get; set; }
-    public required string Suplier { get; set; }
     public required long MainPrice { get; set; }
     public required string NameProduct { get; set; }
 
@@ -32,7 +31,7 @@ public class ProductDetailModel
             MainPrice = productEntity.MainPrice,
             NameProduct = productEntity.NameProduct,
             Slug = productEntity.Slug,
-            Suplier = productEntity.Suplier,
+
             Quality = productEntity.Quality,
             ProductClassification = productEntity.ProductClassification,
             ProductVariantModels = productEntity.ProductVariantEntities?.Select(ProductVariantModel.ConvertModelToEntity).ToArray(),

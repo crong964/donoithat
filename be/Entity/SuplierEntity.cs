@@ -14,4 +14,6 @@ public class SuplierEntity
     public required string SuplierPhoneNumber { get; set; }
     public required string SuplierEmail { get; set; }
     public required string SuplierAddress { get; set; }
+
+    public List<ProductVariantEntity> ProductVariantEntities { get; } = [];
 }

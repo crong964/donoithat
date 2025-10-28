@@ -23,5 +23,6 @@ artifacts/
 # Others
 *.log
 StaticFiles
-Migrations
+Migrations/*
 Tmp
+DatabaseContext.db

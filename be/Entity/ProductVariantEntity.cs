@@ -21,10 +21,14 @@ namespace be.Entity
         public int Position { get; set; }
         public int Weight { get; set; }
 
-        public required ProductEntity ProductEntity { set; get; }
+        public required BrandEntity BrandEntity { set; get; }
+        public required ProductEntity? ProductEntity { set; get; }
 
+
+        public List<SuplierEntity> SuplierEntities { get; } = [];
         public List<UserEntity> UserEntities { get; } = [];
 
         public List<OrderEntity> OrderEntities { get; } = [];
+        public List<ReceivedNoteEntity> ReceivedNoteDetailEntities { get; } = [];
     }
 }

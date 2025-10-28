@@ -99,10 +99,15 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
         foreach (var suplierAddAdminModel in suplierAddAdminModels)
         {
             var suplierTmp = await _context.Suplier.Where(x => x.SuplierId == suplierAddAdminModel.SuplierId).FirstOrDefaultAsync();
+
             if (suplierTmp != null)
             {
                 continue;
             }
+            var brand = new BrandEntity
+            {
+                BrandName = suplierAddAdminModel.SuplierName
+            };
             var suplier = new SuplierEntity
             {
                 SuplierEmail = suplierAddAdminModel.SuplierEmail,
@@ -115,6 +120,9 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
             try
             {
                 await _context.Suplier.AddAsync(suplier);
+                await _context.SaveChangesAsync();
+
+                await _context.Brand.AddAsync(brand);
                 await _context.SaveChangesAsync();
             }
             catch (System.Exception)

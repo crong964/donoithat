@@ -22,7 +22,12 @@ public class DatabaseContext : DbContext
     public DbSet<AddressEntity> Address { get; set; } = null!;
     public DbSet<PhotoGalleryEntity> PhotoGallery { get; set; } = null!;
     public DbSet<SuplierEntity> Suplier { get; set; } = null!;
-     public DbSet<CouponEntity> Coupon { get; set; } = null!;
+    public DbSet<ProvideEntity> Provide { get; set; } = null!;
+
+    public DbSet<ReceivedNoteEntity> ReceivedNote { get; set; } = null!;
+    public DbSet<BrandEntity> Brand { get; set; } = null!;
+    public DbSet<ReceivedNoteDetailEntity> ReceivedNoteDetail { get; set; } = null!;
+    public DbSet<CouponEntity> Coupon { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserEntity>()
@@ -36,9 +41,21 @@ public class DatabaseContext : DbContext
        .UsingEntity<OrderDetailEntity>();
 
         modelBuilder.Entity<ProductEntity>()
-       .HasMany(e => e.ImageEntities)
-       .WithMany(e => e.ProductEntities)
-       .UsingEntity<PhotoGalleryEntity>();
+           .HasMany(e => e.ImageEntities)
+           .WithMany(e => e.ProductEntities)
+           .UsingEntity<PhotoGalleryEntity>();
+
+
+        modelBuilder.Entity<ReceivedNoteEntity>()
+            .HasMany(e => e.ProductVariantEntities)
+            .WithMany(e => e.ReceivedNoteDetailEntities)
+            .UsingEntity<ReceivedNoteDetailEntity>();
+
+
+        modelBuilder.Entity<SuplierEntity>()
+          .HasMany(e => e.ProductVariantEntities)
+          .WithMany(e => e.SuplierEntities)
+          .UsingEntity<ProvideEntity>();
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
