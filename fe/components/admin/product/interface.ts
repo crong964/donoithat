@@ -14,6 +14,7 @@ export interface IProductVariant {
     price: number
     quality: string
     image: number
+    productVariantId?:string
 }
 
 export interface IProductVariantsDetail {

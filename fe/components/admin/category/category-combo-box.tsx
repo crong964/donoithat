@@ -67,8 +67,26 @@ export default function CategoryCombobox(p: { ls: iMainCateGory[] }) {
 
                                     </CommandItem>
                                 </Link>
-
                             ))}
+                            <Link href={`/admin/product`}>
+                                <CommandItem
+                                    value={""}
+                                    onSelect={(currentValue) => {
+                                        setValue(currentValue === value ? "" : currentValue)
+                                        setOpen(false)
+                                    }}
+                                >
+
+                                    Tất cả
+                                    <Check
+                                        className={cn(
+                                            "ml-auto",
+                                            value === "" ? "opacity-100" : "opacity-0"
+                                        )}
+                                    />
+
+                                </CommandItem>
+                            </Link>
                         </CommandGroup>
                     </CommandList>
                 </Command>

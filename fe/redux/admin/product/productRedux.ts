@@ -115,7 +115,33 @@ export const productSlice = createSlice({
             state.productClassifications = [...action.payload]
         },
         setProductVariants: (state, action: PayloadAction<IProductVariant[]>) => {
-            state.productVariants = [...action.payload]
+            let productVariantsMap = new Map<string, IProductVariant>()
+            state.productVariants.forEach(element => {
+                productVariantsMap.set(element.variantId, element)
+            });
+            let newProductVariant: IProductVariant[] = []
+            action.payload.forEach((v, i) => {
+                if (productVariantsMap.has(v.variantId)) {
+                    const temp = productVariantsMap.get(v.variantId) as any
+                    newProductVariant.push({ ...temp, variantName: v.variantName })
+                } else {
+                    newProductVariant.push(v)
+                }
+            })
+            state.productVariants = [...newProductVariant]
+        },
+        setProductVariant: (state, action: PayloadAction<IProductVariant>) => {
+            let newProductVariant: IProductVariant[] = []
+
+            state.productVariants.forEach((v) => {
+                if (v.variantId == action.payload.variantId) {
+                    newProductVariant.push(action.payload)
+                } else {
+                    newProductVariant.push(v)
+                }
+            })
+
+            state.productVariants = newProductVariant
         },
         addImageUrlFiles: (state, action: PayloadAction<iImageInput[]>) => {
             state.imageurls = [...state.imageurls, ...action.payload]
@@ -241,6 +267,9 @@ export const {
     setIamgeVariants,
     setMainPriceProduct,
     setVendor, setMinMaxPrice,
-    setWeightProduct, setResetProductData, setProductData } = productSlice.actions
+    setWeightProduct,
+    setResetProductData,
+    setProductData,
+    setProductVariant } = productSlice.actions
 
 export default productSlice.reducer

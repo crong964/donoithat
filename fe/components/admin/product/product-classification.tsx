@@ -14,14 +14,16 @@ import {
     setMainPriceProduct,
     setMinMaxPrice,
     setProductClassifications,
+    setProductVariant,
     setProductVariants,
     setQuality,
 } from "@/redux/admin/product/productRedux"
 import ProductClassificationItem from "./product-classification-item"
 import ImageProduct from "./image-product"
-import { setOpen } from "@/redux/admin/product/mediaLibraryRedux"
+
 import MinMaxPrice from "./price"
 import { createOption } from "./ulti"
+import ProductVariantItemInput from "@/components/variant/product-variant-item-input"
 
 
 
@@ -35,7 +37,7 @@ export default function ProductClassification() {
     const quality = useSelector((state: RootState) => state.product.quality)
     const dispatch = useDispatch()
 
-
+    const [open, setOpen] = useState(false)
     const sl = useMemo(() => {
         let f = 1
         for (let i = 0; i < productClassifications.length; i++) {
@@ -97,7 +99,8 @@ export default function ProductClassification() {
         }</>
     return (
         <div>
-            <ImageProduct onchange={(i) => {
+            <ImageProduct open={open} onchange={(i) => {
+
                 if (productVariantI != -1) {
                     let temp = productVariants.map((v) => {
                         return { ...v }
@@ -105,26 +108,29 @@ export default function ProductClassification() {
                     temp[productVariantI].image = i
                     dispatch(setProductVariants(temp))
                     setProductVariantI(-1)
+                    setOpen(false)
                     return
                 }
 
-                if (variantKey != "-1") {
+                if (variantKey != "-1" && i != -1) {
 
                     let temp = { ...imageVariants }
                     temp[variantKey] = i
                     dispatch(setIamgeVariants(temp))
 
-                    let tempProductVariants = productVariants.map((v) => {
+                    productVariants.forEach((v) => {
                         let f = v.variantId.split(" ")
                         if (f[0] == variantKey) {
-                            return { ...v, image: i }
+                            dispatch(setProductVariant({ ...v, image: i }))
                         }
-                        return { ...v }
                     })
-                    dispatch(setProductVariants(tempProductVariants))
+
                     setVariantsKey("-1")
+                    setOpen(false)
                     return
                 }
+                setOpen(false)
+
             }} />
             <div className="mb-4">
                 <h1 className="text-sm font-bold">
@@ -199,12 +205,12 @@ export default function ProductClassification() {
                                                 }
                                                 return (
                                                     <li key={v.id} className="py-2">
-                                                        <div  className="flex items-center gap-x-3">
+                                                        <div className="flex items-center gap-x-3">
                                                             <button type="button" onClick={() => {
-                                                                dispatch(setOpen(true))
+                                                                setOpen(true)
                                                                 setVariantsKey(v.id)
                                                             }} className="size-20 border flex justify-center items-center rounded-lg">
-                                                                {imageVariants[v.id] == undefined ?
+                                                                {imageVariants[v.id] == undefined || imageurls[imageVariants[v.id]] == undefined ?
                                                                     <Image size={20} /> :
                                                                     <img src={imageurls[imageVariants[v.id]].url} className="w-full h-full object-cover " alt="" />}
                                                             </button>
@@ -246,52 +252,9 @@ export default function ProductClassification() {
                 </div>
                 <ul>
                     {productVariants.
-                        map((productVariant, i) => {
-                            let url = imageurls[productVariant.image]?.url
+                        map((productVariant) => {
                             return (
-                                <li key={productVariant.variantId} className="flex py-4 gap-x-3">
-                                    <div className="basis-1/3">
-                                        <span className="inline-block px-1">
-                                            <button type="button" onClick={() => {
-                                                dispatch(setOpen(true))
-                                                setProductVariantI(i)
-                                            }} className="aspect-square flex cursor-pointer justify-center items-center size-25 border">
-                                                {url ?
-                                                    <img src={url} className="object-cover size-full" alt="" /> :
-                                                    <Image size={20} />
-                                                }
-
-                                            </button>
-                                        </span>
-                                    </div>
-                                    <div className="basis-1/3 ">
-                                        <span className="inline-block px-1 ">
-                                            {productVariant.variantName}
-                                        </span>
-                                    </div>
-                                    <div className="basis-1/5">
-                                        <Input onChange={(v) => {
-                                            let f = v.currentTarget.value
-                                            let temp = productVariants.map((v) => {
-                                                return { ...v }
-                                            })
-                                            temp[i].price = parseInt(f.replaceAll(',', ''))
-                                            dispatch(setProductVariants(temp))
-                                        }} placeholder="Giá sản phẩm" value={PriceFormat(productVariant.price + "")} >
-                                        </Input>
-                                    </div>
-                                    <div className="basis-1/5">
-                                        <Input onChange={(v) => {
-                                            let f = v.currentTarget.value
-                                            let temp = productVariants.map((v) => {
-                                                return { ...v }
-                                            })
-                                            temp[i].quality = parseInt(f.replaceAll(',', '')) + ""
-                                            dispatch(setProductVariants(temp))
-                                        }} placeholder="Số lượng" value={PriceFormat(productVariant.quality + "")}/>
-
-                                    </div>
-                                </li>
+                                <ProductVariantItemInput key={productVariant.variantId} {...productVariant}></ProductVariantItemInput>
                             )
                         })}
                 </ul>

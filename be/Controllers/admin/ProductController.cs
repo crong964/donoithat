@@ -42,6 +42,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         {
 
             productEntities = await _context.Product.
+            Include(x => x.ImageEntities).
             Include(x => x.CategoryEntity).
             Include(x => x.ProductVariantEntities).
             Skip(productGetModel.Page * limit - limit).Take(limit).
@@ -50,6 +51,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         else
         {
             productEntities = await _context.Product.
+            Include(x => x.ImageEntities).
             Include(x => x.CategoryEntity).
             Include(x => x.ProductVariantEntities).
             Where(x => x.CategoryEntity.Slug == productGetModel.Slug ||

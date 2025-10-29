@@ -69,7 +69,7 @@ export default function ProductClassificationItem(p: {
                             collapse ?
                                 <button onClick={() => {
                                     setCollapses(false)
-                                }} className="flex gap-x-2 w-full cursor-pointer">
+                                }} className="flex flex-wrap gap-x-2 w-full cursor-pointer">
                                     {
                                         productClassification.options
                                             .filter((_, i) => {

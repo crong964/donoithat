@@ -33,7 +33,7 @@ export default function ProductHomeAdmin(p: iProduct) {
                     <div className="flex h-full space-x-2 items-center">
                         <div className="basis-20 ">
                             <img className="min-w-20 border border-boder h-auto"
-                                src={p.imageUrl} alt={p.nameProduct} srcSet="" />
+                                src={p.imageUrls[0]} alt={p.nameProduct} srcSet="" />
                         </div>
                         <div className="flex-1 h-full">
                             <h3 className=" max-md:line-clamp-1 leading-4.5 ">

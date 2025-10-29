@@ -4,7 +4,6 @@ export interface iProduct {
     mainPrice: number,
     nameProduct: string,
     quality: string,
-    imageUrl: string,
     suplier: string
     imageUrls: string[]
     status: number

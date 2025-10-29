@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using be.Service;
@@ -15,6 +14,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.OpenApi.Any;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using be.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -135,6 +135,13 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 var app = builder.Build();
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -163,6 +170,18 @@ app.MapFallbackToFile("index.html");
 
 //var port = Environment.GetEnvironmentVariable("PORT") ?? "3000";
 app.Run();
+
+
+
+
+
+
+
+
+
+
+
+
 
 public class EnumSchemaFilter : ISchemaFilter
 {

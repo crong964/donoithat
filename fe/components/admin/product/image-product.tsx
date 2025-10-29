@@ -1,10 +1,11 @@
 "use client"
 import { setOpen } from "@/redux/admin/product/mediaLibraryRedux";
 import { RootState } from "@/redux/admin/reduxRoot";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 interface IimageProduct {
     onchange(i: number): void
+    open: boolean
 }
 export default function ImageProduct(p: IimageProduct) {
     // call this to Disable
@@ -16,7 +17,7 @@ export default function ImageProduct(p: IimageProduct) {
     }
 
     const imageurls = useSelector((state: RootState) => state.product.imageurls)
-    const open = useSelector((state: RootState) => state.mediaLibrary.open)
+     const [open, setOpen] = useState(false)
     const dispatch = useDispatch()
     useEffect(() => {
         if (open) {
@@ -29,11 +30,11 @@ export default function ImageProduct(p: IimageProduct) {
         };
     }, [open]);
     return (
-        open ?
+        p.open ?
             <>
-                <button onClick={() => {
-                    dispatch(setOpen(false))
-
+                <button type="button" onClick={() => {
+                    p.onchange(-1)
+                    
                 }} className="fixed w-screen h-screen top-0 left-0 z-666 bg-a opacity-30"></button>
                 <div className="fixed top-1/2 left-1/2 -translate-1/2 z-999 shadow-2xl bg-white w-200 min-h-50">
                     <div className="p-4">
@@ -51,7 +52,7 @@ export default function ImageProduct(p: IimageProduct) {
                                             <div key={v.url} className="aspect-square col-span-1">
                                                 <button type="button" onClick={() => {
                                                     p.onchange(i)
-                                                    dispatch(setOpen(false))
+                                                    setOpen(false)
                                                 }} className="w-full hover:shadow-2xl h-full cursor-pointer" >
                                                     <img src={v.url} className="w-full h-full object-cover" />
                                                 </button>
