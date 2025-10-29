@@ -150,6 +150,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
             {
                 var productVariantEntity = new ProductVariantEntity
                 {
+                    
                     BrandEntity = BrandEntity,
                     ProductVariantName = mainProduct.NameProduct,
                     Image = "http://localhost:2000/sta/" + item.Image,
@@ -260,6 +261,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 {
                     var productVariantEntity = new ProductVariantEntity
                     {
+                        
                         BrandEntity = BrandEntity,
                         ProductVariantName = mainProduct.NameProduct,
                         Image = "http://localhost:2000/sta/" + item.Image,
@@ -382,9 +384,10 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 {
                     var productVariantEntity = new ProductVariantEntity
                     {
+                      
                         BrandEntity = BrandEntity,
                         ProductVariantId = item.ProductVariantId,
-                        ProductVariantName = mainProduct.NameProduct,
+                        ProductVariantName = $@"{mainProduct.NameProduct} {item.VariantName}",
                         Image = item.Image,
                         Price = item.Price,
                         ProductEntity = mainProduct,

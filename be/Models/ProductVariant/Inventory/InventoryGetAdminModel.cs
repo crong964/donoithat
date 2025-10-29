@@ -1,12 +1,9 @@
-using be.Entity;
-
 namespace be.Models;
 
-public class ProductVariantGetAdminModel
+public class InventoryGetAdminModel
 {
     public string BrandId { get; set; } = "";
     public bool Independent { get; set; } = true;
     public string ProductVariantName { get; set; } = "";
-    public int CurPage { get; set; } = 1;
-    public bool Show { get; set; } = false;
+    public required int CurPage { get; set; } = 0;
 }

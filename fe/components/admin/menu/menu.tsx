@@ -1,5 +1,5 @@
 
-import { Calendar, ChevronRight, Home, Inbox, Network, Package, Search, Settings, Shirt, Sofa, Store, TicketPercent } from "lucide-react"
+import { Calendar, ChevronRight, Home, Inbox, Network, Package, Search, Settings, Shirt, Sofa, Store, TicketPercent, Warehouse } from "lucide-react"
 
 import {
     Sidebar,
@@ -53,6 +53,16 @@ const items = [
         title: "Loại Sản phẩm",
         url: "/admin/category",
         icon: Network,
+    },
+    {
+        title: "Kho hàng",
+        icon: Warehouse,
+        sub: [
+            {
+                title: "Các sản phẩm",
+                url: "/admin/warehouse/product"
+            },
+        ]
     },
     {
         title: "Nhà cung cấp",

@@ -2,7 +2,7 @@ import CategoryCombobox from "@/components/admin/category/category-combo-box";
 import CardHome from "@/components/admin/home/card-home";
 import OrderLink from "@/components/admin/home/order-link";
 import ProductSaleChart from "@/components/chart/product-sale-chart";
-import { getHomeAdmin } from "@/service/admin/home-Service";
+import { getHomeAdmin } from "@/service/admin/home-service";
 import { Fragment } from "react";
 
 export default async function Admin() {
