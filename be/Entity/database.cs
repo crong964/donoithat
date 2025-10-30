@@ -41,21 +41,42 @@ public class DatabaseContext : DbContext
        .UsingEntity<OrderDetailEntity>();
 
         modelBuilder.Entity<ProductEntity>()
-           .HasMany(e => e.ImageEntities)
-           .WithMany(e => e.ProductEntities)
-           .UsingEntity<PhotoGalleryEntity>();
+        .HasMany(e => e.ImageEntities)
+        .WithMany(e => e.ProductEntities)
+        .UsingEntity<PhotoGalleryEntity>();
 
 
         modelBuilder.Entity<ReceivedNoteEntity>()
-            .HasMany(e => e.ProductVariantEntities)
-            .WithMany(e => e.ReceivedNoteDetailEntities)
-            .UsingEntity<ReceivedNoteDetailEntity>();
+        .HasMany(e => e.ProductVariantEntities)
+        .WithMany(e => e.ReceivedNoteDetailEntities)
+        .UsingEntity<ReceivedNoteDetailEntity>();
 
 
         modelBuilder.Entity<SuplierEntity>()
-          .HasMany(e => e.ProductVariantEntities)
-          .WithMany(e => e.SuplierEntities)
-          .UsingEntity<ProvideEntity>();
+        .HasMany(e => e.ProductVariantEntities)
+        .WithMany(e => e.SuplierEntities)
+        .UsingEntity<ProvideEntity>();
+
+
+        modelBuilder
+        .Entity<ProductVariantEntity>()
+        .HasOne(e => e.ProductEntity)
+        .WithMany(e => e.ProductVariantEntities)
+        .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder
+        .Entity<ProductEntity>()
+        .HasOne(e => e.CategoryEntity)
+        .WithMany()
+        .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder
+        .Entity<ProductEntity>()
+        .HasOne(e => e.BrandEntity)
+        .WithMany()
+        .OnDelete(DeleteBehavior.SetNull);
+
+       
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder

@@ -21,10 +21,11 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
     [HttpGet]
     public async Task<ActionResult> GetAll([FromQuery] ProductVariantGetAdminModel get)
     {
-        var OnSale = get.OnSale.Equals("all") ? "" : get.OnSale;
-       
-        var InventoryName = get.InventoryName ?? "";
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
+        var OnSale = get.OnSale.Equals("all") ? "" : get.OnSale;
+
+        _log.LogInformation("fffffffffffffff " + OnSale);
+        var InventoryName = get.InventoryName ?? "";
         var query = from item in _context.ProductVariant
                     join Product in _context.Product on
                     item.ProductEntity.ProductId equals Product.ProductId into gj

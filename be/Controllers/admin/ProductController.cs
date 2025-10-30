@@ -324,17 +324,18 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
     public async Task<ActionResult<string>> DeleteProduct(ProductDeleteModel productDelete)
     {
         var ProductId = productDelete.ProductId;
-        var pro = await _context.Product.FindAsync(ProductId);
+
+        var pro = await _context.Product.Where(x => x.ProductId.Equals(ProductId)).FirstOrDefaultAsync();
         if (pro != null)
         {
             try
             {
                 _context.Product.Remove(pro);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
-
+               
                 return BadRequest(new
                 {
                     message = "Xóa không dc"

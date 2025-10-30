@@ -9,10 +9,8 @@ export const getInventoryAdmin = async (p?: iInventoryGet): Promise<{
     curPage: number,
     totalPage: number
 }> => {
-
-
     try {
-        let data = await api.get(`/admin/inventory?curpage=${p?.curPage}&inventoryName=${p?.inventoryName || ""}&onSale=${p?.onSale||""}`)
+        let data = await api.get(`/admin/inventory?curpage=${p?.curPage}&inventoryName=${p?.inventoryName || ""}&onSale=${p?.onSale || "all"}`)
         return data.data
     } catch (error) {
         console.log((error as any)?.response?.data);

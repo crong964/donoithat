@@ -5,7 +5,7 @@ import { iProduct } from "./interface-admin";
 import { Badge } from "../ui/badge";
 import { PencilLine, SquarePen, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { Fragment, useActionState, useState } from "react";
+import { Fragment, useActionState, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import Form from "next/form";
@@ -15,6 +15,7 @@ import VariantsHomeItem from "../variant/variant-home-item";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import data from "@/tempdata/data";
 import { deleteProduct } from "@/service/admin/product-service";
+import { toast } from "react-toastify";
 
 export default function ProductHomeAdmin(p: iProduct) {
     const total = p.productVariants.reduce((pre, cur) => {
@@ -22,7 +23,15 @@ export default function ProductHomeAdmin(p: iProduct) {
     }, 0)
     const [mess, deleteForm, pending] = useActionState(deleteProduct, null)
     const [open, setOpen] = useState(false)
-    
+    useEffect(() => {
+        if (mess?.error) {
+            toast.error(mess.message)
+            setOpen(false)
+        }
+        return () => {
+
+        };
+    }, [mess]);
     return (
         <Fragment>
             <tr className="border-t border-black pt-2 ">

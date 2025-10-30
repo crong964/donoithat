@@ -1,7 +1,9 @@
 'use server'
 import { iGetProduct, iProductDetail } from "@/components/product/interface-admin"
 import Await from "@/util/Await"
+import { errorResponse } from "@/util/error-response"
 import { api } from "@/util/fetch"
+import { revalidatePath } from "next/cache"
 
 
 export const getProduct = async (p?: { slug: string, page?: string } | undefined): Promise<iGetProduct | undefined> => {
@@ -27,18 +29,18 @@ export const getProductBySlug = async (slug: string): Promise<iProductDetail | u
 
 export const deleteProduct = async (currentState: any, formData: FormData) => {
     const productId = formData.get("productId")
-    console.log(productId);
-    await Await()
-    return { message: "dấdasd" }
+    
+
     try {
         let data = await api.delete("/admin/product", {
             data: {
                 productId: productId
             }
         })
-        return data.data
     } catch (error) {
-
-        return undefined
+        console.log((error as any).response?.data);
+        
+        return { message: errorResponse(error).message, d: Date.now(), error: true }
     }
+    revalidatePath("/admin")
 }
