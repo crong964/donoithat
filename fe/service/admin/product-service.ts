@@ -1,4 +1,6 @@
+'use server'
 import { iGetProduct, iProductDetail } from "@/components/product/interface-admin"
+import Await from "@/util/Await"
 import { api } from "@/util/fetch"
 
 
@@ -19,6 +21,24 @@ export const getProductBySlug = async (slug: string): Promise<iProductDetail | u
         let data = await api.get(`/admin/product/getProductBySlug?slug=${slug}`)
         return data.data
     } catch (error) {
+        return undefined
+    }
+}
+
+export const deleteProduct = async (currentState: any, formData: FormData) => {
+    const productId = formData.get("productId")
+    console.log(productId);
+    await Await()
+    return { message: "dấdasd" }
+    try {
+        let data = await api.delete("/admin/product", {
+            data: {
+                productId: productId
+            }
+        })
+        return data.data
+    } catch (error) {
+
         return undefined
     }
 }

@@ -25,7 +25,7 @@ export default function InventoryLayout({ children }: { children: React.ReactNod
                         <SelectContent>
                             <SelectGroup>
                                 <SelectLabel>Chọn trạng thai</SelectLabel>
-                                <SelectItem value="truse">Tất cả</SelectItem>
+                                <SelectItem value="all">Tất cả</SelectItem>
                                 <SelectItem value="true">Đang bán</SelectItem>
                                 <SelectItem value="false">Chưa bán</SelectItem>
                             </SelectGroup>

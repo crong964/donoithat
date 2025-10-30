@@ -1,5 +1,6 @@
 
 export interface iProduct {
+    productId: string,
     slug: string
     mainPrice: number,
     nameProduct: string,

@@ -21,13 +21,18 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
     [HttpGet]
     public async Task<ActionResult> GetAll([FromQuery] ProductVariantGetAdminModel get)
     {
-        var OnSale = get.OnSale;
+        var OnSale = get.OnSale.Equals("all") ? "" : get.OnSale;
+       
         var InventoryName = get.InventoryName ?? "";
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         var query = from item in _context.ProductVariant
                     join Product in _context.Product on
                     item.ProductEntity.ProductId equals Product.ProductId into gj
                     from x in gj.DefaultIfEmpty()
+
+                    join Brand in _context.Brand on
+                    item.BrandEntity.BrandId equals Brand.BrandId into brands
+                    from brand in brands.DefaultIfEmpty()
 
                     select new
                     {
@@ -36,7 +41,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
                         item.ProductVariantName,
                         item.Image,
                         item.Price,
-                        BrandName = "",
+                        brand.BrandName,
                         item.Quality,
                         item.Weight,
                         item.ProductVariantId
@@ -48,13 +53,13 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
 
         var ls = await query.
         Where(x =>
-            EF.Functions.Like(x.OnSale, "%" + get.OnSale + "%") &&
+            EF.Functions.Like(x.OnSale, "%" + OnSale + "%") &&
             EF.Functions.Like(x.ProductVariantName, "%" + get.InventoryName + "%")).
         Skip((CurPage - 1) * limit).Take(limit).ToArrayAsync();
 
 
         var count = await query.Where(x =>
-            EF.Functions.Like(x.OnSale, "%" + get.OnSale + "%") &&
+            EF.Functions.Like(x.OnSale, "%" + OnSale + "%") &&
             EF.Functions.Like(x.ProductVariantName, "%" + get.InventoryName + "%")).CountAsync();
 
         var page = count / 40;

@@ -150,7 +150,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
             {
                 var productVariantEntity = new ProductVariantEntity
                 {
-                    
+
                     BrandEntity = BrandEntity,
                     ProductVariantName = mainProduct.NameProduct,
                     Image = "http://localhost:2000/sta/" + item.Image,
@@ -261,7 +261,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 {
                     var productVariantEntity = new ProductVariantEntity
                     {
-                        
+
                         BrandEntity = BrandEntity,
                         ProductVariantName = mainProduct.NameProduct,
                         Image = "http://localhost:2000/sta/" + item.Image,
@@ -319,6 +319,30 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         return Ok(new { mess = "Cập nhật thành công" });
     }
 
+
+    [HttpDelete]
+    public async Task<ActionResult<string>> DeleteProduct(ProductDeleteModel productDelete)
+    {
+        var ProductId = productDelete.ProductId;
+        var pro = await _context.Product.FindAsync(ProductId);
+        if (pro != null)
+        {
+            try
+            {
+                _context.Product.Remove(pro);
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest(new
+                {
+                    message = "Xóa không dc"
+                });
+            }
+        }
+        return Ok();
+    }
 
 
 
@@ -384,7 +408,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 {
                     var productVariantEntity = new ProductVariantEntity
                     {
-                      
+
                         BrandEntity = BrandEntity,
                         ProductVariantId = item.ProductVariantId,
                         ProductVariantName = $@"{mainProduct.NameProduct} {item.VariantName}",

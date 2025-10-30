@@ -106,7 +106,8 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
             }
             var brand = new BrandEntity
             {
-                BrandName = suplierAddAdminModel.SuplierName
+                BrandName = suplierAddAdminModel.SuplierName,
+                BrandId = suplierAddAdminModel.SuplierId
             };
             var suplier = new SuplierEntity
             {
