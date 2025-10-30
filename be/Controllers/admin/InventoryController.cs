@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Azure;
 using be.Entity;
 using be.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,9 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
     [HttpGet]
     public async Task<ActionResult> GetAll([FromQuery] ProductVariantGetAdminModel get)
     {
-
+        var OnSale = get.OnSale;
+        var InventoryName = get.InventoryName ?? "";
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         var query = from item in _context.ProductVariant
                     join Product in _context.Product on
                     item.ProductEntity.ProductId equals Product.ProductId into gj
@@ -29,7 +32,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
                     select new
                     {
                         item.ImportPrice,
-                        Show = item.ProductEntity != null ? "Đang bán" : "Chưa bán",
+                        OnSale = item.ProductEntity == null ? "false" : "true",
                         item.ProductVariantName,
                         item.Image,
                         item.Price,
@@ -38,12 +41,34 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
                         item.Weight,
                         item.ProductVariantId
                     };
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
+        var CurPage = get.CurPage ?? 1;
+        var limit = 40;
+
+        var ls = await query.
+        Where(x =>
+            EF.Functions.Like(x.OnSale, "%" + get.OnSale + "%") &&
+            EF.Functions.Like(x.ProductVariantName, "%" + get.InventoryName + "%")).
+        Skip((CurPage - 1) * limit).Take(limit).ToArrayAsync();
+
+
+        var count = await query.Where(x =>
+            EF.Functions.Like(x.OnSale, "%" + get.OnSale + "%") &&
+            EF.Functions.Like(x.ProductVariantName, "%" + get.InventoryName + "%")).CountAsync();
+
+        var page = count / 40;
+        var du = count % 40;
+
+        if (du > 0)
+        {
+            page += 1;
+        }
 
         return Ok(new
         {
-            Data = await query.Take(20).ToArrayAsync(),
-            Tottal = (await query.CountAsync()) / 20,
+            Data = ls,
+            TotalPage = page,
             get.CurPage
         }
         );

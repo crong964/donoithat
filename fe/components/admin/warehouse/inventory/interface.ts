@@ -1,7 +1,7 @@
 export interface iInventoryGet {
     brandId: string;
-    independent: boolean;
-    productVariantName: string;
+    onSale: string;
+    inventoryName: string;
     curPage: number;
 
 }
@@ -11,7 +11,7 @@ export interface iInventory {
     brandName: string
     productVariantName: string
     price: number,
-    show: string,
+    onSale: string,
     importPrice: number;
     image: string
     quality: number;

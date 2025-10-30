@@ -6,7 +6,7 @@ import { JSX } from 'react';
 
 
 export default function Pagination(p: { page: number, total: number, url: string }) {
-    const margin = 2
+    const margin = 5
     const pre: JSX.Element[] = []
     for (let i = p.page - 1; i > 0 && i >= p.page - margin; i--) {
         pre.push(<PaginationItem page={i} url={p.url} key={i} />)

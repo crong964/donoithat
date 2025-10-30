@@ -4,14 +4,19 @@ import { api } from "@/util/fetch"
 
 
 
-export const getInventoryAdmin = async (p?: iInventoryGet): Promise<{ data: iInventory[], curPage: number, tottal: number }> => {
+export const getInventoryAdmin = async (p?: iInventoryGet): Promise<{
+    data: iInventory[],
+    curPage: number,
+    totalPage: number
+}> => {
+
 
     try {
-        let data = await api.get(`/admin/inventory`)
+        let data = await api.get(`/admin/inventory?curpage=${p?.curPage}&inventoryName=${p?.inventoryName || ""}&onSale=${p?.onSale||""}`)
         return data.data
     } catch (error) {
         console.log((error as any)?.response?.data);
 
-        return { curPage: 0, data: [], tottal: 0 }
+        return { curPage: 0, data: [], totalPage: 0 }
     }
 }

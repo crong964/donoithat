@@ -38,17 +38,17 @@ public class ProductVariantController(DatabaseContext context, ILogger<ProductVa
         return Ok(new { message = "Cập nhật thành công" });
     }
 
-    [HttpGet]
-    public async Task<ActionResult> GetAll(ProductVariantGetAdminModel get)
-    {
-        var ls = _context.ProductVariant.Include(x => x.ProductEntity)
-        .Where(x =>
-        x.ProductEntity == null
-        && EF.Functions.Like(x.BrandEntity.BrandId, "%" + get.ProductVariantName.Replace(" ", "%") + "%")
-        && EF.Functions.Like(x.ProductVariantName, "%" + get.ProductVariantName.Replace(" ", "%") + "%"))
-        .Take(get.CurPage * 20).ToArrayAsync();
+    // [HttpGet]
+    // public async Task<ActionResult> GetAll(ProductVariantGetAdminModel get)
+    // {
+    //     var ls = _context.ProductVariant.Include(x => x.ProductEntity)
+    //     .Where(x =>
+    //     x.ProductEntity == null
+    //     && EF.Functions.Like(x.BrandEntity.BrandId, "%" + get.ProductVariantName.Replace(" ", "%") + "%")
+    //     && EF.Functions.Like(x.ProductVariantName, "%" + get.ProductVariantName.Replace(" ", "%") + "%"))
+    //     .Take(get.CurPage * 20).ToArrayAsync();
         
-        return Ok(ls);
-    }
+    //     return Ok(ls);
+    // }
 
 }

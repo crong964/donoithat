@@ -2,7 +2,8 @@ import ProductHomeAdmin from "@/components/product/product-home-admin";
 import Pagination from "@/components/ui-custom/panination";
 import { getProduct } from "@/service/admin/product-service";
 
-export default async function ProductHomePage({ searchParams }: { searchParams: Promise<{ [key: string]: string | undefined }> }) {
+export default async function ProductHomePage(
+    { searchParams }: { searchParams: Promise<{ [key: string]: string | undefined }> }) {
     const slug = (await searchParams).slug
     const page = (await searchParams).page
     const product = await getProduct({ slug: slug || "all", page: page });

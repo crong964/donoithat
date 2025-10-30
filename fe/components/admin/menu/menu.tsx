@@ -59,8 +59,8 @@ const items = [
         icon: Warehouse,
         sub: [
             {
-                title: "Các sản phẩm",
-                url: "/admin/warehouse/product"
+                title: "Sản phẩm tồn kho",
+                url: "/admin/warehouse/inventory"
             },
         ]
     },
