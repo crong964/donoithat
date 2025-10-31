@@ -1,6 +1,5 @@
 'use server'
 import { iGetProduct, iProductDetail } from "@/components/product/interface-admin"
-import Await from "@/util/Await"
 import { errorResponse } from "@/util/error-response"
 import { api } from "@/util/fetch"
 import { revalidatePath } from "next/cache"

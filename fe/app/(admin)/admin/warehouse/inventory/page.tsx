@@ -8,9 +8,10 @@ export default async function WarehouseProductPage(
     const curPage = parseInt((await searchParams).page || "1")
     const inventoryName = (await searchParams).inventoryName || ""
     const onSale = (await searchParams).onSale || ""
+    const brandId = (await searchParams).brandId || "all"
 
     const data = await getInventoryAdmin({
-        brandId: "",
+        brandId: brandId,
         curPage: curPage,
         onSale: onSale,
         inventoryName: inventoryName
@@ -63,7 +64,7 @@ export default async function WarehouseProductPage(
             <div className="mt-7">
                 <Pagination page={curPage}
                     total={totalPage}
-                    url={`/admin/warehouse/inventory?inventoryName=${inventoryName}&onSale=${onSale}`} />
+                    url={`/admin/warehouse/inventory?curpage=${curPage}&inventoryName=${inventoryName}&onSale=${onSale}&brandId=${brandId}`} />
             </div>
         </div>
     )

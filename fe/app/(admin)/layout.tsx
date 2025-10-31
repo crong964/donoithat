@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 
-import { AppSidebar } from "@/components/admin/menu/menu";
+import { AppSidebar } from "@/components/route/admin/menu/menu";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import ReduxComponent from "@/components/admin/redux-component";
+import ReduxComponent from "@/components/route/admin/redux-component";
 import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
@@ -32,7 +32,6 @@ export default function RootLayout({
             <>
               <AppSidebar />
               <SidebarInset>
-                <SidebarTrigger />
                 <main className="">
                   <section>
                     {children}

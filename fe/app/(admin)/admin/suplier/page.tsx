@@ -1,4 +1,4 @@
-import SuplierHeaderLayout from "@/components/admin/suplier/suplier-header-layout";
+import SuplierHeaderLayout from "@/components/route/admin/suplier/suplier-header-layout";
 import CsvInput from "@/components/form/csv-input";
 import { iSuplier } from "@/components/suplier/interface";
 import { Button } from "@/components/ui/button";

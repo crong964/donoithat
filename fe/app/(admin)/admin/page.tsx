@@ -1,6 +1,6 @@
-import CategoryCombobox from "@/components/admin/category/category-combo-box";
-import CardHome from "@/components/admin/home/card-home";
-import OrderLink from "@/components/admin/home/order-link";
+import CategoryCombobox from "@/components/route/admin/category/category-combo-box";
+import CardHome from "@/components/route/admin/home/card-home";
+import OrderLink from "@/components/route/admin/home/order-link";
 import ProductSaleChart from "@/components/chart/product-sale-chart";
 import { getHomeAdmin } from "@/service/admin/home-service";
 import { Fragment } from "react";

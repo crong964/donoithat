@@ -1,5 +1,4 @@
 'use server'
-import { iMainCateGory } from "@/components/category/interface"
 import { iOrderDetail, iOrderInAdmin } from "@/components/order/interface"
 import { errorResponse } from "@/util/error-response"
 import { api } from "@/util/fetch"

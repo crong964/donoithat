@@ -1,4 +1,4 @@
-import { UserSidebar } from "@/components/client/menu";
+import { UserSidebar } from "@/components/route/client/menu";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { getUserInfor, } from "@/service/user-service";
 

@@ -1,4 +1,4 @@
-
+'use client'
 import { Calendar, ChevronRight, Home, Inbox, Network, Package, Search, Settings, Shirt, Sofa, Store, TicketPercent, Warehouse } from "lucide-react"
 
 import {
@@ -15,12 +15,14 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
+    SidebarTrigger,
 
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 
 import LoadingLink from "./loading-link"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { usePathname } from "next/navigation"
 
 // Menu items.
 const items = [
@@ -77,13 +79,16 @@ const items = [
 ]
 
 export function AppSidebar() {
+    const pathName = usePathname();
 
     return (
         <>
             <nav >
-                <Sidebar collapsible="icon">
+                <Sidebar collapsible="icon" className="**:data-link:data-[activeLink=true]:bg-blue-400 **:data-link:data-[activeLink=true]:text-white ">
                     <SidebarHeader>
+                        <SidebarTrigger className="w-full">
 
+                        </SidebarTrigger>
                     </SidebarHeader>
                     <SidebarContent>
                         <SidebarGroup>
@@ -106,7 +111,8 @@ export function AppSidebar() {
                                                             {item.sub.map((subItem) => (
                                                                 <SidebarMenuSubItem key={subItem.title}>
                                                                     <SidebarMenuSubButton asChild>
-                                                                        <Link href={subItem.url as any}>
+                                                                        <Link data-link data-activeLink={subItem.url == pathName}
+                                                                            href={subItem.url as any}>
                                                                             <span>{subItem.title}</span>
                                                                         </Link>
                                                                     </SidebarMenuSubButton>
@@ -118,7 +124,8 @@ export function AppSidebar() {
                                             </Collapsible> :
                                             <SidebarMenuItem key={item.title} >
                                                 <SidebarMenuButton asChild>
-                                                    <Link href={item.url as any}>
+                                                    <Link data-link data-activeLink={item.url == pathName}
+                                                        href={item.url as any}>
                                                         <item.icon />
                                                         <span>{item.title}</span>
                                                     </Link>

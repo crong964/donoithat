@@ -1,11 +1,11 @@
-import AddProduct from "@/components/admin/product/add-product";
+import AddProduct from "@/components/route/admin/product/add-product";
 
 export default async function AddPage() {
     return (
         <main className="flex justify-center">
             <section>
-                <AddProduct>
-                </AddProduct>
+                <AddProduct/>
+                
             </section>
         </main>
 

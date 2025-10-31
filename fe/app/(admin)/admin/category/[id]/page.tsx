@@ -1,4 +1,4 @@
-import EditCategoryForm from "@/components/admin/category/edit-category-form";
+import EditCategoryForm from "@/components/route/admin/category/edit-category-form";
 import { getCategoryById } from "@/service/admin/category-service";
 import { redirect } from "next/navigation";
 

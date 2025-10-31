@@ -1,4 +1,4 @@
-import CartProduct from "@/components/client/cart/cart";
+import CartProduct from "@/components/route/client/cart/cart";
 import { getAllAddresses } from "@/service/address-service";
 import { getAllProductCart } from "@/service/cart-service";
 import { getUserInfor } from "@/service/user-service";

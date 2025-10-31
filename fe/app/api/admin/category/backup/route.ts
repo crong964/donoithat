@@ -1,5 +1,5 @@
 'use server'
-import { iCategoryBackup } from "@/components/admin/category/interface";
+import { iCategoryBackup } from "@/components/route/admin/category/interface";
 import { api } from "@/util/fetch";
 import { NextRequest, NextResponse } from "next/server";
 

@@ -1,4 +1,4 @@
-import { iHomeAdminGet } from "@/components/admin/home/interface"
+import { iHomeAdminGet } from "@/components/route/admin/home/interface"
 import { api } from "@/util/fetch"
 
 export const getHomeAdmin = async (): Promise<iHomeAdminGet | undefined> => {

@@ -1,4 +1,4 @@
-import ProductSlug from "@/components/client/product/product-slug"
+import ProductSlug from "@/components/route/client/product/product-slug"
 import { getProductBySlug } from "@/service/product-service"
 
 

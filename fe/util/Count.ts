@@ -1,4 +1,4 @@
-import { IProductClassification } from "@/components/admin/product/interface"
+import { IProductClassification } from "@/components/route/admin/product/interface"
 
 export default function Count(params: number, value: IProductClassification[]) {
     if (params == 0 || value.length == 0) {

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { iProductVariantCart } from "./interface";
 import PriceFormat from "@/util/price-format";
-import CartProductRemoveButton from "@/components/client/product/cart-product-remove-button";
+import CartProductRemoveButton from "@/components/route/client/product/cart-product-remove-button";
 import { useActionState } from "react";
 import { updateProductCart } from "@/service/cart-service";
 import Form from "next/form";

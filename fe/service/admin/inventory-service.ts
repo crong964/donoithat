@@ -1,5 +1,5 @@
-import { iHomeAdminGet } from "@/components/admin/home/interface"
-import { iInventory, iInventoryGet } from "@/components/admin/warehouse/inventory/interface"
+import { iHomeAdminGet } from "@/components/route/admin/home/interface"
+import { iInventory, iInventoryGet } from "@/components/route/admin/warehouse/inventory/interface"
 import { api } from "@/util/fetch"
 
 
@@ -10,7 +10,7 @@ export const getInventoryAdmin = async (p?: iInventoryGet): Promise<{
     totalPage: number
 }> => {
     try {
-        let data = await api.get(`/admin/inventory?curpage=${p?.curPage}&inventoryName=${p?.inventoryName || ""}&onSale=${p?.onSale || "all"}`)
+        let data = await api.get(`/admin/inventory?curpage=${p?.curPage}&inventoryName=${p?.inventoryName}&onSale=${p?.onSale}&brandId=${p?.brandId}`)
         return data.data
     } catch (error) {
         console.log((error as any)?.response?.data);

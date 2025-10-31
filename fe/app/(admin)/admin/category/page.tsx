@@ -1,5 +1,4 @@
-import AddCategoryForm from "@/components/admin/category/add-category-form";
-import { getCategory } from "@/service/admin/category-service";
+import AddCategoryForm from "@/components/route/admin/category/add-category-form";
 
 export default async function CategoryPage() {
 

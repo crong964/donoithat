@@ -1,6 +1,6 @@
 'use client'
-import { IProductClassification, IProductVariant } from '@/components/admin/product/interface'
-import { createClassificationFormSaveToHandle } from '@/components/admin/product/ulti'
+import { IProductClassification, IProductVariant } from '@/components/route/admin/product/interface'
+import { createClassificationFormSaveToHandle } from '@/components/route/admin/product/ulti'
 import { iProductDetail } from '@/components/product/interface-admin'
 import data from '@/tempdata/data'
 import { createSlice } from '@reduxjs/toolkit'

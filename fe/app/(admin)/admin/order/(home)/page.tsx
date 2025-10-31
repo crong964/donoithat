@@ -1,5 +1,5 @@
 
-import { getOrders, getOrderStatus } from "@/service/admin/order-service"
+import { getOrders } from "@/service/admin/order-service"
 import dateFormat from "@/util/Date"
 import Link from "next/link"
 import { Fragment } from "react"

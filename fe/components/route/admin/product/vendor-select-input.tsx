@@ -27,15 +27,15 @@ function Vendor() {
     }, []);
     return (
         <div className="mb-4">
-            <Select value={vendor} onValueChange={(v) => {
+            <Select defaultValue={vendor} onValueChange={(v) => {
                 dispatch(setVendor(v))
             }}>
                 <SelectTrigger className="w-70">
-                    <SelectValue placeholder="Chọn nhà cung ứng" />
+                    <SelectValue placeholder="Chọn nhãn hàng" />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
-                        <SelectLabel>Nhà cung ứng</SelectLabel>
+                        <SelectLabel>Nhãn hàng</SelectLabel>
                         {
                             data.map((vendorItem) => {
                                 return (

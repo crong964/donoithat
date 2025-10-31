@@ -333,7 +333,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 _context.Product.Remove(pro);
                 _context.SaveChanges();
             }
-            catch (System.Exception e)
+            catch (System.Exception )
             {
                
                 return BadRequest(new

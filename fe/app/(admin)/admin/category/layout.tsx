@@ -1,6 +1,5 @@
-import CategoryHeaderLayout from "@/components/admin/category/categery-hearder-layout";
-import CategoryCombobox from "@/components/admin/category/category-combo-box";
-import CategoryItem from "@/components/admin/category/category-item";
+import CategoryHeaderLayout from "@/components/route/admin/category/categery-hearder-layout";
+import CategoryItem from "@/components/route/admin/category/category-item";
 import { getCategory, getCategoryInProduct } from "@/service/admin/category-service";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {

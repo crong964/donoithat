@@ -21,10 +21,9 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
     [HttpGet]
     public async Task<ActionResult> GetAll([FromQuery] ProductVariantGetAdminModel get)
     {
+        var OnSale = get.OnSale == null || get.OnSale.Equals("all") ? "" : get.OnSale;
+        var BrandId = get.BrandId == null || get.BrandId.Equals("all") ? "" : get.BrandId;
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-        var OnSale = get.OnSale.Equals("all") ? "" : get.OnSale;
-
-        _log.LogInformation("fffffffffffffff " + OnSale);
         var InventoryName = get.InventoryName ?? "";
         var query = from item in _context.ProductVariant
                     join Product in _context.Product on
@@ -43,6 +42,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
                         item.Image,
                         item.Price,
                         brand.BrandName,
+                        brand.BrandId,
                         item.Quality,
                         item.Weight,
                         item.ProductVariantId
@@ -55,13 +55,15 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         var ls = await query.
         Where(x =>
             EF.Functions.Like(x.OnSale, "%" + OnSale + "%") &&
-            EF.Functions.Like(x.ProductVariantName, "%" + get.InventoryName + "%")).
+            EF.Functions.Like(x.ProductVariantName, "%" + get.InventoryName + "%") &&
+            EF.Functions.Like(x.BrandId, "%" + BrandId + "%")).
         Skip((CurPage - 1) * limit).Take(limit).ToArrayAsync();
 
 
         var count = await query.Where(x =>
             EF.Functions.Like(x.OnSale, "%" + OnSale + "%") &&
-            EF.Functions.Like(x.ProductVariantName, "%" + get.InventoryName + "%")).CountAsync();
+            EF.Functions.Like(x.ProductVariantName, "%" + get.InventoryName + "%") &&
+            EF.Functions.Like(x.BrandId, "%" + BrandId + "%")).CountAsync();
 
         var page = count / 40;
         var du = count % 40;

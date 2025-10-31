@@ -1,5 +1,5 @@
 
-import { IProductClassification, IProductVariant } from '@/components/admin/product/interface'
+import { IProductClassification, IProductVariant } from '@/components/route/admin/product/interface'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 

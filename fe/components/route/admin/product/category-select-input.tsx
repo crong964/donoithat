@@ -19,7 +19,7 @@ export default function CategorySelectInput() {
         })
             .then((v) => {
                 console.log(v);
-                
+
                 setData(v)
 
             })
@@ -29,9 +29,9 @@ export default function CategorySelectInput() {
     }, []);
     const categories = data
     return (
-        <Select onValueChange={(v) => {
+        <Select defaultValue={typeProduct} onValueChange={(v) => {
             dispatch(setTypeProduct(v))
-        }} value={typeProduct}>
+        }} >
             <SelectTrigger className="w-70">
                 <SelectValue placeholder="Chọn loại sản phẩm" />
             </SelectTrigger>

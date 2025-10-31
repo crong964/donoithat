@@ -1,4 +1,4 @@
-import SuplierAdminEditForm from "@/components/admin/suplier/edit-suplier-form"
+import SuplierAdminEditForm from "@/components/route/admin/suplier/edit-suplier-form"
 import { getSuplier } from "@/service/admin/suplier-service"
 import { redirect } from "next/navigation"
 

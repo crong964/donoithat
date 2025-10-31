@@ -1,13 +1,13 @@
 'use client'
 import { useDispatch, useSelector } from "react-redux";
-import { IProductVariant } from "../admin/product/interface";
+import { IProductVariant } from "@/components/route/admin/product/interface";
 import { memo, useState } from "react";
 import { setOpen } from "@/redux/admin/product/mediaLibraryRedux";
 import { RootState } from "@/redux/admin/reduxRoot";
 import { Input } from "antd";
 import { ArrowUpToLine, Image, Trash2, X } from "lucide-react"
 import { setIamgeVariants, setProductVariant, setProductVariants } from "@/redux/admin/product/productRedux";
-import ImageProduct from "../admin/product/image-product";
+import ImageProduct from "@/components/route/admin/product/image-product";
 import PriceFormat from "@/util/price-format"
 function ProductVariantItemInput(v: IProductVariant) {
     const dispatch = useDispatch()
