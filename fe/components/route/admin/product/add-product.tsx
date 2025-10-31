@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, Input } from "antd"
+
 import TextArea from "antd/es/input/TextArea"
 import React, { useEffect, useState } from "react"
 import ImagesInput from "./images-input"
@@ -15,6 +15,8 @@ import { toast } from 'react-toastify'
 import { createClassificationFormHandleToSave, validateData } from './ulti'
 import VendorSelectInput from './vendor-select-input'
 import CategorySelectInput from './category-select-input'
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 
 export default function AddProduct() {
@@ -25,7 +27,7 @@ export default function AddProduct() {
     useEffect(() => {
         dispatch(setResetProductData())
         return () => {
-            
+
         };
     }, []);
     const onSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
@@ -44,7 +46,7 @@ export default function AddProduct() {
             }
 
         }
-        
+
         try {
             let s = await fetch("/api/admin/upload", {
                 method: "POST",
@@ -179,15 +181,23 @@ export default function AddProduct() {
                     <div className="my-3.75 fixed top-0 ">
                         <div className="pt-10">
                             <ul className="flex items-center justify-end gap-x-1">
-                                <Button htmlType='submit' type="primary">
+                                <Button type="submit" variant="blue">
                                     Thêm sản phẩm
                                 </Button>
 
                             </ul>
                         </div>
-                        <div className=" shadow-2xl p-4  rounded-lg">
+                        <div className=" shadow-2xl p-4 mb-4  rounded-lg">
                             <VendorSelectInput />
                             <CategorySelectInput />
+                        </div>
+                        <div className=" shadow-2xl p-4  rounded-lg">
+                            <h1 className=" mb-4">
+                                Chọn sản phẩm bầy bán
+                            </h1>
+                            <Button type='button' variant="blue">
+                                 Sản phẩm
+                            </Button>
                         </div>
                     </div>
                 </section>

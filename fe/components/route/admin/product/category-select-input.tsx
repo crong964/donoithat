@@ -13,6 +13,7 @@ export default function CategorySelectInput() {
     const [data, setData] = React.useState<iMainCateGory[]>([])
     const dispatch = useDispatch()
     const typeProduct = useSelector((state: RootState) => state.product.typeProduct)
+    
     React.useEffect(() => {
         fetch("/api/category").then((v) => {
             return v.json()
@@ -29,11 +30,11 @@ export default function CategorySelectInput() {
     }, []);
     const categories = data
     return (
-        <Select defaultValue={typeProduct} onValueChange={(v) => {
+        <Select onValueChange={(v) => {
             dispatch(setTypeProduct(v))
         }} >
             <SelectTrigger className="w-70">
-                <SelectValue placeholder="Chọn loại sản phẩm" />
+                <SelectValue placeholder={typeProduct || "Chọn loại sản phẩm"} />
             </SelectTrigger>
             <SelectContent>
                 {
