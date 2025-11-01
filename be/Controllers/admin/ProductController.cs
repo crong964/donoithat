@@ -115,6 +115,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
+            List<ImageEntity> images = [];
             var categoryEntity = await _context.Category
             .Where(x => x.Slug == productAddModel.TypeProduct).SingleOrDefaultAsync();
             var BrandEntity = await _context.Brand
@@ -145,12 +146,13 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                     ProductEntity = mainProduct
                 };
                 await _context.PhotoGallery.AddAsync(PhotoGallery);
+                images.Add(imageEntity);
             }
             foreach (var item in productAddModel.ProductVariants)
             {
                 var productVariantEntity = new ProductVariantEntity
                 {
-
+                    ImageEntity = images[item.Position],
                     BrandEntity = BrandEntity,
                     ProductVariantName = mainProduct.NameProduct,
                     Image = "http://localhost:2000/sta/" + item.Image,
@@ -213,6 +215,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 _logger.LogError(e.Message);
             }
         }
+        List<ImageEntity> images = [];
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
@@ -246,6 +249,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 {
                     continue;
                 }
+                images.Add(imageEntity);
                 var PhotoGallery = new PhotoGalleryEntity
                 {
                     ImageEntity = imageEntity,
@@ -261,7 +265,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 {
                     var productVariantEntity = new ProductVariantEntity
                     {
-
+                        ImageEntity = images[item.Position],
                         BrandEntity = BrandEntity,
                         ProductVariantName = mainProduct.NameProduct,
                         Image = "http://localhost:2000/sta/" + item.Image,
@@ -333,9 +337,9 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 _context.Product.Remove(pro);
                 _context.SaveChanges();
             }
-            catch (System.Exception )
+            catch (System.Exception)
             {
-               
+
                 return BadRequest(new
                 {
                     message = "Xóa không dc"
@@ -384,19 +388,21 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                     Quality = productAddModel.Quality + 20,
 
                 };
+                List<ImageEntity> images = new List<ImageEntity>();
                 await _context.Product.AddAsync(mainProduct);
                 foreach (var item in productAddModel.ImageFiles)
                 {
-                    var imageEntity = await _context.Image.FindAsync(item);
+                    var imageEntity = await _context.Image.Where(x => x.ImagePath.Equals(item)).FirstOrDefaultAsync();
                     if (imageEntity == null)
                     {
                         imageEntity = new ImageEntity
                         {
-                            ImageFiles = item,
                             ImagePath = item
                         };
                         await _context.Image.AddAsync(imageEntity);
+
                     }
+                    images.Add(imageEntity);
                     var PhotoGallery = new PhotoGalleryEntity
                     {
                         ImageEntity = imageEntity,
@@ -407,9 +413,10 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
 
                 foreach (var item in productAddModel.ProductVariants)
                 {
+                    var imagesi = item.Position - 1;
                     var productVariantEntity = new ProductVariantEntity
                     {
-
+                        ImageEntity = images[imagesi < 0 ? 0 : imagesi],
                         BrandEntity = BrandEntity,
                         ProductVariantId = item.ProductVariantId,
                         ProductVariantName = $@"{mainProduct.NameProduct} {item.VariantName}",

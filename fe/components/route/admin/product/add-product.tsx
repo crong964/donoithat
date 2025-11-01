@@ -17,6 +17,8 @@ import VendorSelectInput from './vendor-select-input'
 import CategorySelectInput from './category-select-input'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import InventorySearchInput from "@/components/inventory/inventory-search-input"
+import { iBrand } from "@/components/brand/interface"
 
 
 export default function AddProduct() {
@@ -24,6 +26,7 @@ export default function AddProduct() {
     const nameProduct = useSelector((state: RootState) => state.product.nameProduct)
     const description = useSelector((state: RootState) => state.product.description)
     const product = useSelector((state: RootState) => state.product)
+    
     useEffect(() => {
         dispatch(setResetProductData())
         return () => {
@@ -191,14 +194,7 @@ export default function AddProduct() {
                             <VendorSelectInput />
                             <CategorySelectInput />
                         </div>
-                        <div className=" shadow-2xl p-4  rounded-lg">
-                            <h1 className=" mb-4">
-                                Chọn sản phẩm bầy bán
-                            </h1>
-                            <Button type='button' variant="blue">
-                                 Sản phẩm
-                            </Button>
-                        </div>
+                        <InventorySearchInput />
                     </div>
                 </section>
             </form>

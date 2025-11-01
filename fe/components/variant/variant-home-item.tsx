@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Fragment, useActionState, useEffect, useState } from "react";
 import { updateVarient } from "@/service/admin/variant-service";
 import PriceFormat from "@/util/price-format";
-import { iProductVariant } from "@/components/product/interface-admin";
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -17,6 +17,8 @@ import {
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { toast } from "react-toastify";
+import { iProductVariant } from "./interface";
+
 
 export default function VariantsHomeItem(v: iProductVariant) {
     const [mess, formAction, pending] = useActionState(updateVarient, null)

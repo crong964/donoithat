@@ -23,8 +23,11 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
     {
         var OnSale = get.OnSale == null || get.OnSale.Equals("all") ? "" : get.OnSale;
         var BrandId = get.BrandId == null || get.BrandId.Equals("all") ? "" : get.BrandId;
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        var CurPage = get.CurPage ?? 1;
         var InventoryName = get.InventoryName ?? "";
+
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         var query = from item in _context.ProductVariant
                     join Product in _context.Product on
                     item.ProductEntity.ProductId equals Product.ProductId into gj
@@ -49,7 +52,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
                     };
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
-        var CurPage = get.CurPage ?? 1;
+
         var limit = 40;
 
         var ls = await query.
@@ -77,9 +80,10 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         {
             Data = ls,
             TotalPage = page,
-            get.CurPage
+            CurPage
         }
         );
     }
+
 
 }

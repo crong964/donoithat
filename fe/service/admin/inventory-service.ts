@@ -1,5 +1,5 @@
 import { iHomeAdminGet } from "@/components/route/admin/home/interface"
-import { iInventory, iInventoryGet } from "@/components/route/admin/warehouse/inventory/interface"
+import { iInventory, iInventoryGet } from "@/components/inventory/interface"
 import { api } from "@/util/fetch"
 
 

@@ -84,7 +84,7 @@ export function AppSidebar() {
     return (
         <>
             <nav >
-                <Sidebar collapsible="icon" className="**:data-link:data-[activeLink=true]:bg-blue-400 **:data-link:data-[activeLink=true]:text-white ">
+                <Sidebar collapsible="icon" className="**:data-link:data-[activelink=true]:bg-blue-400 **:data-link:data-[activelink=true]:text-white ">
                     <SidebarHeader>
                         <SidebarTrigger className="w-full">
 
@@ -111,7 +111,7 @@ export function AppSidebar() {
                                                             {item.sub.map((subItem) => (
                                                                 <SidebarMenuSubItem key={subItem.title}>
                                                                     <SidebarMenuSubButton asChild>
-                                                                        <Link data-link data-activeLink={subItem.url == pathName}
+                                                                        <Link data-link data-activelink={subItem.url == pathName}
                                                                             href={subItem.url as any}>
                                                                             <span>{subItem.title}</span>
                                                                         </Link>
@@ -124,7 +124,7 @@ export function AppSidebar() {
                                             </Collapsible> :
                                             <SidebarMenuItem key={item.title} >
                                                 <SidebarMenuButton asChild>
-                                                    <Link data-link data-activeLink={item.url == pathName}
+                                                    <Link data-link data-activelink={item.url == pathName}
                                                         href={item.url as any}>
                                                         <item.icon />
                                                         <span>{item.title}</span>

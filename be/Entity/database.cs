@@ -76,7 +76,11 @@ public class DatabaseContext : DbContext
         .WithMany()
         .OnDelete(DeleteBehavior.SetNull);
 
-       
+        modelBuilder
+        .Entity<ProductVariantEntity>()
+        .HasOne(e => e.ImageEntity)
+        .WithMany()
+        .OnDelete(DeleteBehavior.SetNull);
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
