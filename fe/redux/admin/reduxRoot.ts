@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import productRedux from './product/productRedux'
 import mediaLibraryRedux from './product/mediaLibraryRedux'
 import categoryRedux from './category/categoryRedux'
+import inventoryRedux from './product/inventoryRedux'
 
 export const store = configureStore({
     reducer: {
         product: productRedux,
         mediaLibrary: mediaLibraryRedux,
-        category: categoryRedux
+        category: categoryRedux,
+        inventory: inventoryRedux
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

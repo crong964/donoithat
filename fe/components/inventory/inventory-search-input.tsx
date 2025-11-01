@@ -1,5 +1,5 @@
 import { RootState } from "@/redux/admin/reduxRoot"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Button } from "@/components/ui/button"
 import {
     Sheet, SheetClose, SheetContent,
@@ -17,18 +17,21 @@ import {
 } from "../ui/select"
 import SubmitButton from "../button/submit-buttom"
 import { iBrand } from "../brand/interface"
-import { useEffect, useState } from "react"
+import { JSX, useEffect, useMemo, useState } from "react"
 import { iInventoryGet } from "./interface"
 import { iProductVariant, iProductVariantSearch } from "@/components/variant/interface"
 import Pagination from "../ui-custom/panination"
 import PaginationHandle from "../ui-custom/panination-handle"
+import { addInventory, removeInventory } from "@/redux/admin/product/inventoryRedux"
+import { Check } from "lucide-react"
 
 export default function InventorySearchInput() {
     const [brands, setBrands] = useState<iBrand[]>([])
     const [productVariant, setProductVariant] = useState<iProductVariantSearch[]>([])
-    const nameProduct = useSelector((state: RootState) => state.product.nameProduct)
-    const productVariants = useSelector((state: RootState) => state.product.productVariants)
+
+    const inventorys = useSelector((state: RootState) => state.inventory.inventorys)
     const [sta, setSta] = useState({ curPage: 1, totalPage: 0 })
+    const dispatch = useDispatch()
     useEffect(() => {
         fetch("/api/admin/brand")
             .then((v) => {
@@ -64,12 +67,44 @@ export default function InventorySearchInput() {
 
             })
     }
+
+    const handleSelect = (v: iProductVariantSearch) => {
+        if (inventorys[v.productVariantId]) {
+            dispatch(removeInventory(v.productVariantId))
+            return
+        }
+        dispatch(addInventory(v))
+    }
+
+    const inventorysSelected = useMemo(() => {
+        let html: JSX.Element[] = []
+        for (const key in inventorys) {
+            if (!Object.hasOwn(inventorys, key)) continue;
+
+            const v = inventorys[key]?.data;
+            const s = inventorys[key]?.selected
+            if (v == undefined || s == undefined) continue
+
+            html.push(
+                <li key={v.productVariantId} className="relative border-2 cursor-pointer rounded-2xl  flex gap-2 p-2">
+                    <img src={v.image} className="aspect-square h-20" alt="" />
+                    <p className="text-sm">{v.productVariantName}</p>
+                    <div data-selected={s} className="data-[selected]:block data-[selected=false]:hidden absolute top-0 right-0 pr-10 pt-10">
+                        <Check />
+                    </div>
+                </li>
+            )
+
+        }
+
+        return html
+    }, [inventorys])
+
     return (
         <div className=" shadow-2xl p-4  rounded-lg">
             <h1 className=" mb-4">
                 Chọn sản phẩm bầy bán
             </h1>
-
             <Sheet>
                 <SheetTrigger asChild>
                     <Button type='button' variant="blue">
@@ -133,13 +168,15 @@ export default function InventorySearchInput() {
                             </div>
                         </div>
                     </form >
-                    <div className="mt-1 px-2 overflow-y-auto">
+                    <div className="mt-1 px-2 space-y-2.5 overflow-y-auto">
                         {productVariant.map((v) => {
                             return (
-                                <div className="flex gap-2 py-6 shadow-2xs">
+                                <button type="button" data-selected={inventorys[v.productVariantId] != undefined} onClick={() => {
+                                    handleSelect(v)
+                                }} key={v.productVariantId} className="border-2 hover:shadow-2xl cursor-pointer rounded-2xl shadow-2xl data-[selected=false]:border-white data-[selected=true]:border-green-700 flex gap-2 p-2 shadow-2xs">
                                     <img src={v.image} className="aspect-square h-20" alt="" />
                                     <p className="text-sm">{v.productVariantName}</p>
-                                </div>
+                                </button>
                             )
                         })}
                         <div data-hidden={productVariant.length == 0}
@@ -160,8 +197,10 @@ export default function InventorySearchInput() {
                         </SheetClose>
                     </SheetFooter>
                 </SheetContent>
-
             </Sheet>
+            <ul className="h-90 overflow-y-auto space-y-2.5 mt-3">
+                {inventorysSelected}
+            </ul>
         </div>
     )
 }

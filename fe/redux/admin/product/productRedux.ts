@@ -5,6 +5,7 @@ import { iProductDetail } from '@/components/product/interface-admin'
 import data from '@/tempdata/data'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { iProductVariantSearch } from '@/components/variant/interface'
 
 
 export interface iImageInput {
@@ -28,7 +29,7 @@ export interface iProductState {
     weightProduct: {
         value: number,
         measure: string
-    }
+    },
 }
 
 const initialState: iProductState = {
@@ -210,6 +211,7 @@ export const productSlice = createSlice({
             }
 
             let data: iProductState = {
+               
                 description: tmp.description,
                 imageurls: tmp.imageUrls.map((v) => {
                     return {

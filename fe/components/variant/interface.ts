@@ -17,5 +17,6 @@ export interface iProductVariantSearch {
     image: string;
     productVariantName: string;
     price: number;
-    IimportPrice: number
+    importPrice: number,
+    quality: number;
 }
