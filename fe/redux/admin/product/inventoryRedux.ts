@@ -2,7 +2,7 @@ import { iProductVariantSearch } from "@/components/variant/interface";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface iInventoryState {
-    inventorys: Record<string, { data: iProductVariantSearch, selected: boolean } | undefined>
+    inventorys: Record<string, { data: iProductVariantSearch, selected: boolean, variantId: string } | undefined>
 }
 
 const initialState: iInventoryState = {
@@ -16,18 +16,20 @@ export const inventorySlice = createSlice({
         addInventory: (state, action: PayloadAction<iProductVariantSearch>) => {
             state.inventorys[action.payload.productVariantId] = {
                 data: action.payload,
-                selected: false
+                selected: false,
+                variantId: ""
             }
         },
         removeInventory: (state, action: PayloadAction<string>) => {
             state.inventorys[action.payload] = undefined
         },
-        selectInventory: (state, action: PayloadAction<string>) => {
-            let data = state.inventorys[action.payload]
+        selectInventory: (state, action: PayloadAction<{ productVariantId: string, variantId: string }>) => {
+            let data = state.inventorys[action.payload.productVariantId]
             if (data) {
-                state.inventorys[action.payload] = {
+                state.inventorys[action.payload.productVariantId] = {
                     data: data.data,
-                    selected: true
+                    selected: true,
+                    variantId: action.payload.variantId
                 }
             }
         },
@@ -36,7 +38,8 @@ export const inventorySlice = createSlice({
             if (data) {
                 state.inventorys[action.payload] = {
                     data: data.data,
-                    selected: false
+                    selected: false,
+                    variantId: ""
                 }
             }
 

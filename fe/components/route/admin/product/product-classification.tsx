@@ -189,7 +189,7 @@ export default function ProductClassification() {
             </section>
             <section className={`${productClassifications.length == 0 ? "hidden" : "mb-4 bg-white text-sm p-2 shadow-2xl rounded-sm"}`}>
                 <MinMaxPrice />
-                <div className="mb-4">
+                {/* <div className="mb-4">
                     <div className="flex items-center gap-x-3">
                         <div className="basis-4/12">
                             <span >Ảnh chung của các phân loại</span>
@@ -225,7 +225,7 @@ export default function ProductClassification() {
                             }
                         </ul>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="flex py-4 gap-x-3">
                     <div className="inline-block px-2 basis-1/3">

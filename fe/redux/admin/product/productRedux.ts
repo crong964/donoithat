@@ -136,12 +136,31 @@ export const productSlice = createSlice({
 
             state.productVariants.forEach((v) => {
                 if (v.variantId == action.payload.variantId) {
-                    newProductVariant.push(action.payload)
+                    newProductVariant.push({ ...action.payload, })
                 } else {
                     newProductVariant.push(v)
                 }
             })
+            state.productVariants = newProductVariant
+        },
+        resetProductVariant: (state, action: PayloadAction<string>) => {
+            let newProductVariant: IProductVariant[] = []
 
+            state.productVariants.forEach((v) => {
+                if (v.variantId == action.payload) {
+                    newProductVariant.push({
+                        variantId: v.variantId,
+                        variantName: v.variantName.trim(),
+                        price: 0,
+                        quality: "0",
+                        image: -1,
+                        pathImage: undefined,
+                        productVariantId: undefined
+                    })
+                } else {
+                    newProductVariant.push(v)
+                }
+            })
             state.productVariants = newProductVariant
         },
         addImageUrlFiles: (state, action: PayloadAction<iImageInput[]>) => {
@@ -211,7 +230,7 @@ export const productSlice = createSlice({
             }
 
             let data: iProductState = {
-               
+
                 description: tmp.description,
                 imageurls: tmp.imageUrls.map((v) => {
                     return {
@@ -272,6 +291,6 @@ export const {
     setWeightProduct,
     setResetProductData,
     setProductData,
-    setProductVariant } = productSlice.actions
+    setProductVariant, resetProductVariant } = productSlice.actions
 
 export default productSlice.reducer

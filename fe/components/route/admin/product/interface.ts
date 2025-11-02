@@ -15,6 +15,7 @@ export interface IProductVariant {
     quality: string
     image: number
     productVariantId?:string
+    pathImage?:string
 }
 
 export interface IProductVariantsDetail {

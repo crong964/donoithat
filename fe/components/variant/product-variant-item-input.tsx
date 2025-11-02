@@ -11,6 +11,7 @@ import {
     Image
 } from "lucide-react"
 import {
+    resetProductVariant,
     setIamgeVariants, setProductVariant
 } from "@/redux/admin/product/productRedux";
 import ImageProduct from "@/components/route/admin/product/image-product";
@@ -20,7 +21,7 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { selectInventory } from "@/redux/admin/product/inventoryRedux";
+import { cancelSelectInventory, selectInventory } from "@/redux/admin/product/inventoryRedux";
 function ProductVariantItemInput(v: IProductVariant) {
     const dispatch = useDispatch()
     const imageVariants = useSelector((state: RootState) => state.product.imageVariants)
@@ -35,25 +36,35 @@ function ProductVariantItemInput(v: IProductVariant) {
             if (!Object.hasOwn(inventorys, key)) continue;
 
             const inventory = inventorys[key]?.data;
-            const s = inventorys[key]?.selected
-            if (inventory == undefined || s == undefined) continue
+            const selected = inventorys[key]?.selected
+            const variantId = inventorys[key]?.variantId
+            if (inventory == undefined || selected == undefined || variantId == undefined) continue
 
             html.push(
                 <button type="button" onClick={() => {
-                    let temp = { ...v }
+                    if (selected) {
+                        dispatch(resetProductVariant(variantId))
+                    }
+                    if (v.productVariantId) {
+                        dispatch(cancelSelectInventory(v.productVariantId))
+                    }
 
+                    let temp = { ...v }
                     temp.productVariantId = inventory.productVariantId
                     temp.quality = inventory.quality + ""
                     temp.price = inventory.price
+                    temp.pathImage = inventory.image
+
+
 
                     dispatch(setProductVariant(temp))
-                    dispatch(selectInventory(inventory.productVariantId))
+                    dispatch(selectInventory({ productVariantId: inventory.productVariantId, variantId: v.variantId }))
 
                 }} key={inventory.productVariantId} className="relative border-2 cursor-pointer rounded-2xl  flex gap-2 p-2">
                     <img src={inventory.image} className="aspect-square h-20" alt="" />
                     <p className="text-sm">{inventory.productVariantName}</p>
 
-                    <div data-selected={s} className="data-[selected]:block data-[selected=false]:hidden absolute top-0 right-0 ">
+                    <div data-selected={selected} className="data-[selected]:block data-[selected=false]:hidden absolute top-0 right-0 ">
                         <Check />
                     </div>
                 </button>
@@ -81,8 +92,8 @@ function ProductVariantItemInput(v: IProductVariant) {
                         <button type="button" onClick={() => {
                             setOpen(true)
                         }} className="aspect-square flex cursor-pointer justify-center items-center size-25 border">
-                            {url ?
-                                <img src={url} className="object-cover size-full" alt="" /> :
+                            {url || v.pathImage ?
+                                <img src={url || v.pathImage} className="object-cover size-full" alt="" /> :
                                 <Image size={20} />
                             }
 
@@ -102,9 +113,9 @@ function ProductVariantItemInput(v: IProductVariant) {
                         </SheetTrigger>
                         <SheetContent>
                             <SheetHeader>
-                                <SheetTitle>Edit profile</SheetTitle>
+                                <SheetTitle>Chọn sản phẩm</SheetTitle>
                                 <SheetDescription>
-                                    Make changes to your profile here. Click save when you&apos;re done.
+                                    {v.variantName}
                                 </SheetDescription>
                             </SheetHeader>
                             <div className="mt-1 px-2 space-y-2.5 overflow-y-auto">
@@ -137,8 +148,8 @@ function ProductVariantItemInput(v: IProductVariant) {
                     }} placeholder="Số lượng" value={PriceFormat(productVariant.quality + "")} />
 
                 </div>
-                <div data-selected={v.productVariantId != undefined} 
-                className="data-[selected]:block data-[selected=false]:hidden absolute -top-1 right-0 text-green-500">
+                <div data-selected={v.productVariantId != undefined}
+                    className="data-[selected]:block data-[selected=false]:hidden absolute -top-1 right-0 text-green-500">
                     <Check />
                 </div>
             </li>
