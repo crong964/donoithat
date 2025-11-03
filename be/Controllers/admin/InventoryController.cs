@@ -85,5 +85,37 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         );
     }
 
+    [HttpPost]
+    public async Task<ActionResult> Post(InventoryPostAdminModel post)
+    {
+        var imageEntity = await _context.Image.FindAsync(post.ImageFiles);
+        var brandEntity = await _context.Brand.FindAsync(post.BrandId);
+        var productVariant = new ProductVariantEntity
+        {
+            BrandEntity = brandEntity,
+            ImageEntity = imageEntity,
+            Image = imageEntity?.ImagePath ?? "",
+            ImportPrice = post.ImportPrice,
+            Price = post.Price,
+            Position = 0,
+            ProductVariantName = post.ProductVariantName,
+            Quality = post.Quality,
+            ProductEntity = null,
+            VariantId = "",
+            VariantName = "",
+            Weight = post.Weight,
+        };
+        try
+        {
+            _context.ProductVariant.Add(productVariant);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        catch (System.Exception)
+        {
+            return BadRequest(new { message = "thêm không dc" });
+        }
+    }
+
 
 }

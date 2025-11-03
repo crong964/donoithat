@@ -64,6 +64,10 @@ const items = [
                 title: "Sản phẩm tồn kho",
                 url: "/admin/warehouse/inventory"
             },
+            {
+                title: "Thêm sản phẩm tồn kho",
+                url: "/admin/warehouse/inventory/add"
+            },
         ]
     },
     {

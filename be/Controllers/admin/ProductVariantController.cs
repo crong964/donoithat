@@ -47,8 +47,9 @@ public class ProductVariantController(DatabaseContext context, ILogger<ProductVa
     //     && EF.Functions.Like(x.BrandEntity.BrandId, "%" + get.ProductVariantName.Replace(" ", "%") + "%")
     //     && EF.Functions.Like(x.ProductVariantName, "%" + get.ProductVariantName.Replace(" ", "%") + "%"))
     //     .Take(get.CurPage * 20).ToArrayAsync();
-        
+
     //     return Ok(ls);
     // }
+
 
 }

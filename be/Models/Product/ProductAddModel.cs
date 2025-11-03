@@ -4,7 +4,7 @@ namespace be.Models;
 
 public class ProductAddModel
 {
-
+    public string? ProductVariantId { get; set; }
     public required string Description { get; set; }
     public required string ProductClassification { get; set; }
     public required string Slug { get; set; }
@@ -19,7 +19,7 @@ public class ProductAddModel
 
     public required string TypeProduct { get; set; }
 
-    
+
     [Required(ErrorMessage = "Tên sản phẩm bắt buộc phải nhập")]
     public required List<string> ImageFiles { get; set; }
 

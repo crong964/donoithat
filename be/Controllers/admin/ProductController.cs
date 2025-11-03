@@ -148,25 +148,56 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 await _context.PhotoGallery.AddAsync(PhotoGallery);
                 images.Add(imageEntity);
             }
+
+
             foreach (var item in productAddModel.ProductVariants)
             {
-                var productVariantEntity = new ProductVariantEntity
+                if (item.ProductVariantId == null)
                 {
-                    ImageEntity = images[item.Position],
-                    BrandEntity = BrandEntity,
-                    ProductVariantName = mainProduct.NameProduct,
-                    Image = "http://localhost:2000/sta/" + item.Image,
-                    Price = item.Price,
-                    ProductEntity = mainProduct,
-                    Quality = item.Quality,
-                    VariantId = item.VariantId,
-                    VariantName = item.VariantName,
-                    Position = item.Position,
-                    Weight = item.Weight,
-                    ImportPrice = 0
-                };
-                _logger.LogInformation(productVariantEntity.ProductVariantId);
-                await _context.ProductVariant.AddAsync(productVariantEntity);
+                    continue;
+                }
+                var productVariantEntity = await _context.ProductVariant.
+                Include(x => x.ImageEntity)
+                .Where(x => x.ProductVariantId.Equals(item.ProductVariantId)).FirstOrDefaultAsync();
+                // = new ProductVariantEntity
+                // {
+                //     ImageEntity = images[item.Position],
+                //     BrandEntity = BrandEntity,
+                //     ProductVariantName = mainProduct.NameProduct,
+                //     Image = "http://localhost:2000/sta/" + item.Image,
+                //     Price = item.Price,
+                //     ProductEntity = mainProduct,
+                //     Quality = item.Quality,
+                //     VariantId = item.VariantId,
+                //     VariantName = item.VariantName,
+                //     Position = item.Position,
+                //     Weight = item.Weight,
+                //     ImportPrice = 0
+                // };
+                // await _context.ProductVariant.AddAsync(productVariantEntity);
+
+                if (productVariantEntity == null)
+                {
+                    continue;
+                }
+
+                productVariantEntity.VariantName = item.VariantName;
+                productVariantEntity.ProductEntity = mainProduct;
+                productVariantEntity.VariantId = item.VariantId;
+                productVariantEntity.Price = item.Price;
+                
+
+                if (productVariantEntity.ImageEntity != null)
+                {
+                    var PhotoGallery = new PhotoGalleryEntity
+                    {
+                        ImageEntity = productVariantEntity.ImageEntity,
+                        ProductEntity = mainProduct
+                    };
+                    await _context.PhotoGallery.AddAsync(PhotoGallery);
+                    images.Add(productVariantEntity.ImageEntity);
+                    productVariantEntity.Position = images.Count;
+                }
             }
 
             await _context.SaveChangesAsync();

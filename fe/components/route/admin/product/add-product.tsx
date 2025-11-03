@@ -26,7 +26,7 @@ export default function AddProduct() {
     const nameProduct = useSelector((state: RootState) => state.product.nameProduct)
     const description = useSelector((state: RootState) => state.product.description)
     const product = useSelector((state: RootState) => state.product)
-    
+
     useEffect(() => {
         dispatch(setResetProductData())
         return () => {
@@ -70,6 +70,7 @@ export default function AddProduct() {
                     price: product.mainPrice,
                     quality: product.quality,
                     image: 0,
+                    productVariantId: ""
                 }
             ] : product.productVariants
 
@@ -82,17 +83,22 @@ export default function AddProduct() {
                 "nameProduct": product.nameProduct,
                 "quality": 0,
                 "productVariants": [
-                    ...productVariants.map((v) => {
-                        return {
-                            "variantId": v.variantId,
-                            "variantName": v.variantName,
-                            "price": v.price,
-                            "image": images[v.image],
-                            "position": v.image,
-                            "quality": v.quality,
-                            "weight": product.weightProduct.value
-                        }
-                    })
+                    ...productVariants
+                        .filter((v) => {
+                            return v.productVariantId != undefined
+                        })
+                        .map((v) => {
+                            return {
+                                "variantId": v.variantId,
+                                "variantName": v.variantName,
+                                "price": v.price,
+                                "image": images[v.image],
+                                "position": v.image,
+                                "quality": v.quality,
+                                "weight": product.weightProduct.value,
+                                "productVariantId": v.productVariantId
+                            }
+                        })
                 ],
                 "typeProduct": product.typeProduct,
                 "imageFiles": images
