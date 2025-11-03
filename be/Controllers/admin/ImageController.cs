@@ -23,7 +23,7 @@ public class ImageController(DatabaseContext context, ILogger<ImageController> l
     {
         List<string> ls = [];
         List<ImageEntity> images = [];
-        var dir = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+        var dir = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
         int i = 0;
         foreach (var formFile in imageModel.ImageFiles)
         {
@@ -55,10 +55,9 @@ public class ImageController(DatabaseContext context, ILogger<ImageController> l
         }
         catch (System.Exception)
         {
-
-            throw;
+            return BadRequest(new { message = "lỗi" });
         }
-        return ls;
+        return Ok(ls);
     }
 
 

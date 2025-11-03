@@ -90,23 +90,23 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     [HttpPost]
     public async Task<ActionResult> Add(CategoryAddModel categoryModel)
     {
-        if (categoryModel.CategoryImage != null)
-        {
-            var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
-            var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
-            var sourceFileName = tmp + categoryModel.CategoryImage;
-            var destFileName = sta + categoryModel.CategoryImage;
-            try
-            {
-                System.IO.File.Move(sourceFileName, destFileName);
-                categoryModel.CategoryImage = "http://localhost:2000/sta/" + categoryModel.CategoryImage;
-            }
-            catch (System.Exception e)
-            {
-                _logger.LogError(e.Message);
+        // if (categoryModel.CategoryImage != null)
+        // {
+        //     var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
+        //     var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+        //     var sourceFileName = tmp + categoryModel.CategoryImage;
+        //     var destFileName = sta + categoryModel.CategoryImage;
+        //     try
+        //     {
+        //         System.IO.File.Move(sourceFileName, destFileName);
+        //         categoryModel.CategoryImage = "http://localhost:2000/sta/" + categoryModel.CategoryImage;
+        //     }
+        //     catch (System.Exception e)
+        //     {
+        //         _logger.LogError(e.Message);
 
-            }
-        }
+        //     }
+        // }
 
         if (categoryModel == null)
         {
@@ -162,31 +162,31 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
         }
         if (categoryUpdateModel.CategoryImage != null)
         {
-            try
-            {
-                var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
-                var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
-                var sourceFileName = tmp + categoryUpdateModel.CategoryImage;
-                var destFileName = sta + categoryUpdateModel.CategoryImage;
-                System.IO.File.Move(sourceFileName, destFileName);
-            }
-            catch (System.Exception)
-            {
+            // try
+            // {
+            //     var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
+            //     var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+            //     var sourceFileName = tmp + categoryUpdateModel.CategoryImage;
+            //     var destFileName = sta + categoryUpdateModel.CategoryImage;
+            //     System.IO.File.Move(sourceFileName, destFileName);
+            // }
+            // catch (System.Exception)
+            // {
 
 
-            }
+            // }
             categoryUpdateModel.CategoryImage = "http://localhost:2000/sta/" + categoryUpdateModel.CategoryImage;
             var image = category.CategoryImage?.Replace("http://localhost:2000/sta/", "");
             try
             {
-                if (image != null && image.Length > 0)
-                {
-                    var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
-                    var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
-                    var sourceFileName = tmp + image;
-                    var destFileName = sta + image;
-                    System.IO.File.Move(destFileName, sourceFileName);
-                }
+                // if (image != null && image.Length > 0)
+                // {
+                //     var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
+                //     var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+                //     var sourceFileName = tmp + image;
+                //     var destFileName = sta + image;
+                //     System.IO.File.Move(destFileName, sourceFileName);
+                // }
 
                 var imageEntity = await _context.Image.FindAsync(image);
                 if (imageEntity != null)

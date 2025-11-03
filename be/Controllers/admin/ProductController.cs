@@ -96,22 +96,22 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
     {
         List<string> ls = [];
 
-        var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
-        var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
-        foreach (var nameFiles in productAddModel.ImageFiles)
-        {
-            var sourceFileName = tmp + nameFiles;
-            var destFileName = sta + nameFiles;
-            try
-            {
-                System.IO.File.Move(sourceFileName, destFileName);
-            }
-            catch (System.Exception e)
-            {
-                _logger.LogError(e.Message);
-                return BadRequest(new { mess = "Chuyển thất bại" });
-            }
-        }
+         var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
+        // var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+        // foreach (var nameFiles in productAddModel.ImageFiles)
+        // {
+        //     var sourceFileName = tmp + nameFiles;
+        //     var destFileName = sta + nameFiles;
+        //     try
+        //     {
+        //         System.IO.File.Move(sourceFileName, destFileName);
+        //     }
+        //     catch (System.Exception e)
+        //     {
+        //         _logger.LogError(e.Message);
+        //         return BadRequest(new { mess = "Chuyển thất bại" });
+        //     }
+        // }
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
@@ -232,20 +232,20 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         List<string> ls = [];
 
         var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
-        var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
-        foreach (var nameFiles in productAddModel.ImageFiles)
-        {
-            var sourceFileName = tmp + nameFiles;
-            var destFileName = sta + nameFiles;
-            try
-            {
-                System.IO.File.Move(sourceFileName, destFileName);
-            }
-            catch (System.Exception e)
-            {
-                _logger.LogError(e.Message);
-            }
-        }
+        // var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
+        // foreach (var nameFiles in productAddModel.ImageFiles)
+        // {
+        //     var sourceFileName = tmp + nameFiles;
+        //     var destFileName = sta + nameFiles;
+        //     try
+        //     {
+        //         System.IO.File.Move(sourceFileName, destFileName);
+        //     }
+        //     catch (System.Exception e)
+        //     {
+        //         _logger.LogError(e.Message);
+        //     }
+        // }
         List<ImageEntity> images = [];
         var transaction = await _context.Database.BeginTransactionAsync();
         try
