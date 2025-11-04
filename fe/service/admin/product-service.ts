@@ -28,7 +28,7 @@ export const getProductBySlug = async (slug: string): Promise<iProductDetail | u
 
 export const deleteProduct = async (currentState: any, formData: FormData) => {
     const productId = formData.get("productId")
-    
+
 
     try {
         let data = await api.delete("/admin/product", {
@@ -38,8 +38,8 @@ export const deleteProduct = async (currentState: any, formData: FormData) => {
         })
     } catch (error) {
         console.log((error as any).response?.data);
-        
+
         return { message: errorResponse(error).message, d: Date.now(), error: true }
     }
-    revalidatePath("/admin")
+    return { d: Date.now(), error: false }
 }

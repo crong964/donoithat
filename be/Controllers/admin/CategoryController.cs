@@ -90,6 +90,10 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     [HttpPost]
     public async Task<ActionResult> Add(CategoryAddModel categoryModel)
     {
+        if (categoryModel.CategoryImage != null)
+        {
+            categoryModel.CategoryImage = "http://localhost:2000/sta/" + categoryModel.CategoryImage;
+        }
         // if (categoryModel.CategoryImage != null)
         // {
         //     var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
@@ -392,7 +396,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
             foreach (var item in categoryBackupAdmins)
             {
                 var transaction = await _context.Database.BeginTransactionAsync();
-               
+
                 var categoryParent = await _context.Category.Where(x => x.CategoryId == item.CategoryParentId).FirstOrDefaultAsync();
                 var category = new CategoryEntity
                 {

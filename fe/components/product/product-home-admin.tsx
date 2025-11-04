@@ -5,7 +5,7 @@ import { iProduct } from "./interface-admin";
 import { Badge } from "../ui/badge";
 import { PencilLine, SquarePen, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { Fragment, useActionState, useEffect, useState } from "react";
+import { Fragment, useActionState, useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import Form from "next/form";
@@ -21,20 +21,39 @@ export default function ProductHomeAdmin(p: iProduct) {
     const total = p.productVariants.reduce((pre, cur) => {
         return pre + cur.quality
     }, 0)
+    const dis = useRef<HTMLTableRowElement>(null)
+    const dis1 = useRef<HTMLTableRowElement>(null)
     const [mess, deleteForm, pending] = useActionState(deleteProduct, null)
     const [open, setOpen] = useState(false)
     useEffect(() => {
+        let f = undefined
         if (mess?.error) {
             toast.error(mess.message)
             setOpen(false)
         }
+        if (mess?.error == false) {
+            toast.success("Xóa thành công")
+            setDel(true)
+            setOpen(false)
+            f = setTimeout(() => {
+                let c = dis.current
+                let c1 = dis1.current
+                if (c && c1) {
+                    c.style = "display:none"
+                    c1.style = "display:none"
+                }
+            }, 1900);
+        }
         return () => {
-
+            if (f) {
+                clearTimeout(f)
+            }
         };
-    }, [mess]);
+    }, [mess, dis, dis1]);
+    const [del, setDel] = useState(false)
     return (
-        <Fragment>
-            <tr className="border-t border-black pt-2 ">
+        <Fragment >
+            <tr data-del={del} ref={dis} className="border-t border-black pt-2 data-[del=true]:animate-delete">
                 <td >
                     <div className="space-x-3 flex items-center justify-center">
                         <Switch checked={p.status == 1} />
@@ -107,7 +126,7 @@ export default function ProductHomeAdmin(p: iProduct) {
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr data-del={del} ref={dis1} className="data-[del=true]:animate-delete ">
                 <td colSpan={6} className="my-6" >
                     <Collapsible className="group/collapsible">
                         <CollapsibleTrigger asChild>
@@ -131,8 +150,6 @@ export default function ProductHomeAdmin(p: iProduct) {
                     </Collapsible>
                 </td>
             </tr>
-
-
         </Fragment>
     )
 }
