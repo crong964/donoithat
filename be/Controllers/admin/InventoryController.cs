@@ -88,7 +88,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
     [HttpPost]
     public async Task<ActionResult> Post(InventoryPostAdminModel post)
     {
-        var imageEntity = await _context.Image.FindAsync(post.ImageFiles);
+        var imageEntity = await _context.Image.FindAsync(post.ImageFile);
         var brandEntity = await _context.Brand.FindAsync(post.BrandId);
         var productVariant = new ProductVariantEntity
         {
@@ -105,6 +105,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
             VariantName = "",
             Weight = post.Weight,
         };
+        _log.LogError("ddddddddđ");
         try
         {
             _context.ProductVariant.Add(productVariant);
@@ -113,9 +114,20 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         }
         catch (System.Exception)
         {
+            _log.LogError("ddddddddđ đậksjdkádklạdlkạdlk");
             return BadRequest(new { message = "thêm không dc" });
         }
     }
 
+    [HttpGet("{ProductVariantId}")]
+    public async Task<ActionResult> GetId(string ProductVariantId)
+    {
+        var productVariant = await _context.ProductVariant.FindAsync(ProductVariantId);
+        if (productVariant == null)
+        {
+            return BadRequest(new { message = "Không có sản phẩm này" });
+        }
+        return Ok(productVariant);
+    }
 
 }

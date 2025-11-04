@@ -1,4 +1,5 @@
 export default function priceFormat(params: string) {
+    params = params + ""
     let f = params.replaceAll(",", "")
     let temp = ""
     let count = 0

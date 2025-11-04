@@ -3,6 +3,7 @@ import { iHomeAdminGet } from "@/components/route/admin/home/interface"
 import { iInventory, iInventoryGet } from "@/components/inventory/interface"
 import { api } from "@/util/fetch"
 import Await from "@/util/Await"
+import { errorResponse } from "@/util/error-response"
 
 
 
@@ -23,20 +24,26 @@ export const getInventoryAdmin = async (p?: iInventoryGet): Promise<{
 
 
 export const addInventoryAdmin = async (currentState: any, formData: FormData) => {
-    await Await()
     const avatarImage = formData.get("avatarImage") as File
+
+    var fom = new FormData();
+    fom.set("ImageFiles", "")
+
+
     if (avatarImage == null || avatarImage.size == 0) {
         return { message: "Ko có ảnh", d: Date.now(), error: true }
     }
-    return
+    fom.append("ImageFiles", avatarImage);
+
     var images: string | undefined = ""
     try {
-        images = (await api.post("/admin/image/upload", avatarImage) as (string[] | undefined))?.[0]
+        const dataImages = await api.post("/admin/image/upload", fom)
+        images = dataImages.data[0]
     } catch (error) {
-
+        console.log(errorResponse(error).message);
     }
     if (images == undefined) {
-        return { message: "Chưa có ảnh" }
+        return { message: "Chưa có ảnh", d: Date.now(), error: true }
     }
     const data = {
         productVariantName: formData.get("productVariantName"),
@@ -45,7 +52,20 @@ export const addInventoryAdmin = async (currentState: any, formData: FormData) =
         importPrice: formData.get("importPrice"),
         price: formData.get("price"),
         quality: formData.get("quality"),
-        imageFiles: images
+        imageFile: images
     }
-    return ""
-} 
+    try {
+        await api.post("/admin/inventory", data)
+    } catch (error) {
+        console.log(errorResponse(error));
+        console.log((error as any)?.response?.data);
+
+        return { message: "Không thêm dc", d: Date.now(), error: true }
+    }
+
+    return { message: "Không thêm dc", d: Date.now(), error: false }
+}
+
+export const getInventoryByIdAdmin = async (id: string) => {
+
+}
