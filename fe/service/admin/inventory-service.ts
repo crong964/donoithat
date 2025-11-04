@@ -125,10 +125,8 @@ export const editInventoryAdmin = async (currentState: any, formData: FormData) 
 
 export const deleteInventoryAdmin = async (currentState: any, formData: FormData) => {
     const productVariantId = formData.get("productVariantId");
-    console.log(productVariantId);
-    
     try {
-        await api.delete("/admin/inventory",{data:{productVariantId}})
+        await api.delete("/admin/inventory", { data: { productVariantId } })
     } catch (error) {
         console.log((error as any)?.response?.data);
     }

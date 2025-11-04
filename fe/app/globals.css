@@ -120,6 +120,19 @@
       opacity: 1;
     }
   }
+
+  --animate-delete: delete 2000ms ease-in;
+
+  @keyframes delete {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+      height: 0px;
+    }
+  }
 }
 
 body {

@@ -186,11 +186,19 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
     public async Task<ActionResult> Delete(InventoryDeleteAdminModel delete)
     {
         var productVariant = await _context.ProductVariant.FindAsync(delete.ProductVariantId);
-        
+        if (productVariant == null)
+        {
+            return BadRequest(new { message = "Không xóa được" });
+        }
+        try
+        {
+            _context.ProductVariant.Remove(productVariant);
+            await _context.SaveChangesAsync();
+        }
+        catch (System.Exception)
+        {
+            return BadRequest(new { message = "Không xóa được" });
+        }
         return Ok();
     }
-
-
-
-
 }

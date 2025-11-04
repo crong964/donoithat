@@ -11,13 +11,40 @@ import priceFormat from "@/util/price-format";
 import { SquarePen, Trash2 } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function InventoryItem(p: iInventory) {
     const [open, setOpen] = useState(false)
     const [mess, actionDelete, pedding] = useActionState(deleteInventoryAdmin, null)
+    const [del, setDel] = useState(false)
+    const dis = useRef<HTMLTableRowElement>(null)
+    useEffect(() => {
+        let f = undefined
+        if (mess?.error == false) {
+            toast.success("Xóa thành công")
+            setDel(true)
+            const cu = dis.current
+            f = setTimeout(() => {
+                if (cu) {
+                    cu.style = "display:none"
+                }
+            }, 1900);
+            setOpen(false)
+            return
+        }
+        if (mess?.error == true) {
+            toast.error("Không xóa được")
+        }
+        return () => {
+            if (f) {
+                clearTimeout(f);
+            }
+        };
+    }, [mess, dis]);
+
     return (
-        <tr className="">
+        <tr ref={dis} data-del={del} className="data-[del=true]:animate-delete ">
             <td className="text-center pb-2 ">
                 <span data-show={p.onSale} className="px-3 rounded-2xl py-1.5 data-[show=false]:bg-red-600 data-[show=true]:bg-green-600 text-white">
                     {p.onSale == "true" ? "Đang bán" : "Chưa bán"}
@@ -25,7 +52,7 @@ export default function InventoryItem(p: iInventory) {
             </td>
             <td className=" pb-2">
                 <div className="flex items-center gap-4">
-                    <img className="w-20 border border-boder h-auto"
+                    <img className="size-25 border object-cover border-boder"
                         src={p.image} alt={p.productVariantName} srcSet="" />
                     <p>{p.productVariantName}</p>
                 </div>
@@ -61,7 +88,7 @@ export default function InventoryItem(p: iInventory) {
                                     <input type="hidden" name="productVariantId" value={p.productVariantId} />
                                     {
                                         pedding ?
-                                            <Button  type="button"> <Spinner /> Xóa....</Button> :
+                                            <Button type="button"> <Spinner /> Xóa....</Button> :
                                             <Button type="submit" >Xóa</Button>
                                     }
                                 </Form>
@@ -69,6 +96,8 @@ export default function InventoryItem(p: iInventory) {
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
+
+
             </td>
         </tr>
     )
