@@ -4,6 +4,8 @@ import { iInventory, iInventoryGet } from "@/components/inventory/interface"
 import { api } from "@/util/fetch"
 import Await from "@/util/Await"
 import { errorResponse } from "@/util/error-response"
+import { iProductVariantById } from "@/components/variant/interface"
+import { revalidatePath } from "next/cache"
 
 
 
@@ -20,6 +22,18 @@ export const getInventoryAdmin = async (p?: iInventoryGet): Promise<{
 
         return { curPage: 0, data: [], totalPage: 0 }
     }
+}
+
+
+
+export const getInventoryByIdAdmin = async (id: string): Promise<iProductVariantById | undefined> => {
+    try {
+        const data = await api.get(`/admin/inventory/${id}`)
+        return data.data
+    } catch (error) {
+
+    }
+    return undefined
 }
 
 
@@ -66,6 +80,57 @@ export const addInventoryAdmin = async (currentState: any, formData: FormData) =
     return { message: "Không thêm dc", d: Date.now(), error: false }
 }
 
-export const getInventoryByIdAdmin = async (id: string) => {
 
+export const editInventoryAdmin = async (currentState: any, formData: FormData) => {
+    const avatarImage = formData.get("avatarImage") as File
+
+    var fom = new FormData();
+    fom.set("ImageFiles", "")
+    var images: string = ""
+
+    if (avatarImage != null && avatarImage.size != 0) {
+        fom.append("ImageFiles", avatarImage);
+
+
+        try {
+            const dataImages = await api.post("/admin/image/upload", fom)
+            images = dataImages.data[0]
+        } catch (error) {
+            console.log(errorResponse(error).message);
+        }
+    }
+
+
+    const data = {
+        productVariantId: formData.get("productVariantId"),
+        productVariantName: formData.get("productVariantName"),
+        brandId: formData.get("brandId"),
+        weight: formData.get("weight"),
+        importPrice: formData.get("importPrice"),
+        price: formData.get("price"),
+        quality: formData.get("quality"),
+        imageFile: images
+    }
+    try {
+        await api.patch("/admin/inventory", data)
+    } catch (error) {
+        console.log(errorResponse(error));
+        console.log((error as any)?.response?.data);
+
+        return { message: "Không thêm dc", d: Date.now(), error: true }
+    }
+    revalidatePath("/admin")
+    return { message: "Không thêm dc", d: Date.now(), error: false }
+}
+
+export const deleteInventoryAdmin = async (currentState: any, formData: FormData) => {
+    const productVariantId = formData.get("productVariantId");
+    console.log(productVariantId);
+    
+    try {
+        await api.delete("/admin/inventory",{data:{productVariantId}})
+    } catch (error) {
+        console.log((error as any)?.response?.data);
+    }
+    return { message: "Không thêm dc", d: Date.now(), error: false }
 }

@@ -26,7 +26,6 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         var CurPage = get.CurPage ?? 1;
         var InventoryName = get.InventoryName ?? "";
 
-
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         var query = from item in _context.ProductVariant
                     join Product in _context.Product on
@@ -55,7 +54,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
 
         var limit = 40;
 
-        var ls = await query.
+        var ls = await query.AsNoTracking().
         Where(x =>
             EF.Functions.Like(x.OnSale, "%" + OnSale + "%") &&
             EF.Functions.Like(x.ProductVariantName, "%" + get.InventoryName + "%") &&
@@ -63,7 +62,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         Skip((CurPage - 1) * limit).Take(limit).ToArrayAsync();
 
 
-        var count = await query.Where(x =>
+        var count = await query.AsNoTracking().Where(x =>
             EF.Functions.Like(x.OnSale, "%" + OnSale + "%") &&
             EF.Functions.Like(x.ProductVariantName, "%" + get.InventoryName + "%") &&
             EF.Functions.Like(x.BrandId, "%" + BrandId + "%")).CountAsync();
@@ -85,6 +84,24 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         );
     }
 
+    [HttpGet("{ProductVariantId}")]
+    public async Task<ActionResult> GetId(string productVariantId)
+    {
+        var productVariant = await _context.ProductVariant
+        .Include(x => x.ImageEntity)
+        .Include(x => x.BrandEntity)
+        .Where(x => x.ProductVariantId.Equals(productVariantId))
+        .FirstOrDefaultAsync();
+
+        if (productVariant == null)
+        {
+            return BadRequest(new { message = "Không có sản phẩm này" });
+        }
+
+        return Ok(InventoryGetIdAdminModel.Convert(productVariant));
+    }
+
+
     [HttpPost]
     public async Task<ActionResult> Post(InventoryPostAdminModel post)
     {
@@ -105,7 +122,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
             VariantName = "",
             Weight = post.Weight,
         };
-        _log.LogError("ddddddddđ");
+
         try
         {
             _context.ProductVariant.Add(productVariant);
@@ -119,15 +136,61 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         }
     }
 
-    [HttpGet("{ProductVariantId}")]
-    public async Task<ActionResult> GetId(string ProductVariantId)
+
+    [HttpPatch]
+    public async Task<ActionResult> Patch(InventoryPatchAdminModel post)
     {
-        var productVariant = await _context.ProductVariant.FindAsync(ProductVariantId);
+        var imageEntity = await _context.Image.FindAsync(post.ImageFile);
+        var brandEntity = await _context.Brand.FindAsync(post.BrandId);
+        var productVariant = await _context.ProductVariant
+       .Include(x => x.ImageEntity)
+       .Include(x => x.BrandEntity)
+       .Where(x => x.ProductVariantId.Equals(post.ProductVariantId))
+       .FirstOrDefaultAsync();
+
+
         if (productVariant == null)
         {
             return BadRequest(new { message = "Không có sản phẩm này" });
         }
-        return Ok(productVariant);
+        if (imageEntity != null)
+        {
+            productVariant.ImageEntity = imageEntity;
+            productVariant.Image = imageEntity.ImagePath;
+        }
+        if (brandEntity != null)
+        {
+            productVariant.BrandEntity = brandEntity;
+        }
+
+
+        productVariant.ImportPrice = post.ImportPrice;
+        productVariant.Price = post.Price;
+        productVariant.ProductVariantName = post.ProductVariantName;
+        productVariant.Quality = post.Quality;
+        productVariant.Weight = post.Weight;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        catch (System.Exception)
+        {
+
+            return BadRequest(new { message = "chỉnh sửa không dc" });
+        }
     }
+
+    [HttpDelete]
+    public async Task<ActionResult> Delete(InventoryDeleteAdminModel delete)
+    {
+        var productVariant = await _context.ProductVariant.FindAsync(delete.ProductVariantId);
+        
+        return Ok();
+    }
+
+
+
 
 }

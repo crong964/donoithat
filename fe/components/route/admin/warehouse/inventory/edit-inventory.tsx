@@ -1,32 +1,39 @@
 'use client'
 import { iBrand } from "@/components/brand/interface"
-import SubmitButton from "@/components/button/submit-buttom"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText } from "@/components/ui/input-group"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Spinner } from "@/components/ui/spinner"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { addInventoryAdmin } from "@/service/admin/inventory-service"
-import data from "@/tempdata/data"
 import priceFormat from "@/util/price-format"
 import z from "zod"
 import { DiamondPlus, HandCoins, Image, OctagonAlert, Shirt, Weight } from 'lucide-react';
 import Form from "next/form"
-import { ChangeEvent, ChangeEventHandler, FormEvent, useActionState, useEffect, useState } from "react"
+import { ChangeEvent, FormEvent, useActionState, useEffect, useMemo, useState } from "react"
 import { toast } from "react-toastify"
-import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field"
-export default function AddInventory(p: { ls: iBrand[] }) {
-    const brads = p.ls
-    const [url, setUrl] = useState("")
-    const [mess, actionAdd, pedding] = useActionState(addInventoryAdmin, null)
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { iProductVariantById } from "@/components/variant/interface"
+import { editInventoryAdmin } from "@/service/admin/inventory-service"
+export default function EditInventory(p: { ls: iBrand[], data: iProductVariantById }) {
+    const brads = useMemo(() => {
+        return p.ls
+    }, [p.ls])
+
+
+    const variant = useMemo(() => {
+        return p.data
+    }, [p.data])
+    const [url, setUrl] = useState(variant.image)
+    const [mess, actionEdit, pedding] = useActionState(editInventoryAdmin, null)
     const [data, setData] = useState({
-        productVariantName: "",
-        weight: "",
-        importPrice: "",
-        quality: "",
-        price: "",
-        avatarImage: undefined
+        productVariantId: variant.productVariantId,
+        productVariantName: variant.productVariantName,
+        weight: variant.weight,
+        importPrice: variant.importPrice,
+        quality: variant.quality,
+        price: variant.price,
+        avatarImage: undefined,
+        brandId: variant.brandId
     })
     const [alertF, setAlertF] = useState({
         productVariantName: false,
@@ -34,7 +41,7 @@ export default function AddInventory(p: { ls: iBrand[] }) {
         importPrice: false,
         quality: false,
         price: false,
-        avatarImage: false
+        brandId: false
     })
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target
@@ -56,14 +63,17 @@ export default function AddInventory(p: { ls: iBrand[] }) {
             importPrice: z.number(),
             quality: z.number(),
             price: z.number(),
-            avatarImage: z.file()
+
         });
         try {
             form.parse(data);
         } catch (error) {
+
+
             e.preventDefault()
             if (error instanceof z.ZodError) {
-                error.issues;
+
+
                 let temp = { ...alertF } as any
                 error.issues.forEach(element => {
                     temp[element.path[0]] = true
@@ -77,18 +87,20 @@ export default function AddInventory(p: { ls: iBrand[] }) {
         if ((mess as any)?.error == true) {
             toast.error((mess as any)?.message)
         }
+       
     }, [mess])
     return (
         <>
             <div className="p-3.75">
                 <h1 className="text-4xl font-bold">
-                    Thêm sản phẩm mới
+                    Chỉnh sửa sản phẩm
                 </h1>
             </div>
-            <Form onSubmit={handleForm} action={actionAdd}>
+            <Form onSubmit={handleForm} action={actionEdit}>
+                <input type="hidden" name="productVariantId" value={p.data.productVariantId} />
                 <fieldset className="flex px-10  **:data-[alert=true]:border-1 **:data-[alert=true]:border-red-500">
                     <div className="size-75 ">
-                        <div data-alert={alertF.avatarImage}>
+                        <div >
                             <label
                                 className="col-span-2  "
                                 htmlFor="avatarImage">
@@ -107,7 +119,7 @@ export default function AddInventory(p: { ls: iBrand[] }) {
                             const url = URL.createObjectURL(file)
                             setUrl(url)
                             setData({ ...data, avatarImage: file as any })
-                            setAlertF({ ...alertF, avatarImage: false })
+
                         }} type="file"
                             name="avatarImage"
                             id="avatarImage"
@@ -141,7 +153,7 @@ export default function AddInventory(p: { ls: iBrand[] }) {
 
                             <Field>
                                 <FieldLabel htmlFor="brandId">Chọn nhãn hàng</FieldLabel>
-                                <Select name="brandId" >
+                                <Select defaultValue={data.brandId} name="brandId" >
                                     <SelectTrigger className="w-70">
                                         <SelectValue placeholder={"Chọn nhãn hàng"} />
                                     </SelectTrigger>
@@ -184,7 +196,7 @@ export default function AddInventory(p: { ls: iBrand[] }) {
                                 <div className="grid grid-cols-2 gap-4">
                                     <Field>
                                         <FieldLabel htmlFor="importPrice">Giá nhập</FieldLabel>
-                                        <FieldDescription>Giá nhập: {priceFormat(data.importPrice)}</FieldDescription>
+                                        <FieldDescription>Giá nhập: {priceFormat(data.importPrice + "")}</FieldDescription>
                                         <InputGroup data-alert={alertF.importPrice} className="col-span-1">
                                             <InputGroupAddon>
                                                 <HandCoins />
@@ -203,7 +215,7 @@ export default function AddInventory(p: { ls: iBrand[] }) {
                                     </Field>
                                     <Field>
                                         <FieldLabel htmlFor="importPrice">Giá bán</FieldLabel>
-                                        <FieldDescription>Giá bán: {priceFormat(data.price)}</FieldDescription>
+                                        <FieldDescription>Giá bán: {priceFormat(data.price + "")}</FieldDescription>
                                         <InputGroup data-alert={alertF.price} className="col-span-1">
                                             <InputGroupAddon>
                                                 <InputGroupText>
@@ -229,13 +241,12 @@ export default function AddInventory(p: { ls: iBrand[] }) {
                                             </InputGroupAddon>
                                         </InputGroup>
                                     </Field>
-
                                 </div>
                             </FieldGroup>
 
                             <Field>
                                 <FieldLabel htmlFor="quality">Số lượng sản phẩm</FieldLabel>
-                                <FieldDescription>Số lượng sản phẩm hiện có: {priceFormat(data.quality)}</FieldDescription>
+                                <FieldDescription>Số lượng sản phẩm hiện có: {priceFormat(data.quality + "")}</FieldDescription>
                                 <InputGroup data-alert={alertF.quality} className="col-span-2">
                                     <InputGroupAddon>
                                         <InputGroupText>
@@ -257,8 +268,8 @@ export default function AddInventory(p: { ls: iBrand[] }) {
                         <div className="mt-10">
                             {
                                 pedding ?
-                                    <Button variant={"blue"} type="button"> <Spinner /> Thêm....</Button> :
-                                    <Button variant={"blue"} type="submit">Thêm</Button>
+                                    <Button variant={"blue"} type="button"> <Spinner /> Chỉnh sửa....</Button> :
+                                    <Button variant={"blue"} type="submit">Chỉnh sửa</Button>
                             }
                         </div>
                     </div>

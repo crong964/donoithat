@@ -1,6 +1,10 @@
+import InventoryItem from "@/components/route/admin/warehouse/inventory/inventory-item"
 import Pagination from "@/components/ui-custom/panination"
+import { Button } from "@/components/ui/button"
 import { getInventoryAdmin } from "@/service/admin/inventory-service"
 import priceFormat from "@/util/price-format"
+import { SquarePen } from "lucide-react"
+import Link from "next/link"
 
 export default async function WarehouseProductPage(
     { searchParams }: { searchParams: Promise<{ [key: string]: string | undefined }> }
@@ -37,24 +41,7 @@ export default async function WarehouseProductPage(
                     {
                         items.map((p) => {
                             return (
-                                <tr key={p.productVariantId} className="">
-                                    <td className="text-center pb-2 ">
-                                        <span data-show={p.onSale} className="px-3 rounded-2xl py-1.5 data-[show=false]:bg-red-600 data-[show=true]:bg-green-600 text-white">
-                                            {p.onSale == "true" ? "Đang bán" : "Chưa bán"}
-                                        </span>
-                                    </td>
-                                    <td className=" pb-2">
-                                        <div className="flex items-center gap-4">
-                                            <img className="w-20 border border-boder h-auto"
-                                                src={p.image} alt={p.productVariantName} srcSet="" />
-                                            <p>{p.productVariantName}</p>
-                                        </div>
-                                    </td>
-                                    <td className="text-center pb-2">{p.brandName}</td>
-                                    <td className="text-center pb-2">{priceFormat(p.price + "")}</td>
-                                    <td className="text-center pb-2">{p.quality}</td>
-                                    <td className="text-center pb-2 ">Thao tác</td>
-                                </tr>
+                                <InventoryItem {...p} key={p.productVariantId}/>
                             )
                         })
                     }

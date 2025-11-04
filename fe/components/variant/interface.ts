@@ -20,3 +20,15 @@ export interface iProductVariantSearch {
     importPrice: number,
     quality: number;
 }
+
+
+export interface iProductVariantById {
+    productVariantId: string;
+    productVariantName: string
+    price: number;
+    image: string;
+    brandId: string
+    quality: number;
+    weight: number;
+    importPrice: number;
+}
