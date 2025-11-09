@@ -38,14 +38,7 @@ export default function ProductClassification() {
     const dispatch = useDispatch()
 
     const [open, setOpen] = useState(false)
-    const sl = useMemo(() => {
-        let f = 1
-        for (let i = 0; i < productClassifications.length; i++) {
-            const element = productClassifications[i];
-            f *= (element.options.length - 1)
-        }
-        return f
-    }, [productClassifications])
+
 
     useEffect(() => {
         dispatch(setProductClassifications(JSON.parse(localStorage.getItem("temp") || "[]")))
@@ -54,35 +47,47 @@ export default function ProductClassification() {
     }, []);
 
     useEffect(() => {
-        if (productClassifications.length == 0) {
-            dispatch(setProductVariants([]))
-            return
-        }
-        let ls = Count(sl, productClassifications)
-        if (ls.length == 0) {
-
-            return
-        }
-        dispatch(setProductVariants(ls.map((v) => {
-            let variants = v.split(" ")
-            let variantName = ""
-            let variantId = ""
-            variants.forEach((v, i) => {
-                let option = productClassifications[i]?.options?.[parseInt(v)]
-                variantName += `${option?.name} `
-                variantId += `${option?.id} `
-            })
-            variantId = variantId.trim()
-            variantName = variantName.trim()
-            return {
-                variantId: variantId.trim(),
-                variantName: variantName.trim(),
-                price: tmpEdit[variantId]?.price || 0,
-                quality: tmpEdit[variantId]?.quality || "0",
-                image: tmpEdit[variantId]?.image || -1
+        let time = setTimeout(() => {
+            if (productClassifications.length == 0) {
+                dispatch(setProductVariants([]))
+                return
             }
-        })))
-    }, [sl, productClassifications, tmpEdit])
+
+            let f = 1
+            for (let i = 0; i < productClassifications.length; i++) {
+                const element = productClassifications[i];
+                f *= (element.options.length - 1)
+            }
+            const sl = f
+            let ls = Count(sl, productClassifications)
+            if (ls.length == 0) {
+
+                return
+            }
+            dispatch(setProductVariants(ls.map((v) => {
+                let variants = v.split(" ")
+                let variantName = ""
+                let variantId = ""
+                variants.forEach((v, i) => {
+                    let option = productClassifications[i]?.options?.[parseInt(v)]
+                    variantName += `${option?.name} `
+                    variantId += `${option?.id} `
+                })
+                variantId = variantId.trim()
+                variantName = variantName.trim()
+                return {
+                    variantId: variantId.trim(),
+                    variantName: variantName.trim(),
+                    price: tmpEdit[variantId]?.price || 0,
+                    quality: tmpEdit[variantId]?.quality || "0",
+                    image: tmpEdit[variantId]?.image || -1
+                }
+            })))
+        }, 1500);
+        return (() => {
+            clearTimeout(time)
+        })
+    }, [productClassifications, tmpEdit])
 
 
     const [variantKey, setVariantsKey] = useState("-1")

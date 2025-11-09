@@ -1,5 +1,5 @@
 'use client'
-import { IProductClassification } from "@/components/admin/product/interface"
+
 import Coupon from "@/components/coupon/coupon"
 import Navi, { iNavi } from "@/components/layout/navi"
 import { iProductDetail } from "@/components/product/interface"
@@ -12,6 +12,7 @@ import { CarouselNext, CarouselPrevious, MainCarousel } from "@/components/ui/ca
 import PriceFormat from "@/util/price-format"
 import { Fragment, useEffect, useMemo, useState } from "react"
 import CartProductAddButton from "./cart-product-add-button"
+import { IProductClassification } from "../../admin/product/interface"
 
 export default function ProductSlug(productdetail: iProductDetail) {
     const [variants, setVariants] = useState<string[]>([])
