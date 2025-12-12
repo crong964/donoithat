@@ -33,7 +33,7 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
             return BadRequest(new { message = "Không tìm thấy người dùng này" });
         }
         var ls = await _context.Order.
-        Where(x => x.UserEntity.Account == id).
+        Where(x => x.UserEntity.UserId == id).
            Select(x => OrderGetModel.ConvertEntity(x))
          .ToArrayAsync();
         return Ok(ls);
@@ -59,7 +59,7 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         var orderDetails = await _context.OrderDetail
         .Include(x => x.ProductVariantEntity)
         .Where(x => x.OrderEntity.OrderId == orderId).ToArrayAsync();
-        if (userId != order.UserEntity.Account)
+        if (userId != order.UserEntity.UserId)
         {
             return BadRequest(new { message = "Không có hóa đơn này" });
         }
@@ -110,7 +110,7 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         {
             await _context
             .Order.
-            Where(x => x.OrderId == orderPay.OrderId && x.UserEntity.Account == id)
+            Where(x => x.OrderId == orderPay.OrderId && x.UserEntity.UserId == id)
             .ExecuteUpdateAsync((setters) =>
             setters.SetProperty(b => b.Pay, orderPay.Pay));
 
@@ -194,7 +194,7 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
 
 
             }
-            var ls = await _context.Cart.Where(x => x.UserEntity.Account == id).ToArrayAsync();
+            var ls = await _context.Cart.Where(x => x.UserEntity.UserId == id).ToArrayAsync();
             _context.Cart.RemoveRange(ls);
 
             await _context.SaveChangesAsync();

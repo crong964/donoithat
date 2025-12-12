@@ -12,7 +12,7 @@ public class UserInforModel
     {
         return new UserInforModel
         {
-            Account = userEntity.Account,
+            Account = userEntity.AccountEntity.Account,
             FullName = userEntity.FullName,
             PhoneNumber = userEntity.PhoneNumber
         };

@@ -40,7 +40,7 @@ IUserService userService, ILogger<CartController> logger) : ControllerBase
         var ls = await _context.Cart
          .Include(x => x.ProductVariantEntity)
          .Include(x => x.ProductVariantEntity.ProductEntity)
-        .Where(x => x.UserEntity.Account == userId)
+        .Where(x => x.UserEntity.UserId == userId)
         .ToArrayAsync();
 
 
@@ -51,7 +51,7 @@ IUserService userService, ILogger<CartController> logger) : ControllerBase
     [HttpPost]
     public async Task<ActionResult> AddProductCart(CartProductAddModel cartProductAddModel)
     {
-        
+
         var productVariant = await _context.ProductVariant.FindAsync(cartProductAddModel.ProductVariantId);
         var userId = _userService.GetUserId(HttpContext);
 
@@ -71,7 +71,7 @@ IUserService userService, ILogger<CartController> logger) : ControllerBase
         var cartEntity1 = await _context.Cart.
         Where(
               x => x.ProductVariantEntity.ProductVariantId == cartProductAddModel.ProductVariantId &&
-              x.UserEntity.Account == userId).FirstOrDefaultAsync();
+              x.UserEntity.UserId == userId).FirstOrDefaultAsync();
         if (cartEntity1 == null)
         {
             var CartEntity = new CartEntity
@@ -107,7 +107,7 @@ IUserService userService, ILogger<CartController> logger) : ControllerBase
         _logger.LogInformation(userId + " " + cartProductRemoveModel.ProductVariantId);
         var cartEntity = await _context.Cart.Where(x =>
         x.ProductVariantEntity.ProductVariantId == cartProductRemoveModel.ProductVariantId &&
-        x.UserEntity.Account == userId
+        x.UserEntity.UserId == userId
         ).FirstOrDefaultAsync();
 
         if (cartEntity == null)
@@ -133,14 +133,14 @@ IUserService userService, ILogger<CartController> logger) : ControllerBase
         _logger.LogInformation(userId + " " + cartProductUpdateModel.ProductVariantId);
         var cartEntity = await _context.Cart.Where(x =>
         x.ProductVariantEntity.ProductVariantId == cartProductUpdateModel.ProductVariantId &&
-        x.UserEntity.Account == userId
+        x.UserEntity.UserId == userId
         ).FirstOrDefaultAsync();
 
         if (cartEntity == null)
         {
             return BadRequest(new { message = "Không có sản phẩm trong giỏ" });
         }
-        _logger.LogInformation(cartProductUpdateModel.Quality+"");
+        _logger.LogInformation(cartProductUpdateModel.Quality + "");
         cartEntity.Quality = cartProductUpdateModel.Quality;
         _context.Cart.Update(cartEntity);
         await _context.SaveChangesAsync();

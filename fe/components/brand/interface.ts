@@ -1,4 +1,4 @@
 export interface iBrand {
-    brandId: string
-    brandName: string
+  brandId: string;
+  brandName: string;
 }

@@ -16,34 +16,38 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
       <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css" integrity="sha512-kJlvECunwXftkPwyvHbclArO8wszgBGisiLeuDFwNM8ws+wKIw0sv1os3ClWZOcrEB2eRXULYUsm8OVRGJKwGA==" crossOrigin="anonymous" referrerPolicy="no-referrer"></link>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&display=swap" />
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+          integrity="sha512-kJlvECunwXftkPwyvHbclArO8wszgBGisiLeuDFwNM8ws+wKIw0sv1os3ClWZOcrEB2eRXULYUsm8OVRGJKwGA=="
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        ></link>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&display=swap"
+        />
       </head>
-      <body
-        className="bg-a overflow-x-hidden"
-      >
+      <body className="bg-a overflow-x-hidden">
         <div className=" mx-auto">
           <ToastContainer />
-          <ReduxComponent children={
-            <>
-              <AppSidebar />
-              <SidebarInset>
-                <main className="">
-                  <section>
-                    {children}
-                  </section>
-                </main>
-                <footer className="h-100">
-                </footer>
-              </SidebarInset>
-            </>
-          } />
+          <ReduxComponent
+            children={
+              <>
+                <AppSidebar />
+                <SidebarInset>
+                  <main className="">
+                    <section>{children}</section>
+                  </main>
+                  <footer className="h-100"></footer>
+                </SidebarInset>
+              </>
+            }
+          />
         </div>
-
       </body>
     </html>
   );

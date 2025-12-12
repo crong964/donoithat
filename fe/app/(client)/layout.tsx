@@ -3,8 +3,7 @@ import "@/app/globals.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/layout/footer";
 import ReduxClientComponent from "@/components/route/client/redux-client-component";
-import { ToastContainer, toast } from 'react-toastify';
-
+import { ToastContainer, toast } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,24 +18,33 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css" integrity="sha512-kJlvECunwXftkPwyvHbclArO8wszgBGisiLeuDFwNM8ws+wKIw0sv1os3ClWZOcrEB2eRXULYUsm8OVRGJKwGA==" crossOrigin="anonymous" referrerPolicy="no-referrer"></link>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&display=swap" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css"
+          integrity="sha512-kJlvECunwXftkPwyvHbclArO8wszgBGisiLeuDFwNM8ws+wKIw0sv1os3ClWZOcrEB2eRXULYUsm8OVRGJKwGA=="
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        ></link>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700&display=swap"
+        />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossOrigin="" />
+          crossOrigin=""
+        />
       </head>
-      <body
-        className="bg-a overflow-x-hidden"
-      >
-
-        <ReduxClientComponent children={
-          <>
-            <Header></Header>
-            <main className="max-w-350 mx-auto pb-7.5">
-              {children}
-            </main>
-            <Footer />
-          </>}
+      <body className="bg-a overflow-x-hidden">
+        <ReduxClientComponent
+          children={
+            <>
+              <Header></Header>
+              <main className="max-w-350 mx-auto pb-7.5">{children}</main>
+              <Footer />
+            </>
+          }
         />
         <ToastContainer />
       </body>

@@ -26,9 +26,9 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
         var key = "ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM";
 
 
-        var user = await _context.User.
+        var account = await _context.Account.
         Where(x => x.Account == loginModel.Account && x.Password == loginModel.Password).FirstOrDefaultAsync();
-        if (user == null)
+        if (account == null)
         {
             return BadRequest("tài khoản");
         }
@@ -47,7 +47,7 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
             Audience = domain,
             Expires = DateTime.UtcNow.AddHours(12),
             SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
-            Subject = new ClaimsIdentity(authClaims)
+            Subject = new ClaimsIdentity(authClaims),
         };
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -85,7 +85,6 @@ public class PermissionFilter(string permission) : IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var user = context.HttpContext.User;
-
         // Chưa đăng nhập
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         if (!user.Identity.IsAuthenticated)

@@ -27,32 +27,38 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
         var key = "ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM";
 
 
-        var user = await _context.User.
+        var account = await _context.Account.
         Where(x => x.Account == loginModel.Account
         ).FirstOrDefaultAsync();
 
-        if (user == null)
+        if (account == null)
         {
             return BadRequest(new { message = "Tài khoản không tồn tại" });
         }
-        if (!user.Password.Equals(loginModel.Password))
+        if (!account.Password.Equals(loginModel.Password))
         {
             return BadRequest(new { message = "Mật khẩu không đúng" });
         }
+        var user = await _context.User.Where(x => x.AccountEntity == account).FirstOrDefaultAsync();
 
+        if (user == null || !account.Account.Equals("admin"))
+        {
+            return BadRequest(new { message = "Tài khoản không tồn tại" });
+        }
+        var id = user.UserId ?? account.Account;
+        var role = user.Role ?? "admin";
         var authClaims = new List<Claim>
            {
-              new("id", loginModel.Account),
+              new("id", id),
               new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-              new(ClaimTypes.Role,"admin"),
-              new("action","an")
+              new(ClaimTypes.Role,role),
            };
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Issuer = domain,
             Audience = domain,
-            Expires = DateTime.UtcNow.AddHours(24 + 7),
+            Expires = DateTime.UtcNow.AddHours(24 * 7),
             SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
             Subject = new ClaimsIdentity(authClaims)
         };

@@ -83,7 +83,7 @@ export default function ProductClassification() {
                     image: tmpEdit[variantId]?.image || -1
                 }
             })))
-        }, 1500);
+        }, 1000);
         return (() => {
             clearTimeout(time)
         })

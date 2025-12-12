@@ -1,8 +1,10 @@
 using System.Collections.Immutable;
+using System.Data;
+using System.Threading.Tasks;
 using be.Entity;
 using be.Models;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 namespace be.Controllers.admin;
@@ -96,7 +98,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
     {
         List<string> ls = [];
 
-         var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
+        var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
         // var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
         // foreach (var nameFiles in productAddModel.ImageFiles)
         // {
@@ -185,7 +187,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 productVariantEntity.ProductEntity = mainProduct;
                 productVariantEntity.VariantId = item.VariantId;
                 productVariantEntity.Price = item.Price;
-                
+
 
                 if (productVariantEntity.ImageEntity != null)
                 {
@@ -381,8 +383,19 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
     }
 
 
-
-
+    [HttpPatch("status")]
+    public async Task<ActionResult> UpdateStatus(ProductUpdateStatusModel statusModel)
+    {
+        _logger.LogInformation(statusModel.ProductId);
+        var productEntity = await _context.Product.FindAsync(statusModel.ProductId);
+        if (productEntity == null)
+        {
+            return BadRequest(new { Message = "not found" });
+        }
+        productEntity.Status = productEntity.Status == 0 ? 1 : 0;
+        await _context.SaveChangesAsync();
+        return Ok(new { newValua = productEntity.Status });
+    }
 
 
 
@@ -417,9 +430,9 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                     ProductClassification = productAddModel.ProductClassification,
                     NameProduct = productAddModel.NameProduct,
                     Quality = productAddModel.Quality + 20,
-
+                    BrandEntity = BrandEntity,
                 };
-                List<ImageEntity> images = new List<ImageEntity>();
+                List<ImageEntity> images = [];
                 await _context.Product.AddAsync(mainProduct);
                 foreach (var item in productAddModel.ImageFiles)
                 {

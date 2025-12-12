@@ -3,14 +3,9 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace be.Entity;
 
-public class DatabaseContext : DbContext
+public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
-    public DatabaseContext(DbContextOptions<DatabaseContext> options)
-        : base(options)
-    {
-    }
-
-    public DbSet<WeatherForecast> WeatherForecastItems { get; set; } = null!;
+    public DbSet<AccountEntity> Account { get; set; } = null!;
     public DbSet<ProductEntity> Product { get; set; } = null!;
     public DbSet<ProductVariantEntity> ProductVariant { get; set; } = null!;
     public DbSet<ImageEntity> Image { get; set; } = null!;
@@ -31,7 +26,7 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserEntity>()
-       .HasMany(e => e.productVariantEntities)
+       .HasMany(e => e.ProductVariantEntities)
        .WithMany(e => e.UserEntities)
        .UsingEntity<CartEntity>();
 

@@ -32,7 +32,7 @@ IUserService userService, ILogger<AddressController> logger) : ControllerBase
     public async Task<ActionResult> Get()
     {
         var id = _userService.GetUserId(HttpContext);
-        var ls = await _context.Address.Where(x => x.UserEntity.Account == id).ToListAsync();
+        var ls = await _context.Address.Where(x => x.UserEntity.UserId == id).ToListAsync();
         return Ok(ls);
     }
 
@@ -80,7 +80,7 @@ IUserService userService, ILogger<AddressController> logger) : ControllerBase
         }
         var address = await _context.Address.FindAsync(addressPatchModel.AddressId);
 
-        if (address == null || address.UserEntity.Account != id)
+        if (address == null || address.UserEntity.UserId != id)
         {
             return BadRequest(new { message = "Không có địa chỉ này" });
         }
@@ -106,7 +106,7 @@ IUserService userService, ILogger<AddressController> logger) : ControllerBase
         }
         var address = await _context.Address.FindAsync(addressDeleteModel.AddressId);
 
-        if (address == null || address.UserEntity.Account != id)
+        if (address == null || address.UserEntity.UserId != id)
         {
             return BadRequest(new { message = "Không có địa chỉ này" });
         }

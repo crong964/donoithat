@@ -16,17 +16,15 @@ public static class SeedData
                 DbContextOptions<DatabaseContext>>()))
         {
 
-            if (context.User.Any())
+            if (context.Account.Any())
             {
                 return;
             }
-            context.User.AddRange(
-                new UserEntity
+            context.Account.AddRange(
+                new AccountEntity
                 {
                     Account = "admin",
-                    FullName = "Admin",
                     Password = "admin",
-                    PhoneNumber = "123456789",
                 }
             );
             context.SaveChanges();

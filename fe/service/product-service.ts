@@ -1,37 +1,40 @@
-import { iGetProduct, iProductDetail } from "@/components/product/interface"
-import { api } from "@/util/fetch"
+import { iGetProduct, iProductDetail } from "@/components/product/interface";
+import { api } from "@/util/fetch";
 
+export const getProduct = async (
+  p?: { slug: string; page?: string } | undefined
+): Promise<iGetProduct | undefined> => {
+  try {
+    let data = await api.get(`/product?slug=${p?.slug}&page=${p?.page || 1}`);
+    return data.data;
+  } catch (error) {
+    return undefined;
+  }
+};
 
-export const getProduct = async (p?: { slug: string, page?: string } | undefined): Promise<iGetProduct | undefined> => {
+export const getProductBySlug = async (
+  slug: string
+): Promise<iProductDetail | undefined> => {
+  try {
+    let data = await api.get(`/product/getProductBySlug?slug=${slug}`);
+    return data.data;
+  } catch (error) {
+    return undefined;
+  }
+};
 
-    try {
-        let data = await api.get(`/product?slug=${p?.slug}&page=${p?.page || 1}`)
-        return data.data
-    } catch (error) {
+export const searchProduct = async (
+  name: string,
+  page?: string
+): Promise<iGetProduct | undefined> => {
+  try {
+    let data = await api.get(
+      `/product/search?title=${name.trim()}&page=${page || 1}`
+    );
+    return data.data;
+  } catch (error) {
+    console.log((error as any)?.response?.data);
 
-        return undefined
-    }
-}
-
-export const getProductBySlug = async (slug: string): Promise<iProductDetail | undefined> => {
-
-    try {
-        let data = await api.get(`/product/getProductBySlug?slug=${slug}`)
-        return data.data
-    } catch (error) {
-        return undefined
-    }
-}
-
-export const searchProduct = async (name: string, page?: string): Promise<iGetProduct | undefined> => {
-
-
-    try {
-        let data = await api.get(`/product/search?title=${name.trim()}&page=${page || 1}`)
-        return data.data
-    } catch (error) {
-        console.log((error as any)?.response?.data);
-
-        return undefined
-    }
-}
+    return undefined;
+  }
+};

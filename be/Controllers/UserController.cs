@@ -24,21 +24,31 @@ public class UserController(DatabaseContext context, IUserService userService) :
         {
             return BadRequest(new { message = "Tài khoản đã tồn tại" });
         }
+        var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            await _context.User.AddAsync(new UserEntity
+
+            var account = new AccountEntity
             {
                 Account = userCreateModel.Account,
+                Password = userCreateModel.Password
+            };
+            await _context.Account.AddAsync(account);
+            await _context.User.AddAsync(new UserEntity
+            {
+                AccountEntity = account,
                 FullName = userCreateModel.FullName,
-                Password = userCreateModel.Password,
-                PhoneNumber = userCreateModel.PhoneNumber
+                PhoneNumber = userCreateModel.PhoneNumber,
+                Role = "user",
 
             });
             await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
             return Ok(new { message = "Đăng ký thành công" });
         }
         catch (System.Exception)
         {
+            await transaction.RollbackAsync();
             return BadRequest(new { message = "Tài khoản đã tồn tại" });
         }
 
