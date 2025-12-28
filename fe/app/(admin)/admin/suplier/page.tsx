@@ -10,7 +10,7 @@ export default async function SuplierIndexPage() {
   const data = await getSupliers();
 
   return (
-    <div className="p-4">
+    <>
       <SuplierHeaderLayout />
 
       <div className="p-4 overflow-x-auto w-full">
@@ -43,6 +43,6 @@ export default async function SuplierIndexPage() {
           })}
         </table>
       </div>
-    </div>
+    </>
   );
 }

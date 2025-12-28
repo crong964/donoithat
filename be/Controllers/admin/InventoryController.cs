@@ -201,4 +201,37 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         }
         return Ok();
     }
+
+
+    [HttpGet("search")]
+    public async Task<ActionResult> SearchInventotyName([FromQuery] ImportQueryProductAdmin importQuery)
+    {
+        var page = importQuery.Page;
+        var name = importQuery.Name;
+        var limit = 10;
+        if (name == null)
+        {
+            return BadRequest(new { mess = "Thiếu tên" });
+        }
+
+        var query = from productVariant in _context.ProductVariant
+                    join image in _context.Image on
+                    productVariant.ImageEntity equals image into temptImages
+                    from temptImage in temptImages.DefaultIfEmpty()
+                    select new
+                    {
+                        temptImage.ImagePath,
+                        productVariant.ProductVariantName,
+                        productVariant.ProductVariantId,
+                    };
+
+        var productVariants = await query
+        .Where(item => EF.Functions.Like(item.ProductVariantName, "%" + name.Replace(" ", "%") + "%"))
+        .Skip((page - 1) * limit)
+        .Take(limit)
+        .ToArrayAsync();
+
+
+        return Ok(productVariants);
+    }
 }

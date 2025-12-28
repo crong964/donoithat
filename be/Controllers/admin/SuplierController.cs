@@ -93,6 +93,33 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
     }
 
 
+    [HttpGet("search")]
+    public async Task<ActionResult> Search([FromQuery] SuplierAdminQueryModel quey)
+    {
+        var limit = 10;
+        if (quey.Name == null)
+        {
+            return BadRequest(new { message = "Không có tên" });
+        }
+        var page2 = quey.Page;
+        var ls = await _context
+        .Suplier
+        .AsNoTracking()
+        .Where(item => EF.Functions.Like(item.SuplierName, "%" + quey.Name.Replace(" ", "%") + "%"))
+        .Skip((page2 - 1) * limit)
+        .Take(page2 * limit)
+        .Select(x => SuplierGetAdminModel.Convert(x))
+        .ToArrayAsync();
+
+        return Ok(ls);
+    }
+
+
+
+
+
+
+
     [HttpPost("backup")]
     public async Task<ActionResult<SuplierGetAdminModel[]>> AddList(List<SuplierAddAdminModel> suplierAddAdminModels)
     {

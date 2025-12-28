@@ -2,7 +2,7 @@
 
 import { iAddress } from "@/components/address/interface";
 import { api } from "@/util/fetch";
-import Await from "@/util/Await";
+import Await from "@/util/await";
 import { revalidatePath } from "next/cache";
 import { errorResponse } from "@/util/error-response";
 

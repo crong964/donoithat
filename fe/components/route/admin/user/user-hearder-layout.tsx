@@ -35,9 +35,9 @@ export default function UserHearderLayout() {
     });
   };
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1>Danh sách sản phầm</h1>
+    <div className="p-3 ">
+      <h1 className="text-2xl font-bold mb-3">Danh sách khác hàng</h1>
+      <div className="flex justify-between items-center mb-3">
         <div className="flex">
           <div className="space-x-2">
             <Link href={"/api/admin/user/backup"} download>

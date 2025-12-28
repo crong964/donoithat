@@ -1,6 +1,6 @@
 import Navi, { iNavi } from "@/components/layout/navi";
 import ProductItem from "@/components/product/product-item";
-import Pagination from "@/components/ui-custom/panination";
+import Pagination from "@/components/ui-custom/pagination";
 import {
   Accordion,
   AccordionContent,

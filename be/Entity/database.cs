@@ -18,10 +18,9 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     public DbSet<PhotoGalleryEntity> PhotoGallery { get; set; } = null!;
     public DbSet<SuplierEntity> Suplier { get; set; } = null!;
     public DbSet<ProvideEntity> Provide { get; set; } = null!;
-
-    public DbSet<ReceivedNoteEntity> ReceivedNote { get; set; } = null!;
+    public DbSet<ImportEntity> ImportEntity { get; set; } = null!;
     public DbSet<BrandEntity> Brand { get; set; } = null!;
-    public DbSet<ReceivedNoteDetailEntity> ReceivedNoteDetail { get; set; } = null!;
+    public DbSet<ImportDetailEntity> ImportDetailEntity { get; set; } = null!;
     public DbSet<CouponEntity> Coupon { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,10 +40,10 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
         .UsingEntity<PhotoGalleryEntity>();
 
 
-        modelBuilder.Entity<ReceivedNoteEntity>()
+        modelBuilder.Entity<ImportEntity>()
         .HasMany(e => e.ProductVariantEntities)
-        .WithMany(e => e.ReceivedNoteDetailEntities)
-        .UsingEntity<ReceivedNoteDetailEntity>();
+        .WithMany(e => e.ImportEntities)
+        .UsingEntity<ImportDetailEntity>();
 
 
         modelBuilder.Entity<SuplierEntity>()

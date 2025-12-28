@@ -32,25 +32,23 @@ export default function SuplierHeaderLayout() {
     });
   };
   return (
-    <>
-      <header className="p-4 border flex justify-between border-[#00000014]">
-        <p className="text-sm"> Danh sách nhà cung cấp</p>
-        <div className="space-x-2">
-          <Link href={"/api/admin/suplier/backup"} download>
-            <Button type="button" variant={"default"}>
-              <Download />
-              Tải CSV
-            </Button>
-          </Link>
-          <CsvInput onChange={handleBackup} />
-          <Link href={"/admin/suplier/add"}>
-            <Button type="button" variant={"blue"}>
-              <Plus />
-              Thêm
-            </Button>
-          </Link>
-        </div>
-      </header>
-    </>
+    <div className="p-3 ">
+      <p className="text-2xl font-bold mb-3"> Danh sách nhà cung cấp</p>
+      <div className="space-x-2">
+        <Link href={"/api/admin/suplier/backup"} download>
+          <Button type="button" variant={"default"}>
+            <Download />
+            Tải CSV
+          </Button>
+        </Link>
+        <CsvInput onChange={handleBackup} />
+        <Link href={"/admin/suplier/add"}>
+          <Button type="button" variant={"blue"}>
+            <Plus />
+            Thêm
+          </Button>
+        </Link>
+      </div>
+    </div>
   );
 }

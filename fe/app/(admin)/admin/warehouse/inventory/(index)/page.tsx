@@ -1,5 +1,5 @@
 import InventoryItem from "@/components/route/admin/warehouse/inventory/inventory-item";
-import Pagination from "@/components/ui-custom/panination";
+import Pagination from "@/components/ui-custom/pagination";
 import { Button } from "@/components/ui/button";
 import { getInventoryAdmin } from "@/service/admin/inventory-service";
 import priceFormat from "@/util/price-format";

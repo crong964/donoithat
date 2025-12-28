@@ -1,5 +1,5 @@
 import UserHearderLayout from "@/components/route/admin/user/user-hearder-layout";
-import Pagination from "@/components/ui-custom/panination";
+import Pagination from "@/components/ui-custom/pagination";
 import { getUserAdmin } from "@/service/admin/user-service";
 
 export default async function UserPage({
@@ -15,7 +15,7 @@ export default async function UserPage({
   const totalPage = res.totalPage;
   
   return (
-    <div className="p-7">
+    <>
       <UserHearderLayout></UserHearderLayout>
       <section className="relative mt-7">
         <div className="min-h-100 my-6 overflow-x-auto">
@@ -50,6 +50,6 @@ export default async function UserPage({
           url={`/admin/user?query=${query}`}
         />
       </section>
-    </div>
+    </>
   );
 }

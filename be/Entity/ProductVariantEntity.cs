@@ -9,6 +9,7 @@ namespace be.Entity
     //    image: number
     public class ProductVariantEntity
     {
+
         [Key]
         public string ProductVariantId { get; set; } = Guid.NewGuid().ToString().Replace("-", "");
         public required string ProductVariantName { get; set; }
@@ -30,6 +31,6 @@ namespace be.Entity
         public List<UserEntity> UserEntities { get; } = [];
 
         public List<OrderEntity> OrderEntities { get; } = [];
-        public List<ReceivedNoteEntity> ReceivedNoteDetailEntities { get; } = [];
+        public List<ImportEntity> ImportEntities { get; } = [];
     }
 }

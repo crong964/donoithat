@@ -1,7 +1,7 @@
 "use server";
 import { iLogin, iUser } from "@/components/user/interface";
 import { api } from "@/util/fetch";
-import Await from "@/util/Await";
+import Await from "@/util/await";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

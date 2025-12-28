@@ -1,5 +1,5 @@
 import ProductHomeAdmin from "@/components/product/product-home-admin";
-import Pagination from "@/components/ui-custom/panination";
+import Pagination from "@/components/ui-custom/pagination";
 import { getProduct } from "@/service/admin/product-service";
 
 export default async function ProductHomePage({

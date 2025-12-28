@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 
 import { AppSidebar } from "@/components/route/admin/menu/menu";
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarInset } from "@/components/ui/sidebar";
 import ReduxComponent from "@/components/route/admin/redux-component";
 import { ToastContainer } from "react-toastify";
 

@@ -103,7 +103,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         {
             return BadRequest(new { mess = "Thiếu name" });
         }
-        _logger.LogInformation(name);
+
         var productEntities = await _context.Product
         .Include(x => x.ImageEntities).
         Where(x => EF.Functions.Like(x.NameProduct, "%" + name.Replace(" ", "%") + "%"))

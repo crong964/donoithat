@@ -1,5 +1,5 @@
 import { getOrders } from "@/service/admin/order-service";
-import dateFormat from "@/util/Date";
+import dateFormat from "@/util/date";
 import Link from "next/link";
 import { Fragment } from "react";
 const IndexAdminPage = async ({

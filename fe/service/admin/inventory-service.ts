@@ -2,7 +2,7 @@
 import { iHomeAdminGet } from "@/components/route/admin/home/interface";
 import { iInventory, iInventoryGet } from "@/components/inventory/interface";
 import { api } from "@/util/fetch";
-import Await from "@/util/Await";
+import Await from "@/util/await";
 import { errorResponse } from "@/util/error-response";
 import { iProductVariantById } from "@/components/variant/interface";
 import { revalidatePath } from "next/cache";

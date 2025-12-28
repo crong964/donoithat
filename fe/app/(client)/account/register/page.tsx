@@ -1,6 +1,7 @@
 "use client";
 import SubmitButton from "@/components/button/submit-buttom";
 import MessageAlert from "@/components/form/message-alert";
+import { Input } from "@/components/ui/input";
 import { createUser } from "@/service/user-service";
 import Form from "next/form";
 import Link from "next/link";
@@ -27,11 +28,10 @@ export default function RegisterPage() {
           <Form action={formAction}>
             <div className="mb-6.25">
               <label htmlFor="">
-                <input
+                <Input
                   required
                   type="text"
                   name="fullName"
-                  value="a"
                   className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
                   placeholder="Họ và tên"
                 />
@@ -39,8 +39,7 @@ export default function RegisterPage() {
             </div>
             <div className="mb-6.25">
               <label htmlFor="">
-                <input
-                  value="a"
+                <Input
                   required
                   type="text"
                   name="phoneNumber"
@@ -52,8 +51,7 @@ export default function RegisterPage() {
 
             <div className="mb-6.25">
               <label htmlFor="">
-                <input
-                  value="huy91027@gmail.com"
+                <Input
                   required
                   type="email"
                   name="account"
@@ -63,10 +61,9 @@ export default function RegisterPage() {
               </label>
             </div>
             <div className="mb-1.25">
-              <label htmlFor="">
-                <input
+              <label htmlFor="password">
+                <Input
                   required
-                  value="a"
                   type="password"
                   name="password"
                   className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
@@ -102,8 +99,7 @@ export default function RegisterPage() {
                 loading={
                   <button
                     type="button"
-                    className="px-8.75 cursor-progress rounded-sm leading-11.25
-                                         bg-loadingbg uppercase font-semibold text-white"
+                    className="px-8.75 cursor-progress rounded-sm leading-11.25 bg-loadingbg uppercase font-semibold text-white"
                   >
                     Đăng ký
                   </button>
@@ -116,7 +112,6 @@ export default function RegisterPage() {
                   Đăng ký
                 </button>
               </SubmitButton>
-
               <p className="pl-7.5 mr-auto text-[14px] leading-5 font-normal">
                 Bạn đã có tài khoản?{" "}
                 <Link className="text-[#2962ff]" href="/account/login">
@@ -129,30 +124,4 @@ export default function RegisterPage() {
       </div>
     </div>
   );
-}
-
-{
-  /* <div className="mb-6.25 flex">
-                            <label htmlFor="nn" className="mr-5">
-                                <div className="relative pl-6">
-                                    <input required type="radio" id="nn" name="sex" className="absolute size-4.5 left-0 top-1/2 -translate-y-1/2" />
-                                    <span className=" text-[14px] font-normal mr-5">Nữ</span>
-                                </div>
-                            </label>
-                            <label htmlFor="n" className="">
-                                <div className="relative pl-6">
-                                    <input required type="radio" id="n" name="sex" className="absolute size-4.5  left-0 top-1/2 -translate-y-1/2" />
-                                    <span className=" text-[14px] font-normal mr-5">Nam</span>
-                                </div>
-
-                            </label>
-                        </div> */
-}
-{
-  /* <div className="mb-6.25">
-                            <label htmlFor="">
-                                <input required type="text" className="border-boder text-[14px] bg-input required focus:bg-white  border focus:outline-none px-5 py-1.25 w-full italic font-medium h-13.75"
-                                    placeholder="mm/dd/yyyy" />
-                            </label>
-                        </div> */
 }

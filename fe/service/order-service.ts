@@ -6,7 +6,7 @@ import {
   iOrderInAdmin,
 } from "@/components/order/interface";
 import { api } from "@/util/fetch";
-import Await from "@/util/Await";
+import Await from "@/util/await";
 import { revalidatePath } from "next/cache";
 import { errorResponse } from "@/util/error-response";
 

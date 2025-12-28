@@ -1,5 +1,5 @@
 'use client'
-import dateFormat from "@/util/Date";
+import dateFormat from "@/util/date";
 import priceFormat from "@/util/price-format";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { iOrder, iProductVariantDetail } from "./interface";

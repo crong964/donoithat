@@ -1,5 +1,6 @@
 "use client";
 import {
+  BaggageClaim,
   Calendar,
   ChevronRight,
   Home,
@@ -13,6 +14,8 @@ import {
   Store,
   TicketPercent,
   User,
+  Users,
+  Users2,
   Warehouse,
 } from "lucide-react";
 
@@ -41,6 +44,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { usePathname } from "next/navigation";
+import { icon } from "leaflet";
 
 // Menu items.
 const items = [
@@ -63,17 +67,13 @@ const items = [
         url: "/admin/product",
       },
       {
-        title: "Thêm sản phẩm",
-        url: "/admin/product/add",
-      },
-      {
         title: "Loại Sản phẩm",
         url: "/admin/category",
       },
-      {
-        title: "Nhãn hàng",
-        url: "/admin/brand",
-      },
+      //{
+      //  title: "Nhãn hàng",
+      //  url: "/admin/brand",
+      //},
     ],
   },
   {
@@ -84,11 +84,12 @@ const items = [
         title: "Người mua hàng",
         url: "/admin/user",
       },
-      {
-        title: "Nhân viên",
-        url: "/admin/user/employee",
-      },
     ],
+  },
+  {
+    title: "Nhân viên",
+    icon: Users2,
+    url: "/admin/employee/",
   },
   {
     title: "Kho hàng",
@@ -99,8 +100,8 @@ const items = [
         url: "/admin/warehouse/inventory",
       },
       {
-        title: "Thêm sản phẩm tồn kho",
-        url: "/admin/warehouse/inventory/add",
+        title: "Nhập kho",
+        url: "/admin/warehouse/import",
       },
     ],
   },
@@ -173,7 +174,7 @@ export function AppSidebar() {
                           <Link
                             data-link
                             data-activelink={item.url == pathName}
-                            href={item.url as any}
+                            href={item.url}
                           >
                             <item.icon />
                             <span>{item.title}</span>

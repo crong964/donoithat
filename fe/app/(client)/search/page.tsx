@@ -1,5 +1,5 @@
 import ProductItem from "@/components/product/product-item";
-import Pagination from "@/components/ui-custom/panination";
+import Pagination from "@/components/ui-custom/pagination";
 import { getProduct, searchProduct } from "@/service/product-service";
 import { redirect } from "next/navigation";
 

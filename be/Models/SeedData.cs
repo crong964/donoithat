@@ -11,23 +11,28 @@ public static class SeedData
 {
     public static void Initialize(IServiceProvider serviceProvider)
     {
-        using (var context = new DatabaseContext(
-            serviceProvider.GetRequiredService<
-                DbContextOptions<DatabaseContext>>()))
-        {
+        using var context = new DatabaseContext(
+                serviceProvider.GetRequiredService<
+                        DbContextOptions<DatabaseContext>>());
 
-            if (context.Account.Any())
-            {
-                return;
-            }
-            context.Account.AddRange(
-                new AccountEntity
-                {
-                    Account = "admin",
-                    Password = "admin",
-                }
-            );
-            context.SaveChanges();
+        if (context.Account.Any())
+        {
+            return;
         }
+        var account = new AccountEntity
+        {
+            Account = "admin",
+            Password = "admin",
+        };
+        context.Account.Add(account);
+        context.User.Add(new UserEntity
+        {
+            UserId = "admin",
+            AccountEntity = account,
+            FullName = "Chủ quán",
+            Role = "admin",
+            PhoneNumber = ""
+        });
+        context.SaveChanges();
     }
 }

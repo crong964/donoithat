@@ -1,5 +1,5 @@
 import { getToken } from "@/service/user-service";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 const API_BASE_URL = "http://localhost:2000/api";
 

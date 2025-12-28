@@ -1,5 +1,5 @@
 import { getOrders } from "@/service/order-service"
-import DateFormat from "@/util/Date"
+import DateFormat from "@/util/date"
 import Link from "next/link"
 
 export default async function OrderPage() {
