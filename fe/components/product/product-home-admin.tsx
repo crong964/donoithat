@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/collapsible";
 import Form from "next/form";
 import { updateVarient } from "@/service/admin/variant-service";
-import SubmitButton from "../button/submit-buttom";
+import SubmitButton from "../ui-custom/submit-buttom";
 import VariantsHomeItem from "../variant/variant-home-item";
 import {
   AlertDialog,

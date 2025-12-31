@@ -1,6 +1,6 @@
 'use client'
 import { iBrand } from "@/components/brand/interface";
-import SubmitButton from "@/components/button/submit-buttom";
+import SubmitButton from "@/components/ui-custom/submit-buttom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";

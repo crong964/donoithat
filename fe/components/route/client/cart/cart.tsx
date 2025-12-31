@@ -2,7 +2,7 @@
 import { AddressComboBox } from "@/components/address/address-combo-box"
 import Address from "@/components/address/address-model"
 import { iAddress } from "@/components/address/interface"
-import SubmitButton from "@/components/button/submit-buttom"
+import SubmitButton from "@/components/ui-custom/submit-buttom"
 import Coupon from "@/components/coupon/coupon"
 import Navi from "@/components/layout/navi"
 import { iProductVariantCart } from "@/components/product/interface"

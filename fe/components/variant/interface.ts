@@ -1,3 +1,6 @@
+import { iInventory } from "../inventory/interface";
+import { iSuplier } from "../suplier/interface";
+
 // Mô tả đúng theo shape hiện tại (productClassification là chuỗi JSON)
 export interface iProductVariant {
   productId: any;
@@ -30,4 +33,14 @@ export interface iProductVariantById {
   quality: number;
   weight: number;
   importPrice: number;
+}
+
+export interface iSuplierAndImportPrice extends iSuplier {
+  importPrice: number;
+  inventoryId: string;
+}
+
+export interface iProductVariantAndSuplier {
+  inventory: iInventory;
+  supliers: iSuplierAndImportPrice[];
 }

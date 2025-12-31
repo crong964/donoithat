@@ -1,5 +1,5 @@
 "use client";
-import SubmitButton from "@/components/button/submit-buttom";
+import SubmitButton from "@/components/ui-custom/submit-buttom";
 import CsvInput from "@/components/form/csv-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

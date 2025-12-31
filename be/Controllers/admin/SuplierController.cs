@@ -105,7 +105,7 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
         var ls = await _context
         .Suplier
         .AsNoTracking()
-        .Where(item => EF.Functions.Like(item.SuplierName, "%" + quey.Name.Replace(" ", "%") + "%"))
+        .Where(item => EF.Functions.Like(item.SuplierName, "%" + quey.Name.ToUpper().Replace(" ", "%") + "%"))
         .Skip((page2 - 1) * limit)
         .Take(page2 * limit)
         .Select(x => SuplierGetAdminModel.Convert(x))

@@ -100,6 +100,10 @@ const items = [
         url: "/admin/warehouse/inventory",
       },
       {
+        title: "Sản phẩm đang dặt",
+        url: "/admin/warehouse/order",
+      },
+      {
         title: "Nhập kho",
         url: "/admin/warehouse/import",
       },

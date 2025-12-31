@@ -5,7 +5,7 @@ import Form from "next/form";
 import Link from "next/link"
 import { useActionState, useEffect, useState } from "react"
 import { toast } from "react-toastify";
-import SubmitButton from "../button/submit-buttom";
+import SubmitButton from "../ui-custom/submit-buttom";
 import { Dot } from "lucide-react";
 
 export default function Sign(p: {

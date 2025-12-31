@@ -16,17 +16,19 @@ namespace be.Controllers;
 [Authorize]
 [ApiController]
 [Route("/api/token")]
-public class AuthorizeController(DatabaseContext context) : ControllerBase
+public class AuthorizeController(DatabaseContext context, ILogger<AuthorizeController> logger,
+IConfiguration config) : ControllerBase
 {
     private readonly DatabaseContext _context = context;
+    private readonly ILogger<AuthorizeController> _logger = logger;
+    private readonly IConfiguration _config = config;
+
+
     [AllowAnonymous]
     [HttpPost]
     public async Task<ActionResult<string>> Login(LoginModel loginModel)
     {
-        var domain = "https://localhost:2000";
-        var key = "ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM";
-
-
+        var domain = _config.GetValue<string>("JWT:Web") ?? "";
         var account = await _context.Account.
         Where(x => x.Account == loginModel.Account
         ).FirstOrDefaultAsync();
@@ -53,7 +55,7 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
               new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
               new(ClaimTypes.Role,role),
            };
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("JWT:Secret") ?? ""));
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Issuer = domain,
@@ -71,13 +73,13 @@ public class AuthorizeController(DatabaseContext context) : ControllerBase
     [HttpGet("infor")]
     public async Task<ActionResult> UserInfor()
     {
-
         var tokenStorage = HttpContext.Request.Headers.Authorization;
         var handler = new JwtSecurityTokenHandler();
         var token = handler.ReadJwtToken(tokenStorage[0]?.Replace("Bearer ", ""));
         var id = token.Claims.First(claim => claim.Type == "id").Value;
+        _logger.LogInformation(id);
+        var user = await _context.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
 
-        var user = await _context.User.FindAsync(id);
         if (user == null)
         {
             return NotFound(new { message = "" });

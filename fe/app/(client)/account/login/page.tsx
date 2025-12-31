@@ -1,5 +1,5 @@
 "use client";
-import SubmitButton from "@/components/button/submit-buttom";
+import SubmitButton from "@/components/ui-custom/submit-buttom";
 import { loginUser } from "@/service/user-service";
 import Form from "next/form";
 import Link from "next/link";

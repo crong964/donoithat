@@ -1,5 +1,5 @@
 "use client";
-import SubmitButton from "@/components/button/submit-buttom";
+import SubmitButton from "@/components/ui-custom/submit-buttom";
 import MessageAlert from "@/components/form/message-alert";
 import { Input } from "@/components/ui/input";
 import { createUser } from "@/service/user-service";

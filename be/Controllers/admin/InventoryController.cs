@@ -234,4 +234,112 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
 
         return Ok(productVariants);
     }
+
+    [HttpGet("suplier")]
+    public async Task<ActionResult> Suplier(string productVariantId)
+    {
+        var productVariant = await _context
+        .ProductVariant
+        .Where(x => x.ProductVariantId.Equals(productVariantId))
+        .FirstOrDefaultAsync();
+
+        if (productVariant == null)
+        {
+            return BadRequest(new { message = "Không có sản phẩm này" });
+        }
+        var ls = _context.ImportDetailEntity.AsNoTracking()
+            .Where(importDetail => importDetail.ProductVariantEntity.ProductVariantId == productVariantId)
+            .Select(importDetail => new
+            {
+                importPrice = importDetail.Price,
+                importDetail.ImportEntity.SuplierEntity.SuplierId,
+                importDetail.ImportEntity.SuplierEntity.SuplierEmail,
+                importDetail.ImportEntity.SuplierEntity.SuplierName,
+                importDetail.ImportEntity.SuplierEntity.SuplierPhoneNumber,
+                importDetail.ImportEntity.ReceivedDate
+            })
+            .GroupBy(x => x.SuplierId)
+            .Select(g => g.OrderBy(x => x.ReceivedDate).First())
+            .ToList();
+
+
+
+        return Ok(new
+        {
+            inventory = productVariant,
+            supliers = ls
+        });
+    }
+
+
+    [HttpGet("order")]
+    public async Task<ActionResult> OrderGet()
+    {
+        var ls = await _context
+        .Provide
+       .Select(i => new ProvideEntity
+       {
+           ProductVariantEntity = i.ProductVariantEntity,
+           SuplierEntity = i.SuplierEntity,
+           ReceiedQuality = i.ReceiedQuality
+       })
+        .Select(provide => InventoryOrderGetAdminModel.Convert(provide)).ToArrayAsync();
+        return Ok(ls);
+    }
+    [HttpPost("order")]
+    public async Task<ActionResult> OrderPost(InventoryOrderPostAdminModel inventory)
+    {
+        var suplier = await _context.Suplier.Where(x => x.SuplierId == inventory.SuplierId).FirstOrDefaultAsync();
+        var product = await _context.ProductVariant.Where(x => x.ProductVariantId == inventory.InventoryId).FirstOrDefaultAsync();
+        if (suplier == null || product == null)
+        {
+            return BadRequest(new { message = "Không tồn tại" });
+        }
+        var provide = await _context.Provide.Where(x => x.ProductVariantEntity == product).FirstOrDefaultAsync();
+
+        if (provide != null)
+        {
+            return BadRequest(new { message = "Đã đặt ở rồi" });
+        }
+        var prodive = new ProvideEntity
+        {
+            ProductVariantEntity = product,
+            SuplierEntity = suplier,
+        };
+
+        try
+        {
+            await _context.Provide.AddAsync(prodive);
+            await _context.SaveChangesAsync();
+        }
+        catch (System.Exception)
+        {
+            return BadRequest();
+        }
+        return Ok();
+    }
+
+    [HttpDelete("order")]
+    public async Task<ActionResult> OrderDelete(InventoryOrderPostAdminModel inventory)
+    {
+        var provide = await _context.Provide
+        .Where(x => x.ProductVariantEntity.ProductVariantId == inventory.InventoryId && x.SuplierEntity.SuplierId == inventory.SuplierId)
+        .FirstOrDefaultAsync();
+
+        if (provide == null)
+        {
+            return Ok();
+        }
+        try
+        {
+            _context.Provide.Remove(provide);
+            await _context.SaveChangesAsync();
+        }
+        catch (System.Exception)
+        {
+
+
+        }
+        return Ok();
+    }
 }

@@ -25,3 +25,13 @@ export interface iImportProduct {
   productVariantId: string;
   importPrice: number;
 }
+
+export interface iInventoryOrderAdmin {
+  inventoryId: string;
+  imagePath: string;
+  suplierId: string;
+  suplierName: string;
+  suplierPhoneNumber: string;
+  productVariantName: string;
+  receiedQuality: string;
+}

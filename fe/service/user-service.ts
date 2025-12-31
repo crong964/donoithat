@@ -57,22 +57,18 @@ export const logoutUser = async () => {
   revalidatePath("/");
 };
 
-export const getUserInfor = async (): Promise<
-  | {
-      fullName: string;
-      account: string;
-      phoneNumber: string;
-      address: string;
-    }
-  | undefined
-> => {
+export const getUserInfor = async (): Promise<{
+  fullName: string;
+  account: string;
+  phoneNumber: string;
+  address: string;
+} | null> => {
+  let data = null;
   try {
-    let data = await api.get("/token/infor");
+    data = await api.get("/token/infor");
+  } catch (error: any) {}
 
-    return data.data;
-  } catch (error: any) {
-    return undefined;
-  }
+  return data?.data;
 };
 
 export const updateUser = async (currentState: any, formData: FormData) => {

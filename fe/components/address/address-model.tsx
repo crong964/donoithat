@@ -1,7 +1,7 @@
 "use client";
 import Form from "next/form";
 import MapLeafLet from "./map-leafLet";
-import SubmitButton from "../button/submit-buttom";
+import SubmitButton from "../ui-custom/submit-buttom";
 import { Fragment, useActionState, useEffect, useState } from "react";
 import { addAddresses } from "@/service/address-service";
 import { toast } from "react-toastify";

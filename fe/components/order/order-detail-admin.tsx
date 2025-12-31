@@ -8,7 +8,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from "../ui/button";
 import { useActionState, useEffect, useState } from "react";
 import { updatePayOrder, updateStatusOrder } from "@/service/admin/order-service";
-import SubmitButton from "../button/submit-buttom";
+import SubmitButton from "../ui-custom/submit-buttom";
 import { toast } from "react-toastify";
 import LeafletButtom from "./leaflet-buttom";
 

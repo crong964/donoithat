@@ -87,7 +87,7 @@ public class ImportControler(DatabaseContext context, IUserService userService, 
 			long importTotlePrice = 0;
 			foreach (var importProduct in importAddAdminModel.ImportVariantProducts)
 			{
-
+				var importProductQuality = importProduct.Quality;
 				var productVariant = await _context
 				.ProductVariant
 				.Include(x => x.ProductEntity)
@@ -97,13 +97,21 @@ public class ImportControler(DatabaseContext context, IUserService userService, 
 				{
 					continue;
 				}
+				var provide = await _context.Provide.
+				Where(x => x.ProductVariantEntity == productVariant && x.SuplierEntity == suplier)
+				.FirstOrDefaultAsync();
+
+				if (provide != null)
+				{
+					provide.ReceiedQuality += importProductQuality;
+				}
 
 				if (productVariant.ProductEntity != null)
 				{
-					productVariant.ProductEntity.Quality += importProduct.Quality;
+					productVariant.ProductEntity.Quality += importProductQuality;
 				}
 
-				productVariant.Quality += importProduct.Quality;
+				productVariant.Quality += importProductQuality;
 				if (productVariant.ImportPrice < importProduct.ImportPrice)
 				{
 					productVariant.ImportPrice = importProduct.ImportPrice;
@@ -114,10 +122,10 @@ public class ImportControler(DatabaseContext context, IUserService userService, 
 					ImportEntity = importEntity,
 					ProductVariantEntity = productVariant,
 					Price = importProduct.ImportPrice,
-					Quality = importProduct.Quality
+					Quality = importProductQuality
 				};
 
-				importTotlePrice += importProduct.ImportPrice * importProduct.Quality;
+				importTotlePrice += importProduct.ImportPrice * importProductQuality;
 				importDetails.Add(importDetail);
 
 			}

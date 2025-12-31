@@ -1,5 +1,5 @@
 import Form from "next/form";
-import SubmitButton from "@/components/button/submit-buttom";
+import SubmitButton from "@/components/ui-custom/submit-buttom";
 import { Button } from "@/components/ui/button";
 import { Fragment, useActionState, useEffect, useState } from "react";
 import { updateVarient } from "@/service/admin/variant-service";

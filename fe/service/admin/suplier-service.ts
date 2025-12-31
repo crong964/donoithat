@@ -8,14 +8,14 @@ import { redirect } from "next/navigation";
 
 export const getSuplier = async (
   suplierId: string
-): Promise<iSuplier | undefined> => {
+): Promise<iSuplier | null> => {
   try {
     let data = await api.get(
       "/admin/suplier/suplierbyid?suplierId=" + suplierId
     );
     return data.data;
   } catch (error) {
-    return undefined;
+    return null;
   }
 };
 

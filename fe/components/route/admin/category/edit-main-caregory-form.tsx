@@ -1,4 +1,4 @@
-import SubmitButton from "@/components/button/submit-buttom";
+import SubmitButton from "@/components/ui-custom/submit-buttom";
 import { iCateGory } from "@/components/category/interface";
 import { AlertDialogHeader, AlertDialogFooter, AlertDialogDescription, AlertDialogTitle, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";

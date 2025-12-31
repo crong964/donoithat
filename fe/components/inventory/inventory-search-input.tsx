@@ -15,7 +15,7 @@ import {
     SelectItem, SelectLabel,
     SelectTrigger, SelectValue
 } from "../ui/select"
-import SubmitButton from "../button/submit-buttom"
+import SubmitButton from "../ui-custom/submit-buttom"
 import { iBrand } from "../brand/interface"
 import { JSX, useEffect, useMemo, useState } from "react"
 import { iInventoryGet } from "./interface"

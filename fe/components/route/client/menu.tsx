@@ -20,7 +20,7 @@ import LoadingLink from "@/components/admin/menu/loading-link"
 import Form from "next/form"
 import { logoutUser } from "@/service/user-service"
 import { Button } from "../../ui/button"
-import SubmitButton from "../../button/submit-buttom"
+import SubmitButton from "../../ui-custom/submit-buttom"
 
 
 // Menu items.

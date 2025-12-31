@@ -1,11 +1,17 @@
 "use server";
-import { iHomeAdminGet } from "@/components/route/admin/home/interface";
-import { iInventory, iInventoryGet } from "@/components/inventory/interface";
+import {
+  iInventory,
+  iInventoryGet,
+  iInventoryOrder,
+} from "@/components/inventory/interface";
 import { api } from "@/util/fetch";
-import Await from "@/util/await";
 import { errorResponse } from "@/util/error-response";
-import { iProductVariantById } from "@/components/variant/interface";
+import {
+  iProductVariantAndSuplier,
+  iProductVariantById,
+} from "@/components/variant/interface";
 import { revalidatePath } from "next/cache";
+import { iMessage } from "@/interface/message";
 
 export const getInventoryAdmin = async (
   p?: iInventoryGet
@@ -28,12 +34,12 @@ export const getInventoryAdmin = async (
 
 export const getInventoryByIdAdmin = async (
   id: string
-): Promise<iProductVariantById | undefined> => {
+): Promise<iProductVariantById | null> => {
+  let data = null;
   try {
-    const data = await api.get(`/admin/inventory/${id}`);
-    return data.data;
+    data = await api.get(`/admin/inventory/${id}`);
   } catch (error) {}
-  return undefined;
+  return data?.data;
 };
 
 export const addInventoryAdmin = async (
@@ -135,4 +141,20 @@ export const deleteInventoryAdmin = async (
     console.log((error as any)?.response?.data);
   }
   return { message: "Không thêm dc", d: Date.now(), error: false };
+};
+
+export const getInventoryAndSupliersAdmin = async (
+  productId: string
+): Promise<iProductVariantAndSuplier | null> => {
+  let data = null;
+  try {
+    data = await api.get(
+      "/admin/inventory/suplier?productVariantId=" + productId
+    );
+  } catch (error) {
+    console.log(errorResponse(error));
+    console.log((error as any)?.response?.data);
+  }
+
+  return data?.data;
 };
