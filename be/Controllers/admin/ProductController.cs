@@ -3,9 +3,12 @@ using System.Data;
 using System.Threading.Tasks;
 using be.Entity;
 using be.Models;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Model.Map;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 
 namespace be.Controllers.admin;
 
@@ -25,7 +28,34 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         CategoryEntity? categoryEntity = null;
 
         int Total = 0;
+        string nameProduct = productGetModel.NameProduct ?? "";
 
+        if (nameProduct != "")
+        {
+            Total = await _context
+            .Product
+            .Where(x => EF.Functions.Like(x.NameProduct, "%" + productGetModel.NameProduct + "%"))
+            .CountAsync();
+
+            productEntities = await _context.Product.
+            Include(x => x.ImageEntities).
+            Include(x => x.CategoryEntity).
+            Include(x => x.ProductVariantEntities).
+            Where(x => EF.Functions.Like(x.NameProduct, "%" + nameProduct + "%")).
+            Skip(productGetModel.Page * limit - limit).Take(limit).
+            Select(x => x).AsNoTracking().ToListAsync();
+
+            return new ProductListModelInAmin
+            {
+                TotalPage = Total / limit + (Total % limit == 0 ? 0 : 1),
+                Page = productGetModel.Page,
+                TotalItem = Total,
+                Products = [.. productEntities.Select(ProductModelInAdmin.Converter)],
+                NameCate = "",
+                NameProduct = nameProduct
+            };
+
+        }
         if (productGetModel.Slug == null || productGetModel.Slug == "all")
         {
             Total = await _context.Product.CountAsync();
@@ -33,11 +63,13 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         else
         {
             categoryEntity = await _context.Category.Where(x => x.Slug == productGetModel.Slug).FirstOrDefaultAsync();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             Total = await _context.Product
             .Where(x => x.CategoryEntity.Slug == productGetModel.Slug ||
            (x.CategoryEntity.CategoryParent != null && x.CategoryEntity.CategoryParent.Slug == productGetModel.Slug))
            .AsNoTracking()
            .CountAsync();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         if (productGetModel.Slug == null || productGetModel.Slug == "all")
@@ -52,6 +84,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         }
         else
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             productEntities = await _context.Product.
             Include(x => x.ImageEntities).
             Include(x => x.CategoryEntity).
@@ -60,13 +93,14 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
            (x.CategoryEntity.CategoryParent != null && x.CategoryEntity.CategoryParent.Slug == productGetModel.Slug)).
                  Skip(productGetModel.Page * limit - limit).Take(limit).
                  Select(x => x).AsNoTracking().ToListAsync();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
         return new ProductListModelInAmin
         {
             TotalPage = Total / limit + (Total % limit == 0 ? 0 : 1),
             Page = productGetModel.Page,
             TotalItem = Total,
-            ProductModels = [.. productEntities.Select(ProductModelInAdmin.Converter)],
+            Products = [.. productEntities.Select(ProductModelInAdmin.Converter)],
             NameCate = categoryEntity == null ? "" : categoryEntity.NameCategory
 
         };
@@ -99,28 +133,15 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         List<string> ls = [];
 
         var sta = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";
-        // var tmp = System.IO.Directory.GetCurrentDirectory() + "/Tmp/";
-        // foreach (var nameFiles in productAddModel.ImageFiles)
-        // {
-        //     var sourceFileName = tmp + nameFiles;
-        //     var destFileName = sta + nameFiles;
-        //     try
-        //     {
-        //         System.IO.File.Move(sourceFileName, destFileName);
-        //     }
-        //     catch (System.Exception e)
-        //     {
-        //         _logger.LogError(e.Message);
-        //         return BadRequest(new { mess = "Chuyển thất bại" });
-        //     }
-        // }
+
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
             List<ImageEntity> images = [];
+            HashSet<string> urlsSet = [];
             var categoryEntity = await _context.Category
-            .Where(x => x.Slug == productAddModel.TypeProduct).SingleOrDefaultAsync();
-            var BrandEntity = await _context.Brand
+            .Where(x => x.Slug == productAddModel.CategorySlug).SingleOrDefaultAsync();
+            var brandEntity = await _context.Brand
             .Where(x => x.BrandId == productAddModel.BrandId).SingleOrDefaultAsync();
             var mainProduct = new ProductEntity
             {
@@ -131,7 +152,8 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 ProductClassification = productAddModel.ProductClassification,
                 NameProduct = productAddModel.NameProduct,
                 Quality = productAddModel.Quality,
-                Slug = productAddModel.Slug
+                Slug = productAddModel.Slug,
+                BrandEntity = brandEntity
             };
             await _context.Product.AddAsync(mainProduct);
             foreach (var item in productAddModel.ImageFiles)
@@ -142,6 +164,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 {
                     continue;
                 }
+
                 var PhotoGallery = new PhotoGalleryEntity
                 {
                     ImageEntity = imageEntity,
@@ -154,6 +177,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
 
             foreach (var item in productAddModel.ProductVariants)
             {
+
                 if (item.ProductVariantId == null)
                 {
                     continue;
@@ -161,27 +185,18 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 var productVariantEntity = await _context.ProductVariant.
                 Include(x => x.ImageEntity)
                 .Where(x => x.ProductVariantId.Equals(item.ProductVariantId)).FirstOrDefaultAsync();
-                // = new ProductVariantEntity
-                // {
-                //     ImageEntity = images[item.Position],
-                //     BrandEntity = BrandEntity,
-                //     ProductVariantName = mainProduct.NameProduct,
-                //     Image = "http://localhost:2000/sta/" + item.Image,
-                //     Price = item.Price,
-                //     ProductEntity = mainProduct,
-                //     Quality = item.Quality,
-                //     VariantId = item.VariantId,
-                //     VariantName = item.VariantName,
-                //     Position = item.Position,
-                //     Weight = item.Weight,
-                //     ImportPrice = 0
-                // };
-                // await _context.ProductVariant.AddAsync(productVariantEntity);
 
                 if (productVariantEntity == null)
                 {
                     continue;
                 }
+
+                if (mainProduct.MainPrice < productVariantEntity.Price)
+                {
+                    mainProduct.MainPrice = productVariantEntity.Price;
+                }
+                mainProduct.Quality += productVariantEntity.Quality;
+
 
                 productVariantEntity.VariantName = item.VariantName;
                 productVariantEntity.ProductEntity = mainProduct;
@@ -189,19 +204,26 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 productVariantEntity.Price = item.Price;
 
 
-                if (productVariantEntity.ImageEntity != null)
+
+                var imageFiles = productVariantEntity.ImageEntity;
+
+                if (imageFiles != null)
                 {
-                    var PhotoGallery = new PhotoGalleryEntity
+                    if (!urlsSet.Contains(imageFiles.ImageFiles))
                     {
-                        ImageEntity = productVariantEntity.ImageEntity,
-                        ProductEntity = mainProduct
-                    };
-                    await _context.PhotoGallery.AddAsync(PhotoGallery);
-                    images.Add(productVariantEntity.ImageEntity);
+                        urlsSet.Add(imageFiles.ImageFiles);
+                        var PhotoGallery = new PhotoGalleryEntity
+                        {
+                            ImageEntity = imageFiles,
+                            ProductEntity = mainProduct
+                        };
+                        await _context.PhotoGallery.AddAsync(PhotoGallery);
+                    }
+
+                    images.Add(imageFiles);
                     productVariantEntity.Position = images.Count;
                 }
             }
-
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
@@ -419,7 +441,7 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 var BrandEntity = await _context.Brand
            .Where(x => x.BrandId == productAddModel.BrandId).SingleOrDefaultAsync();
                 var categoryEntity = await _context.Category
-                .Where(x => x.Slug == productAddModel.TypeProduct).SingleOrDefaultAsync() ?? throw new Exception("not found category");
+                .Where(x => x.Slug == productAddModel.CategorySlug).SingleOrDefaultAsync() ?? throw new Exception("not found category");
 
                 var mainProduct = new ProductEntity
                 {
@@ -480,9 +502,10 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
                 _logger.LogInformation(productAddModel.NameProduct);
+                _logger.LogError(e.Message);
                 await transaction.RollbackAsync();
             }
 

@@ -1,9 +1,5 @@
 "use server";
-import {
-  iInventory,
-  iInventoryGet,
-  iInventoryOrder,
-} from "@/components/inventory/interface";
+import { iInventory, iInventoryGet } from "@/components/inventory/interface";
 import { api } from "@/util/fetch";
 import { errorResponse } from "@/util/error-response";
 import {

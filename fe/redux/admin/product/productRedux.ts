@@ -1,296 +1,376 @@
-'use client'
-import { IProductClassification, IProductVariant } from '@/components/route/admin/product/interface'
-import { createClassificationFormSaveToHandle } from '@/components/route/admin/product/ulti'
-import { iProductDetail } from '@/components/product/interface-admin'
-import data from '@/tempdata/data'
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { iProductVariantSearch } from '@/components/variant/interface'
-
+"use client";
+import {
+  IProductClassification,
+  IProductVariant,
+} from "@/components/route/admin/product/interface";
+import { createClassificationFormSaveToHandle } from "@/components/route/admin/product/ulti";
+import { iProductDetail } from "@/components/product/interface-admin";
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface iImageInput {
-    file: File | undefined,
-    url: string
+  file: File | undefined;
+  url: string;
 }
 export interface iProductState {
-    productVariants: IProductVariant[]
-    productVariantsInEdit: { [key: string]: IProductVariant | undefined }
-    productClassifications: IProductClassification[]
-    imageurls: iImageInput[],
-    nameProduct: string,
-    typeProduct: string
-    description: string
-    mainPrice: number
-    minPrice: number
-    maxPrice: number
-    quality: number
-    imageVariants: { [key: string]: number }
-    vendor: string,
-    weightProduct: {
-        value: number,
-        measure: string
-    },
+  productVariants: IProductVariant[];
+  productVariantsInEdit: { [key: string]: IProductVariant | undefined };
+  productClassifications: IProductClassification[];
+  imageurls: iImageInput[];
+  nameProduct: string;
+  description: string;
+  mainPrice: number;
+  minPrice: number;
+  maxPrice: number;
+  quality: number;
+  imageVariants: { [key: string]: number };
+  categorySlug: string;
+  brandId: string;
+  weightProduct: {
+    value: number;
+    measure: string;
+  };
+  producVariantImageurls: string[];
 }
 
 const initialState: iProductState = {
-    productVariants: [],
-    productClassifications: [],
-    productVariantsInEdit: {},
-    imageurls: [],
-    maxPrice: 0,
-    minPrice: 0,
-    nameProduct: "",
-    typeProduct: "",
-    description: "",
-    mainPrice: 0,
-    imageVariants: {},
-    vendor: "",
-    quality: 0,
-    weightProduct: {
-        measure: "",
-        value: 0
-    }
-}
+  productVariants: [],
+  productClassifications: [],
+  productVariantsInEdit: {},
+  imageurls: [],
+  maxPrice: 0,
+  minPrice: 0,
+  nameProduct: "",
+  description: "",
+  mainPrice: 0,
+  imageVariants: {},
+  categorySlug: "",
+  brandId: "",
+  quality: 0,
+  weightProduct: {
+    measure: "",
+    value: 0,
+  },
+  producVariantImageurls: [],
+};
 
 export const productSlice = createSlice({
-    name: 'product',
-    initialState,
-    reducers: {
-        swapImage: (state, action: PayloadAction<{ i1: number, i2: number }>) => {
-            const i1 = action.payload.i1
-            const i2 = action.payload.i2
-            const temp = state.imageurls[i1]
-            state.imageurls[i1] = state.imageurls[i2]
-            state.imageurls[i2] = temp
-
-        },
-        addProductVariants: (state, action: PayloadAction<IProductVariant>) => {
-            state.productVariants.push(action.payload)
-        },
-        addProductClassifications: (state, action: PayloadAction<IProductClassification>) => {
-            state.productClassifications.push(action.payload)
-        },
-        removeProductClassifications: (state, action: PayloadAction<string>) => {
-            state.productClassifications = state.productClassifications.filter((v, i) => {
-                return v.id != action.payload
-            })
-            localStorage.setItem("temp", JSON.stringify(state.productClassifications))
-        },
-        addOptionInProductClassifications: (state, action: PayloadAction<{
-            data: {
-                id: string, name: string, edit: boolean
-            },
-            pci: number
-        }>) => {
-
-            state.productClassifications[action.payload.pci].options.push(action.payload.data)
-        },
-        removeOptionInProductClassifications: (state, action: PayloadAction<{
-            oi: number,
-            pci: number
-        }>) => {
-            state.productClassifications[action.payload.pci].options =
-                state.productClassifications[action.payload.pci].options.filter((_, i) => {
-                    return i != action.payload.oi
-                })
-            localStorage.setItem("temp", JSON.stringify(state.productClassifications))
-        },
-        editOptionInProductClassifications: (state, action: PayloadAction<{
-            data: string,
-            pci: number,
-            oi: number
-        }>) => {
-            state.productClassifications[action.payload.pci]
-                .options[action.payload.oi].name = action.payload.data
-            localStorage.setItem("temp", JSON.stringify(state.productClassifications))
-        },
-        editProductClassifications: (state, action: PayloadAction<{
-            data: string,
-            pci: number,
-
-        }>) => {
-            state.productClassifications[action.payload.pci].name = action.payload.data
-            localStorage.setItem("temp", JSON.stringify(state.productClassifications))
-        },
-        setProductClassifications: (state, action: PayloadAction<IProductClassification[]>) => {
-            state.productClassifications = [...action.payload]
-        },
-        setProductVariants: (state, action: PayloadAction<IProductVariant[]>) => {
-            let productVariantsMap = new Map<string, IProductVariant>()
-            state.productVariants.forEach(element => {
-                productVariantsMap.set(element.variantId, element)
-            });
-            let newProductVariant: IProductVariant[] = []
-            action.payload.forEach((v, i) => {
-                if (productVariantsMap.has(v.variantId)) {
-                    const temp = productVariantsMap.get(v.variantId) as any
-                    newProductVariant.push({ ...temp, variantName: v.variantName })
-                } else {
-                    newProductVariant.push(v)
-                }
-            })
-            state.productVariants = [...newProductVariant]
-        },
-        setProductVariant: (state, action: PayloadAction<IProductVariant>) => {
-            let newProductVariant: IProductVariant[] = []
-
-            state.productVariants.forEach((v) => {
-                if (v.variantId == action.payload.variantId) {
-                    newProductVariant.push({ ...action.payload, })
-                } else {
-                    newProductVariant.push(v)
-                }
-            })
-            state.productVariants = newProductVariant
-        },
-        resetProductVariant: (state, action: PayloadAction<string>) => {
-            let newProductVariant: IProductVariant[] = []
-
-            state.productVariants.forEach((v) => {
-                if (v.variantId == action.payload) {
-                    newProductVariant.push({
-                        variantId: v.variantId,
-                        variantName: v.variantName.trim(),
-                        price: 0,
-                        quality: "0",
-                        image: -1,
-                        pathImage: undefined,
-                        productVariantId: undefined
-                    })
-                } else {
-                    newProductVariant.push(v)
-                }
-            })
-            state.productVariants = newProductVariant
-        },
-        addImageUrlFiles: (state, action: PayloadAction<iImageInput[]>) => {
-            state.imageurls = [...state.imageurls, ...action.payload]
-        },
-        removeImageUrls: (state, action: PayloadAction<number>) => {
-            state.imageurls = state.imageurls.filter((_, i) => {
-                return i != action.payload
-            })
-        }
-        ,
-        setNameProduct: (state, action: PayloadAction<string>) => {
-            state.nameProduct = action.payload
-        },
-        setTypeProduct: (state, action: PayloadAction<string>) => {
-            state.typeProduct = action.payload
-        },
-        setDescriptionProduct: (state, action: PayloadAction<string>) => {
-            state.description = action.payload
-        },
-        setMainPriceProduct: (state, action: PayloadAction<number>) => {
-            state.mainPrice = action.payload
-        },
-        setIamgeVariants: (state, action: PayloadAction<{ [key: string]: number }>) => {
-            state.imageVariants = action.payload
-        },
-        setVendor: (state, action: PayloadAction<string>) => {
-            state.vendor = action.payload
-        },
-        setMinMaxPrice: (state, action: PayloadAction<{
-            minPrice: number
-            maxPrice: number
-        }>) => {
-
-            state.minPrice = action.payload.minPrice
-            state.maxPrice = action.payload.maxPrice
-        },
-        setWeightProduct: (state, action: PayloadAction<{
-            value: number,
-            measure: string
-        }>) => {
-
-            state.weightProduct.value = action.payload.value
-            state.weightProduct.measure = action.payload.measure
-        },
-        setQuality: (state, action: PayloadAction<number>) => {
-            state.quality = action.payload
-        },
-        setResetProductData: (state) => {
-            localStorage.removeItem("temp")
-            return initialState
-        },
-        setProductData: (state, action: PayloadAction<iProductDetail>) => {
-            let tmp = action.payload
-            let d: IProductClassification[] = createClassificationFormSaveToHandle(JSON.parse(tmp.productClassification))
-
-            var tmpEdit: { [key: string]: IProductVariant } = {}
-            for (let index = 0; index < tmp.productVariants.length; index++) {
-                const v = tmp.productVariants[index];
-                tmpEdit[v.variantId] = {
-                    image: v.position,
-                    price: v.price,
-                    quality: v.quality + "",
-                    variantId: v.variantId,
-                    variantName: v.variantName
-                }
-            }
-
-            let data: iProductState = {
-
-                description: tmp.description,
-                imageurls: tmp.imageUrls.map((v) => {
-                    return {
-                        file: undefined,
-                        url: v
-                    }
-                }),
-                productVariantsInEdit: tmpEdit,
-                imageVariants: {},
-                mainPrice: tmp.mainPrice,
-                maxPrice: 0,
-                minPrice: 0,
-                nameProduct: tmp.nameProduct,
-                productClassifications: d,
-                productVariants: tmp.productVariants.map(v => {
-                    return {
-                        image: v.position,
-                        price: v.price,
-                        quality: v.quality + "",
-                        variantId: v.variantId,
-                        variantName: v.variantName
-                    }
-                }),
-                quality: tmp.quality,
-                typeProduct: tmp.categorySlug,
-                vendor: tmp.suplier,
-                weightProduct: {
-                    measure: "kg",
-                    value: 1
-                }
-            }
-
-            return data
-        }
+  name: "product",
+  initialState,
+  reducers: {
+    swapImage: (state, action: PayloadAction<{ i1: number; i2: number }>) => {
+      const i1 = action.payload.i1;
+      const i2 = action.payload.i2;
+      const temp = state.imageurls[i1];
+      state.imageurls[i1] = state.imageurls[i2];
+      state.imageurls[i2] = temp;
     },
-})
+    addProductVariants: (state, action: PayloadAction<IProductVariant>) => {
+      state.productVariants.push(action.payload);
+    },
+    addProductClassifications: (
+      state,
+      action: PayloadAction<IProductClassification>
+    ) => {
+      state.productClassifications.push(action.payload);
+    },
+    removeProductClassifications: (state, action: PayloadAction<string>) => {
+      state.productClassifications = state.productClassifications.filter(
+        (v, i) => {
+          return v.id != action.payload;
+        }
+      );
+      localStorage.setItem(
+        "temp",
+        JSON.stringify(state.productClassifications)
+      );
+    },
+    addOptionInProductClassifications: (
+      state,
+      action: PayloadAction<{
+        data: {
+          id: string;
+          name: string;
+          edit: boolean;
+        };
+        pci: number;
+      }>
+    ) => {
+      state.productClassifications[action.payload.pci].options.push(
+        action.payload.data
+      );
+    },
+    removeOptionInProductClassifications: (
+      state,
+      action: PayloadAction<{
+        oi: number;
+        pci: number;
+      }>
+    ) => {
+      state.productClassifications[action.payload.pci].options =
+        state.productClassifications[action.payload.pci].options.filter(
+          (_, i) => {
+            return i != action.payload.oi;
+          }
+        );
+      localStorage.setItem(
+        "temp",
+        JSON.stringify(state.productClassifications)
+      );
+    },
+    editOptionInProductClassifications: (
+      state,
+      action: PayloadAction<{
+        data: string;
+        pci: number;
+        oi: number;
+      }>
+    ) => {
+      state.productClassifications[action.payload.pci].options[
+        action.payload.oi
+      ].name = action.payload.data;
+      localStorage.setItem(
+        "temp",
+        JSON.stringify(state.productClassifications)
+      );
+    },
+    editProductClassifications: (
+      state,
+      action: PayloadAction<{
+        data: string;
+        pci: number;
+      }>
+    ) => {
+      state.productClassifications[action.payload.pci].name =
+        action.payload.data;
+      localStorage.setItem(
+        "temp",
+        JSON.stringify(state.productClassifications)
+      );
+    },
+    setProductClassifications: (
+      state,
+      action: PayloadAction<IProductClassification[]>
+    ) => {
+      state.productClassifications = [...action.payload];
+    },
+    setProductVariants: (state, action: PayloadAction<IProductVariant[]>) => {
+      let productVariantsMap = new Map<string, IProductVariant>();
+      state.productVariants.forEach((element) => {
+        productVariantsMap.set(element.variantId, element);
+      });
+      let newProductVariant: IProductVariant[] = [];
+      action.payload.forEach((v, i) => {
+        if (productVariantsMap.has(v.variantId)) {
+          const temp = productVariantsMap.get(v.variantId) as any;
+          newProductVariant.push({ ...temp, variantName: v.variantName });
+        } else {
+          newProductVariant.push(v);
+        }
+      });
+      state.productVariants = [...newProductVariant];
+    },
+    setProductVariant: (state, action: PayloadAction<IProductVariant>) => {
+      let newProductVariant: IProductVariant[] = [];
+
+      state.productVariants.forEach((v) => {
+        if (v.variantId == action.payload.variantId) {
+          newProductVariant.push({ ...action.payload });
+        } else {
+          newProductVariant.push(v);
+        }
+      });
+      state.productVariants = newProductVariant;
+    },
+    setSingleProductVariant: (
+      state,
+      action: PayloadAction<IProductVariant>
+    ) => {
+      if (state.productVariants[0]) {
+        state.productVariants[0] = action.payload;
+      } else {
+        state.productVariants = [
+          ...state.productVariants,
+          { ...action.payload },
+        ];
+      }
+    },
+    resetProductVariant: (state, action: PayloadAction<string>) => {
+      let newProductVariant: IProductVariant[] = [];
+
+      state.productVariants.forEach((v) => {
+        if (v.variantId == action.payload) {
+          newProductVariant.push({
+            variantId: v.variantId,
+            variantName: v.variantName.trim(),
+            price: 0,
+            quality: "0",
+            image: -1,
+            pathImage: undefined,
+            productVariantId: undefined,
+          });
+        } else {
+          newProductVariant.push(v);
+        }
+      });
+      state.productVariants = newProductVariant;
+    },
+    addImageUrlFiles: (state, action: PayloadAction<iImageInput[]>) => {
+      state.imageurls = [...state.imageurls, ...action.payload];
+    },
+    removeImageUrls: (state, action: PayloadAction<number>) => {
+      state.imageurls = state.imageurls.filter((_, i) => {
+        return i != action.payload;
+      });
+    },
+    setNameProduct: (state, action: PayloadAction<string>) => {
+      state.nameProduct = action.payload;
+    },
+    setTypeProduct: (state, action: PayloadAction<string>) => {
+      state.categorySlug = action.payload;
+    },
+    setDescriptionProduct: (state, action: PayloadAction<string>) => {
+      state.description = action.payload;
+    },
+    setMainPriceProduct: (state, action: PayloadAction<number>) => {
+      state.mainPrice = action.payload;
+    },
+    setIamgeVariants: (
+      state,
+      action: PayloadAction<{ [key: string]: number }>
+    ) => {
+      state.imageVariants = action.payload;
+    },
+    setBrand: (state, action: PayloadAction<string>) => {
+      state.brandId = action.payload;
+    },
+    setMinMaxPrice: (
+      state,
+      action: PayloadAction<{
+        minPrice: number;
+        maxPrice: number;
+      }>
+    ) => {
+      state.minPrice = action.payload.minPrice;
+      state.maxPrice = action.payload.maxPrice;
+    },
+    setWeightProduct: (
+      state,
+      action: PayloadAction<{
+        value: number;
+        measure: string;
+      }>
+    ) => {
+      state.weightProduct.value = action.payload.value;
+      state.weightProduct.measure = action.payload.measure;
+    },
+    setQuality: (state, action: PayloadAction<number>) => {
+      state.quality = action.payload;
+    },
+    setResetProductData: (state) => {
+      localStorage.removeItem("temp");
+      return initialState;
+    },
+    setProductData: (state, action: PayloadAction<iProductDetail>) => {
+      let tmp = action.payload;
+      let d: IProductClassification[] = createClassificationFormSaveToHandle(
+        JSON.parse(tmp.productClassification)
+      );
+
+      var tmpEdit: { [key: string]: IProductVariant } = {};
+      for (let index = 0; index < tmp.productVariants.length; index++) {
+        const v = tmp.productVariants[index];
+        tmpEdit[v.variantId] = {
+          image: v.position,
+          price: v.price,
+          quality: v.quality + "",
+          variantId: v.variantId,
+          variantName: v.variantName,
+        };
+      }
+
+      let data: iProductState = {
+        description: tmp.description,
+        imageurls: tmp.imageUrls.map((v) => {
+          return {
+            file: undefined,
+            url: v,
+          };
+        }),
+        productVariantsInEdit: tmpEdit,
+        imageVariants: {},
+        mainPrice: tmp.mainPrice,
+        maxPrice: 0,
+        minPrice: 0,
+        nameProduct: tmp.nameProduct,
+        productClassifications: d,
+        categorySlug: tmp.categorySlug,
+        productVariants: tmp.productVariants.map((v) => {
+          return {
+            image: v.position,
+            price: v.price,
+            quality: v.quality + "",
+            variantId: v.variantId,
+            variantName: v.variantName,
+          };
+        }),
+        quality: tmp.quality,
+        weightProduct: {
+          measure: "kg",
+          value: 1,
+        },
+        producVariantImageurls: action.payload.productVariants.map(
+          ({ image }) => {
+            return image;
+          }
+        ),
+        brandId: tmp.brandId,
+      };
+
+      return data;
+    },
+    addProducVariantImageurls: (state, acion: PayloadAction<string>) => {
+      state.producVariantImageurls.push(acion.payload);
+    },
+    removeProducVariantImageurls: (state, acion: PayloadAction<string>) => {
+      state.producVariantImageurls = [
+        ...state.producVariantImageurls.filter((url) => {
+          return acion.payload != url;
+        }),
+      ];
+    },
+  },
+});
 
 export const {
-    swapImage,
-    setQuality,
-    addProductClassifications,
-    addProductVariants,
-    setProductClassifications,
-    setProductVariants,
-    editOptionInProductClassifications,
-    editProductClassifications,
-    addOptionInProductClassifications,
-    removeOptionInProductClassifications,
-    removeProductClassifications,
-    addImageUrlFiles,
-    removeImageUrls,
-    setDescriptionProduct,
-    setNameProduct,
-    setTypeProduct,
-    setIamgeVariants,
-    setMainPriceProduct,
-    setVendor, setMinMaxPrice,
-    setWeightProduct,
-    setResetProductData,
-    setProductData,
-    setProductVariant, resetProductVariant } = productSlice.actions
+  swapImage,
+  setQuality,
+  addProductClassifications,
+  addProductVariants,
+  setProductClassifications,
+  setProductVariants,
+  setSingleProductVariant,
+  editOptionInProductClassifications,
+  editProductClassifications,
+  addOptionInProductClassifications,
+  removeOptionInProductClassifications,
+  removeProductClassifications,
+  addImageUrlFiles,
+  removeImageUrls,
+  setDescriptionProduct,
+  setNameProduct,
+  setTypeProduct,
+  setIamgeVariants,
+  setMainPriceProduct,
+  setMinMaxPrice,
+  setWeightProduct,
+  setResetProductData,
+  setProductData,
+  setProductVariant,
+  resetProductVariant,
+  addProducVariantImageurls,
+  removeProducVariantImageurls,
+  setBrand,
+} = productSlice.actions;
 
-export default productSlice.reducer
+export default productSlice.reducer;

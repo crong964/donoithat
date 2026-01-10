@@ -1,12 +1,12 @@
 "use server";
 import { iMainCateGory } from "@/components/category/interface";
-import { getBrand } from "@/service/admin/brand-service";
+import { getAllBrand } from "@/service/admin/brand-service";
 import { api } from "@/util/fetch";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    let data = await getBrand();
+    let data = await getAllBrand();
     return NextResponse.json(data);
   } catch (error) {}
   return NextResponse.json(

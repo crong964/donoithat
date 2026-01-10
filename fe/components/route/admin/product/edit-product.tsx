@@ -14,18 +14,16 @@ import {
   setNameProduct,
   setProductData,
   setResetProductData,
-  setTypeProduct,
 } from "@/redux/admin/product/productRedux";
-import Category from "./category";
-import Vendor from "./vendor";
+
 import WeightProduct from "./weight-product";
 import removeAccents from "@/util/remove-accents";
 import { toast } from "react-toastify";
 import { iProductDetail } from "@/components/product/interface-admin";
 import { createClassificationFormHandleToSave, validateData } from "./ulti";
 import CategorySelectInput from "./category-select-input";
-import VendorComboboxInput from "./vendor-select-input";
 import BackButton from "@/components/ui-custom/back-button";
+import BrandSelectInput from "./brand-select-input";
 
 export default function EditProductPage(p: iProductDetail) {
   const dispatch = useDispatch();
@@ -107,7 +105,7 @@ export default function EditProductPage(p: iProductDetail) {
         productClassification: JSON.stringify(productClassifications),
         slug: removeAccents(product.nameProduct),
         mainPrice: product.mainPrice,
-        suplier: product.vendor,
+        brandId: product.brandId,
         nameProduct: product.nameProduct,
         quality: 0,
         productVariants: [
@@ -123,7 +121,7 @@ export default function EditProductPage(p: iProductDetail) {
             };
           }),
         ],
-        typeProduct: product.typeProduct,
+        categorySlug: product.categorySlug,
         imageFiles: images,
       };
 
@@ -224,7 +222,7 @@ export default function EditProductPage(p: iProductDetail) {
               </ul>
             </div>
             <div className=" shadow-2xl p-4  rounded-lg">
-              <VendorComboboxInput />
+              <BrandSelectInput />
               <CategorySelectInput />
             </div>
           </div>

@@ -76,11 +76,5 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
         .WithMany()
         .OnDelete(DeleteBehavior.SetNull);
     }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder
-            .LogTo(
-                Console.WriteLine,
-                (eventId, logLevel) => logLevel > LogLevel.Information
-                                       || eventId == RelationalEventId.ConnectionOpened
-                                       || eventId == RelationalEventId.ConnectionClosed);
+
 }

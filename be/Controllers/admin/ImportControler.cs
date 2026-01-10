@@ -64,7 +64,7 @@ public class ImportControler(DatabaseContext context, IUserService userService, 
 				message = "Chưa đăng nhập"
 			});
 		}
-		_logger.LogInformation(userId);
+
 		var user = await _context.User.Where(x => x.UserId.Equals(userId)).FirstOrDefaultAsync();
 		if (user == null)
 		{

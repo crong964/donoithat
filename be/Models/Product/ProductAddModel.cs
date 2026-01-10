@@ -17,11 +17,11 @@ public class ProductAddModel
 
     public required List<ProductVariantModel> ProductVariants { get; set; }
 
-    public required string TypeProduct { get; set; }
+    public required string CategorySlug { get; set; }
 
 
     [Required(ErrorMessage = "Tên sản phẩm bắt buộc phải nhập")]
-    public required List<string> ImageFiles { get; set; }
+    public required List<string> ImageFiles { get; set; } = [];
 
 
 

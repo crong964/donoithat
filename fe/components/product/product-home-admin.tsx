@@ -138,12 +138,6 @@ export default function ProductHomeAdmin(p: iProduct) {
         <td className="text-center pb-3.75">{total}</td>
         <td>
           <div className="flex space-x-2.5 justify-end items-center">
-            <Link href={`/admin/product/${p.slug}`}>
-              <Button variant="ghost">
-                <SquarePen />
-              </Button>
-            </Link>
-
             <AlertDialog open={open}>
               <AlertDialogTrigger asChild>
                 <Button onClick={() => setOpen(true)} variant="ghost">

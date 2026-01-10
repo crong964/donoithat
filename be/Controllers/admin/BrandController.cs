@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using be.Entity;
+using be.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,13 +15,20 @@ public class BrandController(DatabaseContext context, ILogger<BrandController> l
     private readonly ILogger<BrandController> _logger = logger;
 
     [HttpGet]
-    public async Task<ActionResult> Get()
+    public async Task<ActionResult> GetAll()
     {
-        var ls = await _context.Brand.AsNoTracking().ToArrayAsync();
+        var ls = await _context.Brand.AsNoTracking().Select(x => BrandAdminGetModel.Covert(x)).ToArrayAsync();
         return Ok(ls);
     }
 
-
+    [HttpGet("tobuy")]
+    public async Task<ActionResult> GetAllBrandProductBuyYet()
+    {
+        var ls = await _context.Brand
+         .Where(x => x.ProductVariantEntities != null && x.ProductVariantEntities.Any(x => x.ProductEntity == null))
+         .AsNoTracking().Select(x => BrandAdminGetModel.Covert(x)).ToArrayAsync();
+        return Ok(ls);
+    }
     [HttpPost]
     public async Task<ActionResult> Add(BrandEntity brandEntity)
     {
@@ -33,7 +41,7 @@ public class BrandController(DatabaseContext context, ILogger<BrandController> l
     [HttpPatch]
     public async Task<ActionResult> Update(BrandEntity brandEntity)
     {
-         _context.Brand.Update(brandEntity);
+        _context.Brand.Update(brandEntity);
         await _context.SaveChangesAsync();
         return Ok();
     }

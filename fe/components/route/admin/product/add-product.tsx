@@ -17,13 +17,16 @@ import WeightProduct from "./weight-product";
 import removeAccents from "@/util/remove-accents";
 import { toast } from "react-toastify";
 import { createClassificationFormHandleToSave, validateData } from "./ulti";
-import VendorSelectInput from "./vendor-select-input";
 import CategorySelectInput from "./category-select-input";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import InventorySearchInput from "@/components/inventory/inventory-search-input";
+import Link from "next/link";
+import BrandSelectInput from "./brand-select-input";
+import { resetInventory } from "@/redux/admin/product/inventoryRedux";
 
 export default function AddProduct() {
+  const [isloading, setIsLoading] = useState(false);
   const nameProduct = useSelector(
     (state: RootState) => state.product.nameProduct
   );
@@ -43,6 +46,7 @@ export default function AddProduct() {
       toast.error(validate.mess);
       return;
     }
+    setIsLoading(true);
     var fom = new FormData();
     fom.set("ImageFiles", "");
     for (let i = 0; i < product.imageurls.length; i++) {
@@ -75,26 +79,15 @@ export default function AddProduct() {
             ]
           : tmpClassifications;
 
-      const productVariants =
-        product.productVariants.length == 0
-          ? [
-              {
-                variantId: idOpion,
-                variantName: "Default Title",
-                price: product.mainPrice,
-                quality: product.quality,
-                image: 0,
-                productVariantId: "",
-              },
-            ]
-          : product.productVariants;
+      const productVariants = product.productVariants;
 
       var data = {
         description: product.description,
         productClassification: JSON.stringify(productClassifications),
         slug: removeAccents(product.nameProduct),
         mainPrice: product.mainPrice,
-        suplier: product.vendor,
+        brandId: product.brandId,
+        categorySlug: product.categorySlug,
         nameProduct: product.nameProduct,
         quality: 0,
         productVariants: [
@@ -107,7 +100,7 @@ export default function AddProduct() {
                 variantId: v.variantId,
                 variantName: v.variantName,
                 price: v.price,
-                image: images[v.image],
+                image: "",
                 position: v.image,
                 quality: v.quality,
                 weight: product.weightProduct.value,
@@ -115,7 +108,6 @@ export default function AddProduct() {
               };
             }),
         ],
-        typeProduct: product.typeProduct,
         imageFiles: images,
       };
 
@@ -129,96 +121,110 @@ export default function AddProduct() {
       } else {
         toast.success(messdata.mess);
         dispatch(setResetProductData());
+        dispatch(resetInventory());
       }
     } catch (error) {
       alert("lỗi");
     }
+    setIsLoading(false);
   };
   const dispatch = useDispatch();
   return (
-    <>
-      <div className="my-5 ">
-        <h1 className="font-bold text-2xl">Thêm sản phẩm </h1>
+    <div>
+      <div className="ml-3 mt-3">
+        <Link href={"/admin/product"}>
+          <Button variant={"blue"}>Trở về</Button>
+        </Link>
       </div>
-
-      <form onSubmit={onSubmit} className="flex gap-2 relative">
-        <section className="w-220">
-          <div className="my-3.75 ">
-            <div className=" shadow-2xl p-3.5  rounded-sm">
-              <div className="mb-6">
-                <label className="text-3xl font-bold">Thông tin cơ bản</label>
-              </div>
-              <ImagesInput />
-            </div>
+      <main className="flex justify-center">
+        <section>
+          <div className="my-5 ">
+            <h1 className="font-bold text-2xl">Thêm sản phẩm </h1>
           </div>
-          <div className="mt-12.5 shadow-2xl">
-            <div className="p-5.5">
-              <div className="mb-5">
-                <span className="flex space-x-1">
-                  <h2 className="text-lg font-bold  ">Tên sản phẩm</h2>
-                  <p className="text-red-600">*</p>
-                </span>
-                <div className="">
-                  <Input
-                    required
-                    value={nameProduct}
-                    onChange={(v) => {
-                      dispatch(setNameProduct(v.currentTarget.value));
-                    }}
-                    placeholder="tên sản phẩm"
-                  />
+          <form onSubmit={onSubmit} className="flex gap-2 relative">
+            <section className="w-220">
+              <div className="my-3.75 ">
+                <div className=" shadow-2xl p-3.5  rounded-sm">
+                  <div className="mb-6">
+                    <label className="text-3xl font-bold">
+                      Thông tin cơ bản
+                    </label>
+                  </div>
+                  <ImagesInput />
                 </div>
               </div>
+              <div className="mt-12.5 shadow-2xl">
+                <div className="p-5.5">
+                  <div className="mb-5">
+                    <span className="flex space-x-1">
+                      <h2 className="text-lg font-bold  ">Tên sản phẩm</h2>
+                      <p className="text-red-600">*</p>
+                    </span>
+                    <div className="">
+                      <Input
+                        required
+                        value={nameProduct}
+                        onChange={(v) => {
+                          dispatch(setNameProduct(v.currentTarget.value));
+                        }}
+                        placeholder="tên sản phẩm"
+                      />
+                    </div>
+                  </div>
 
-              <div className="mb-5">
-                <span className="flex space-x-1">
-                  <h2 className="text-lg font-bold ">Mô tả sản phẩm</h2>
-                  <p className="text-red-600">*</p>
-                </span>
+                  <div className="mb-5">
+                    <span className="flex space-x-1">
+                      <h2 className="text-lg font-bold ">Mô tả sản phẩm</h2>
+                      <p className="text-red-600">*</p>
+                    </span>
 
-                <div className="">
-                  <TextArea
-                    onChange={(v) => {
-                      let text = v.currentTarget.value;
-                      dispatch(setDescriptionProduct(text));
-                    }}
-                    required
-                    value={description}
-                    placeholder="tên sản phẩm"
-                  />
-                </div>
-              </div>
+                    <div className="">
+                      <TextArea
+                        onChange={(v) => {
+                          let text = v.currentTarget.value;
+                          dispatch(setDescriptionProduct(text));
+                        }}
+                        required
+                        value={description}
+                        placeholder="tên sản phẩm"
+                      />
+                    </div>
+                  </div>
 
-              <div className="mb-5">
-                <div className="mb-4">
-                  <div className="flex space-x-1">
-                    <h2 className="text-lg font-bold  ">Thông tin bán hàng</h2>
-                    <p className="text-red-600">*</p>
+                  <div className="mb-5">
+                    <div className="mb-4">
+                      <div className="flex space-x-1">
+                        <h2 className="text-lg font-bold  ">
+                          Thông tin bán hàng
+                        </h2>
+                        <p className="text-red-600">*</p>
+                      </div>
+                    </div>
+                    <ProductClassification />
+                    <WeightProduct />
                   </div>
                 </div>
-                <ProductClassification />
-                <WeightProduct />
               </div>
-            </div>
-          </div>
+            </section>
+            <section className="w-75">
+              <div className="my-3.75 fixed top-0 ">
+                <div className="pt-10">
+                  <ul className="flex items-center justify-end gap-x-1">
+                    <Button disabled={isloading} type="submit" variant="blue">
+                      Thêm sản phẩm
+                    </Button>
+                  </ul>
+                </div>
+                <div className=" shadow-2xl p-4 mb-4  rounded-lg">
+                  <BrandSelectInput />
+                  <CategorySelectInput />
+                </div>
+                <InventorySearchInput />
+              </div>
+            </section>
+          </form>
         </section>
-        <section className="w-75">
-          <div className="my-3.75 fixed top-0 ">
-            <div className="pt-10">
-              <ul className="flex items-center justify-end gap-x-1">
-                <Button type="submit" variant="blue">
-                  Thêm sản phẩm
-                </Button>
-              </ul>
-            </div>
-            <div className=" shadow-2xl p-4 mb-4  rounded-lg">
-              <VendorSelectInput />
-              <CategorySelectInput />
-            </div>
-            <InventorySearchInput />
-          </div>
-        </section>
-      </form>
-    </>
+      </main>
+    </div>
   );
 }

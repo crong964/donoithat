@@ -13,20 +13,20 @@ export default async function UserPage({
 
   const users = res.data;
   const totalPage = res.totalPage;
-  
+
   return (
     <>
       <UserHearderLayout></UserHearderLayout>
       <section className="relative mt-7">
         <div className="min-h-100 my-6 overflow-x-auto">
-          <table className="table-auto w-full text-[13px] text-black!">
+          <table className="table-auto w-full ">
             <thead className=" ">
               <tr className="">
                 <th className="text-center pb-2 w-50">Tên người dùng</th>
                 <th className="text-center pb-2 w-100">Email</th>
-                <th className=" pb-2">Số điện thoại</th>
-                <th className=" pb-2">Đặt hàng</th>
-                <th className=" pb-2 text-right">Thao tác</th>
+                <th className=" pb-2 w-50">Số điện thoại</th>
+                <th className=" pb-2 w-50">Đặt hàng</th>
+                <th className=" pb-2 w-50 text-right">Thao tác</th>
               </tr>
             </thead>
             <tbody>

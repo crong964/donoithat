@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace be.Entity;
 
 
-[Index("Slug", IsUnique = true)]
+[Index("Slug")]
 public class ProductEntity
 {
 
@@ -23,6 +23,7 @@ public class ProductEntity
     public BrandEntity? BrandEntity { get; set; }
     public ICollection<ProductVariantEntity>? ProductVariantEntities { get; set; }
     public required CategoryEntity? CategoryEntity { get; set; }
-    public List<ImageEntity> ImageEntities { get; } = [];
+    public ICollection<ImageEntity> ImageEntities { get; } = [];
+    public ICollection<PhotoGalleryEntity> PhotoGalleryEntities { get; } = [];
 
 }

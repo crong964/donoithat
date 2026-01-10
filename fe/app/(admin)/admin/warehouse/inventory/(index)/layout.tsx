@@ -1,6 +1,6 @@
 import ActionInventoryHeader from "@/components/route/admin/warehouse/inventory/action-inventory-header";
 import { Button } from "@/components/ui/button";
-import { getBrand } from "@/service/admin/brand-service";
+import { getAllBrand } from "@/service/admin/brand-service";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
@@ -9,7 +9,7 @@ export default async function InventoryLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const da = await getBrand();
+  const da = await getAllBrand();
   return (
     <>
       <div className="p-3.75">

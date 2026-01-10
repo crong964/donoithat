@@ -50,6 +50,9 @@ export const inventorySlice = createSlice({
         };
       }
     },
+    resetInventory: () => {
+      return initialState;
+    },
   },
 });
 
@@ -58,6 +61,7 @@ export const {
   removeInventory,
   cancelSelectInventory,
   selectInventory,
+  resetInventory,
 } = inventorySlice.actions;
 
 export default inventorySlice.reducer;

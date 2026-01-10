@@ -16,6 +16,8 @@ public class ProductModelInAdmin
     public int Status { get; set; }
     public required string CategoryName { get; set; }
     public required string CategorySlug { get; set; }
+    public required string BrandId { get; set; }
+    public required string BrandName { get; set; }
     public required ICollection<string> ImageUrls { get; set; }
     public required ICollection<ProductVariantAdminModel> ProductVariants { get; set; }
     static public ProductModelInAdmin Converter(ProductEntity productEntity)
@@ -32,7 +34,9 @@ public class ProductModelInAdmin
             Status = productEntity.Status,
             CategorySlug = productEntity.CategoryEntity != null ? productEntity.CategoryEntity.Slug : "",
             ProductVariants = productEntity.ProductVariantEntities != null ? productEntity.ProductVariantEntities.Select(x => ProductVariantAdminModel.ConvertModelToEntity(x)).ToArray() : [],
-            ProductClassification = productEntity.ProductClassification
+            ProductClassification = productEntity.ProductClassification,
+            BrandId = productEntity.BrandEntity?.BrandId ?? "",
+            BrandName = productEntity.BrandEntity?.BrandName ?? ""
         };
         return productModel;
     }
@@ -40,9 +44,10 @@ public class ProductModelInAdmin
 
 public class ProductListModelInAmin
 {
-    public required IEnumerable<ProductModelInAdmin> ProductModels { get; set; }
+    public required IEnumerable<ProductModelInAdmin> Products { get; set; }
     public int TotalPage { get; set; }
     public int Page { get; set; }
     public int TotalItem { get; set; }
     public required string NameCate { get; set; }
+    public string NameProduct { get; set; } = "";
 }

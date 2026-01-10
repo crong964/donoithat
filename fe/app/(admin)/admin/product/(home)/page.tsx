@@ -9,11 +9,16 @@ export default async function ProductHomePage({
 }) {
   const slug = (await searchParams).slug;
   const page = (await searchParams).page;
-  const product = await getProduct({ slug: slug || "all", page: page });
+  const nameProduct = (await searchParams).nameProduct;
+  const product = await getProduct({
+    slug: slug || "all",
+    page: page,
+    nameProduct: nameProduct || "",
+  });
   if (product == null) {
     return <></>;
   }
-  const items = product.productModels;
+  const products = product.products;
   return (
     <section className="p-7 relative">
       <div className="min-h-100 overflow-x-auto">
@@ -29,8 +34,8 @@ export default async function ProductHomePage({
             </tr>
           </thead>
           <tbody>
-            {items.map((p) => {
-              return <ProductHomeAdmin {...p} key={p.slug} />;
+            {products.map((product) => {
+              return <ProductHomeAdmin {...product} key={product.slug} />;
             })}
           </tbody>
         </table>
@@ -39,7 +44,9 @@ export default async function ProductHomePage({
         <Pagination
           page={parseInt(page || "1")}
           total={product.totalPage}
-          url={`/admin/product?slug=${slug || "all"}`}
+          url={`/admin/product?slug=${slug || "all"}&nameProduct=${
+            nameProduct || ""
+          }`}
         />
       </div>
     </section>

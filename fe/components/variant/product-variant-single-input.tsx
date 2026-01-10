@@ -1,18 +1,9 @@
-"use client";
-import { useDispatch, useSelector } from "react-redux";
-import { IProductVariant } from "@/components/route/admin/product/interface";
-import { JSX, memo, useMemo, useState } from "react";
-
-import { RootState } from "@/redux/admin/reduxRoot";
-
+import React, { JSX, useMemo } from "react";
+import { Input } from "../ui/input";
 import { Check, Image } from "lucide-react";
-import {
-  resetProductVariant,
-  setIamgeVariants,
-  setProductVariant,
-} from "@/redux/admin/product/productRedux";
-import ImageProduct from "@/components/route/admin/product/image-product";
-import PriceFormat from "@/util/price-format";
+import { IProductVariant } from "../route/admin/product/interface";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/admin/reduxRoot";
 import {
   Sheet,
   SheetClose,
@@ -22,23 +13,25 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from "../ui/sheet";
+import PriceFormat from "@/util/price-format";
+import { Button } from "../ui/button";
+import HighlightedText from "../ui-custom/highlighted-text";
+import {
+  resetProductVariant,
+  setProductVariant,
+  setSingleProductVariant,
+} from "@/redux/admin/product/productRedux";
 import {
   cancelSelectInventory,
   selectInventory,
 } from "@/redux/admin/product/inventoryRedux";
-import HighlightedText from "../ui-custom/highlighted-text";
-function ProductVariantItemInput(v: IProductVariant) {
+
+const ProductVariantSingleInput = (v: IProductVariant) => {
   const dispatch = useDispatch();
-  const imageurls = useSelector((state: RootState) => state.product.imageurls);
   const inventorys = useSelector(
     (state: RootState) => state.inventory.inventorys
   );
-  const productVariant = v;
-  let url = imageurls[productVariant.image]?.url;
   const inventorysSelected = useMemo(() => {
     let html: JSX.Element[] = [];
     for (const key in inventorys) {
@@ -61,21 +54,26 @@ function ProductVariantItemInput(v: IProductVariant) {
             if (selected) {
               dispatch(resetProductVariant(variantId));
             }
-            if (v.productVariantId) {
-              dispatch(cancelSelectInventory(v.productVariantId));
-            }
 
-            let temp = { ...v };
-            temp.productVariantId = inventory.productVariantId;
-            temp.quality = inventory.quality + "";
-            temp.price = inventory.price;
-            temp.pathImage = inventory.image;
+            let temp = {
+              productVariantId: inventory.productVariantId,
+              quality: inventory.quality + "",
+              price: inventory.price,
+              pathImage: inventory.image,
+            };
 
-            dispatch(setProductVariant(temp));
+            dispatch(
+              setSingleProductVariant({
+                ...temp,
+                image: 0,
+                variantId: "",
+                variantName: "",
+              })
+            );
             dispatch(
               selectInventory({
                 productVariantId: inventory.productVariantId,
-                variantId: v.variantId,
+                variantId: "",
               })
             );
           }}
@@ -85,7 +83,7 @@ function ProductVariantItemInput(v: IProductVariant) {
           <img src={inventory.image} className="aspect-square h-20" alt="" />
           <HighlightedText
             mainText={inventory.productVariantName}
-            requireText={v.variantName}
+            requireText={""}
           />
 
           <div
@@ -99,8 +97,9 @@ function ProductVariantItemInput(v: IProductVariant) {
     }
 
     return html;
-  }, [inventorys, v.variantName]);
+  }, [inventorys]);
 
+  let url = v.pathImage;
   return (
     <li className="flex py-4 gap-x-3 relative">
       <div className="basis-1/3">
@@ -119,7 +118,6 @@ function ProductVariantItemInput(v: IProductVariant) {
         </span>
       </div>
       <div className="basis-1/3 ">
-        <span className="inline-block px-1 ">{productVariant.variantName}</span>
         <div className="my-10"></div>
         <Sheet>
           <SheetTrigger asChild>
@@ -128,7 +126,6 @@ function ProductVariantItemInput(v: IProductVariant) {
           <SheetContent>
             <SheetHeader>
               <SheetTitle>Chọn sản phẩm</SheetTitle>
-              <SheetDescription>{v.variantName}</SheetDescription>
             </SheetHeader>
             <div className="mt-1 px-2 space-y-2.5 overflow-y-auto">
               {inventorysSelected}
@@ -147,10 +144,10 @@ function ProductVariantItemInput(v: IProductVariant) {
             let f = t.currentTarget.value;
             let temp = { ...v };
             temp.price = parseInt(f.replaceAll(",", ""));
-            dispatch(setProductVariant(temp));
+            dispatch(setSingleProductVariant(temp));
           }}
           placeholder="Giá sản phẩm"
-          value={PriceFormat(productVariant.price + "")}
+          value={PriceFormat(0 || v.price + "")}
         />
       </div>
       <div className="basis-1/5">
@@ -159,10 +156,10 @@ function ProductVariantItemInput(v: IProductVariant) {
             let f = t.currentTarget.value;
             let temp = { ...v };
             temp.quality = parseInt(f.replaceAll(",", "")) + "";
-            dispatch(setProductVariant(temp));
+            dispatch(setSingleProductVariant(temp));
           }}
           placeholder="Số lượng"
-          value={PriceFormat(productVariant.quality + "")}
+          value={PriceFormat(0 || v.quality + "")}
         />
       </div>
       <div
@@ -173,6 +170,6 @@ function ProductVariantItemInput(v: IProductVariant) {
       </div>
     </li>
   );
-}
+};
 
-export default memo(ProductVariantItemInput);
+export default ProductVariantSingleInput;

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace be.Entity
 {
@@ -7,6 +8,7 @@ namespace be.Entity
     //    price: number
     //    quality: string
     //    image: number
+    [DataContract(IsReference = true)]
     public class ProductVariantEntity
     {
 

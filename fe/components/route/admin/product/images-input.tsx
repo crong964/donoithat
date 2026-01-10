@@ -1,240 +1,274 @@
-'use client'
-import { Button } from "antd"
-import { CloudUpload, Trash, Trash2 } from "lucide-react"
-import React, { Fragment, useEffect, useState } from "react"
+"use client";
+import { Button } from "antd";
+import { CloudUpload, Trash, Trash2 } from "lucide-react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
-    DndContext,
-    closestCenter,
-    KeyboardSensor,
-    PointerSensor,
-    useSensor,
-    useSensors,
-    DragOverlay,
-
-} from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+} from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 import {
-    arrayMove,
-    SortableContext,
-    sortableKeyboardCoordinates,
-    useSortable,
-    verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { IinputImage } from "./interface";
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/admin/reduxRoot";
-import { addImageUrlFiles, iImageInput, removeImageUrls, swapImage } from "@/redux/admin/product/productRedux";
+import {
+  addImageUrlFiles,
+  iImageInput,
+  removeImageUrls,
+  swapImage,
+} from "@/redux/admin/product/productRedux";
 
 export default function ImagesInput() {
-    const sensors = useSensors(
-        useSensor(PointerSensor, {
-            activationConstraint: {
-                distance: 5
-            }
-        }),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates,
-        })
-    );
-    const imageurls = useSelector((state: RootState) => state.product.imageurls)
-    const dispatch = useDispatch()
-    const [active, setActiveId] = useState()
-    const dropHandler = (ev: React.DragEvent<any>) => {
-        ev.preventDefault();
-        let urls: iImageInput[] = []
-        if (ev.dataTransfer.items) {
-            [...ev.dataTransfer.items].map((item) => {
-                if (item.kind === "file" && item.type.indexOf("image") >= 0) {
-                    const file = item.getAsFile();
-                    if (file == null) {
-                        return
-                    }
-                    urls.push({
-                        file: file,
-                        url: URL.createObjectURL(file)
-                    })
-                }
-            });
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+  const imageurls = useSelector((state: RootState) => state.product.imageurls);
+  const dispatch = useDispatch();
+  const [active, setActiveId] = useState();
+  const dropHandler = (ev: React.DragEvent<any>) => {
+    ev.preventDefault();
+    let urls: iImageInput[] = [];
+    if (ev.dataTransfer.items) {
+      [...ev.dataTransfer.items].map((item) => {
+        if (item.kind === "file" && item.type.indexOf("image") >= 0) {
+          const file = item.getAsFile();
+          if (file == null) {
+            return;
+          }
+          urls.push({
+            file: file,
+            url: URL.createObjectURL(file),
+          });
         }
-
-
-        dispatch(addImageUrlFiles(urls))
-    }
-    const drawOverHandler = (ev: React.DragEvent<any>) => {
-        ev.preventDefault();
-    }
-    const removeImage = (urli: number) => {
-        dispatch(removeImageUrls(urli))
+      });
     }
 
-    const handlerFileInput = (v: React.ChangeEvent<HTMLInputElement>) => {
-        let vfiles = v.currentTarget.files
-        if (vfiles == null) {
-            return
-        }
-        let urls: iImageInput[] = []
+    dispatch(addImageUrlFiles(urls));
+  };
+  const drawOverHandler = (ev: React.DragEvent<any>) => {
+    ev.preventDefault();
+  };
+  const removeImage = (urli: number) => {
+    dispatch(removeImageUrls(urli));
+  };
 
-
-        for (let i = 0; i < vfiles.length; i++) {
-            const e = vfiles[i];
-            if (e.type.indexOf("image") >= 0) {
-                urls.push({
-                    file: e,
-                    url: URL.createObjectURL(e)
-                })
-            }
-        }
-        dispatch(addImageUrlFiles(urls))
+  const handlerFileInput = (v: React.ChangeEvent<HTMLInputElement>) => {
+    let vfiles = v.currentTarget.files;
+    if (vfiles == null) {
+      return;
     }
-    return (
-        <>
-            <header>
-                <div className="flex space-x-1">
-                    <h1 className=" font-bold text-lg">
-                        Hình ảnh
-                    </h1>
-                    <p className='text-red-600'>*</p>
-                </div>
-            </header>
-            <section className="mt-3">
-                <div
-                    onDrop={dropHandler} onDragOver={drawOverHandler}
-                    className="grid gap-2 grid-cols-6 justify-center">
-                    <Fragment>
+    let urls: iImageInput[] = [];
 
-                        {
-                            imageurls.length > 0 ?
-                                <>
-                                </>
-                                :
-                                <div className="size-70  col-span-2 row-span-2">
-                                    <label htmlFor="imageurls" className="flex flex-col cursor-pointer p-2 border-2 border-black rounded-2xl  h-full justify-center items-center">
-                                        <CloudUpload />
-                                        <p>Draw anh Drop</p>
-                                    </label>
-                                    <input type="file" onChange={handlerFileInput} multiple id="imageurls" className="hidden" />
+    for (let i = 0; i < vfiles.length; i++) {
+      const e = vfiles[i];
+      if (e.type.indexOf("image") >= 0) {
+        urls.push({
+          file: e,
+          url: URL.createObjectURL(e),
+        });
+      }
+    }
+    dispatch(addImageUrlFiles(urls));
+  };
+  return (
+    <>
+      <header>
+        <div className="flex space-x-1">
+          <h1 className=" font-bold text-lg">Hình ảnh</h1>
+          <p className="text-red-600">*</p>
+        </div>
+      </header>
+      <section className="mt-3">
+        <div
+          onDrop={dropHandler}
+          onDragOver={drawOverHandler}
+          className="grid gap-2 grid-cols-6 justify-center"
+        >
+          <Fragment>
+            {imageurls.length > 0 ? (
+              <></>
+            ) : (
+              <div className="size-70  col-span-2 row-span-2">
+                <label
+                  htmlFor="imageurls"
+                  className="flex flex-col cursor-pointer p-2 border-2 border-black rounded-2xl  h-full justify-center items-center"
+                >
+                  <CloudUpload />
+                  <p>Draw anh Drop</p>
+                </label>
+                <input
+                  type="file"
+                  onChange={handlerFileInput}
+                  multiple
+                  id="imageurls"
+                  className="hidden"
+                />
+              </div>
+            )}
+          </Fragment>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={({ active }) => {
+              if (!active) {
+                return;
+              }
+
+              setActiveId(active.id as any);
+            }}
+            onDragEnd={(ev) => {
+              const { active, over } = ev;
+              if (!active || !over) {
+                return;
+              }
+              if (active.id !== over.id) {
+                dispatch(
+                  swapImage({ i1: active.id as any, i2: over.id as any })
+                );
+              }
+              setActiveId(undefined);
+            }}
+          >
+            <SortableContext
+              items={imageurls.map((v, i) => {
+                return v.url;
+              })}
+              strategy={verticalListSortingStrategy}
+            >
+              <Fragment>
+                {imageurls.map((data, i) => {
+                  let url = data.url;
+                  if (i == 0) {
+                    return (
+                      <div className="size-70  col-span-2 row-span-2">
+                        {imageurls.length > 0 ? (
+                          <SortableItem url={url} index={i}>
+                            <div className="p-2">
+                              <div className="relative">
+                                <div className="absolute top-0 right-0 p-2">
+                                  <Button
+                                    onClick={() => removeImage(i)}
+                                    icon={<Trash2 size={14} />}
+                                  />
                                 </div>
-                        }
-                    </Fragment>
-                    <DndContext
-                        sensors={sensors}
-                        collisionDetection={closestCenter}
-                        onDragStart={({ active }) => {
-                            if (!active) {
-                                return;
-                            }
-
-                            setActiveId(active.id as any);
-                        }}
-                        onDragEnd={(ev) => {
-                            const { active, over } = ev;
-                            if (!active || !over) {
-                                return
-                            }
-                            if (active.id !== over.id) {
-                                dispatch(swapImage({ i1: active.id as any, i2: over.id as any }))
-                            }
-                            setActiveId(undefined)
-                        }}
-
+                                <img
+                                  src={url}
+                                  className="aspect-square shadow-2xl object-center object-cover"
+                                  alt=""
+                                />
+                              </div>
+                            </div>
+                          </SortableItem>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    );
+                  }
+                  return (
+                    <SortableItem url={url} index={i}>
+                      <div className=" col-span-1 p-2">
+                        <div className="relative">
+                          <div className="absolute top-0 right-0 p-1">
+                            <Button
+                              size={"middle"}
+                              onClick={() => removeImage(i)}
+                              icon={<Trash2 size={14} />}
+                            />
+                          </div>
+                          <img
+                            src={url}
+                            className="aspect-square object-center object-cover shadow-2xl"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                    </SortableItem>
+                  );
+                })}
+                {imageurls.length == 0 ? (
+                  <></>
+                ) : (
+                  <div className="col-span-1 p-2 aspect-square">
+                    <label
+                      htmlFor="imageurls"
+                      className="flex flex-col cursor-pointer p-2 border rounded-2xl 
+                                                         h-full justify-center items-center"
                     >
-                        <SortableContext
-                            items={imageurls.map((v, i) => {
-                                return v.url
-                            })}
-                            strategy={verticalListSortingStrategy}
-                        >
-                            <Fragment>
-                                {imageurls
-                                    .map((data, i) => {
-                                        let url = data.url
-                                        if (i == 0) {
-                                            return (
-                                                <div className="size-70  col-span-2 row-span-2">
-                                                    {
-                                                        imageurls.length > 0 ?
-                                                            <SortableItem url={url} index={i}>
-                                                                <div className="p-2" >
-                                                                    <div className="relative">
-                                                                        <div className="absolute top-0 right-0 p-2">
-                                                                            <Button onClick={() => removeImage(i)}
-                                                                                icon={<Trash2 size={14} />} />
-                                                                        </div>
-                                                                        <img src={url} className="aspect-square shadow-2xl object-center object-cover" alt="" />
-                                                                    </div>
-                                                                </div>
-                                                            </SortableItem>
-                                                            :
-                                                            <>
-                                                            </>
-                                                    }
-                                                </div>
-                                            )
-                                        }
-                                        return (
-                                            <SortableItem url={url} index={i} >
-                                                <div className=" col-span-1 p-2">
-                                                    <div className="relative">
-                                                        <div className="absolute top-0 right-0 p-1">
-                                                            <Button size={"middle"} onClick={() => removeImage(i)}
-                                                                icon={<Trash2 size={14} />} />
-                                                        </div>
-                                                        <img src={url} className="aspect-square object-center object-cover shadow-2xl" alt="" />
-
-                                                    </div>
-                                                </div>
-                                            </SortableItem>
-                                        )
-                                    })}
-                                {
-                                    imageurls.length == 0 ?
-                                        <></> :
-                                        <div className="col-span-1 p-2 aspect-square">
-                                            <label htmlFor="imageurls"
-                                                className="flex flex-col cursor-pointer p-2 border rounded-2xl 
-                                                         h-full justify-center items-center">
-                                                <CloudUpload />
-                                                <p>Draw anh Drop</p>
-                                            </label>
-                                            <input type="file" onChange={handlerFileInput} multiple id="imageurls" className="hidden" />
-                                        </div>
-                                }
-                            </Fragment>
-                            {
-                                active ?
-                                    <DragOverlay>
-                                        <div className="p-2">
-                                            <div className="relative">
-                                                <img src={imageurls[active].url} className="aspect-square shadow-2xl object-center object-cover" alt="" />
-                                            </div>
-                                        </div>
-                                    </DragOverlay> : <></>
-                            }
-                        </SortableContext>
-                    </DndContext>
-                </div>
-            </section>
-        </>
-    )
+                      <CloudUpload />
+                      <p>Draw anh Drop</p>
+                    </label>
+                    <input
+                      type="file"
+                      onChange={handlerFileInput}
+                      multiple
+                      id="imageurls"
+                      className="hidden"
+                    />
+                  </div>
+                )}
+              </Fragment>
+              {active ? (
+                <DragOverlay>
+                  <div className="p-2">
+                    <div className="relative">
+                      <img
+                        src={imageurls[active].url}
+                        className="aspect-square shadow-2xl object-center object-cover"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </DragOverlay>
+              ) : (
+                <></>
+              )}
+            </SortableContext>
+          </DndContext>
+        </div>
+      </section>
+    </>
+  );
 }
 
-function SortableItem(props: { children: React.JSX.Element, index: number, url: string }) {
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-    } = useSortable({ id: props.index });
+function SortableItem(props: {
+  children: React.JSX.Element;
+  index: number;
+  url: string;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: props.index });
 
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    };
-    props.children
-    return (
-        <div ref={setNodeRef} key={props.url} style={style} {...attributes} {...listeners}>
-            {props.children}
-        </div>
-    );
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+  props.children;
+  return (
+    <div
+      ref={setNodeRef}
+      key={props.url}
+      style={style}
+      {...attributes}
+      {...listeners}
+    >
+      {props.children}
+    </div>
+  );
 }

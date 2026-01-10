@@ -13,15 +13,15 @@ const IndexAdminPage = async ({
   return (
     <Fragment>
       <div className="overflow-x-auto mt-3.75">
-        <table className="table-auto w-max lg:w-full">
+        <table className="table-fixed w-full">
           <thead>
             <tr>
-              <th className="pl-3 pb-2">Mã số đơn hàng</th>
-              <th className="pl-3 pb-2">Tên khác hàng</th>
-              <th className="pl-3 pb-2">Địa chỉ nhận</th>
-              <th className="pl-3 pb-2 w-30">Ngày đặt</th>
-              <th className="pl-3 pb-2">Trạng thái vận chuyên</th>
-              <th className="pl-3 pb-2">Trạng thái thanh toán</th>
+              <th className="w-30 text-sm pl-3 pb-2">Mã số đơn hàng</th>
+              <th className="w-30 text-sm pl-3 pb-2">Tên khác hàng</th>
+              <th className="w-30 text-sm pl-3 pb-2">Địa chỉ nhận</th>
+              <th className="w-30 text-sm pl-3 pb-2">Ngày đặt</th>
+              <th className="w-30 text-sm pl-3 pb-2">Trạng thái vận chuyên</th>
+              <th className="w-30 text-sm pl-3 pb-2">Trạng thái thanh toán</th>
             </tr>
           </thead>
           <tbody>

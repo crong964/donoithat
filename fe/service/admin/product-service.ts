@@ -8,14 +8,19 @@ import { api } from "@/util/fetch";
 import { revalidatePath } from "next/cache";
 
 export const getProduct = async (
-  p?: { slug: string; page?: string } | undefined
+  p?: { slug: string; page?: string; nameProduct?: string } | undefined
 ): Promise<iGetProduct | undefined> => {
   try {
     let data = await api.get(
-      `/admin/product?slug=${p?.slug}&page=${p?.page || 1}`
+      `/admin/product?slug=${p?.slug}&page=${p?.page || 1}&nameProduct=${
+        p?.nameProduct || ""
+      }`
     );
+
     return data.data;
-  } catch (error) {
+  } catch (error: any) {
+    console.log(error?.response?.data);
+    console.log(errorResponse(error));
     return undefined;
   }
 };

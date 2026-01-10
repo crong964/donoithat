@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {}
-  return new Response(JSON.stringify({ mess: "" }), {
+  return new Response(JSON.stringify([]), {
     status: 201,
     headers: { "Content-Type": "application/json" },
   });

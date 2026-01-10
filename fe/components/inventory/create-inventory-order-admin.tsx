@@ -30,7 +30,6 @@ const CreateInventoryOrderAdmin = ({
     });
   };
   useEffect(() => {
-  
     if (!mess) {
       return;
     }
