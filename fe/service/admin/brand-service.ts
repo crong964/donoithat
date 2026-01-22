@@ -10,12 +10,3 @@ export const getAllBrand = async (): Promise<iBrand[]> => {
 
   return data;
 };
-export const getAllBrandToBuy = async (): Promise<iBrand[]> => {
-  let data: iBrand[] = [];
-  try {
-    const res = await api.get("admin/brand/tobuy");
-    data = res.data;
-  } catch (e) {}
-
-  return data;
-};

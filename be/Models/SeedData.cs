@@ -19,18 +19,34 @@ public static class SeedData
         {
             return;
         }
+        var role = new RoleEntiry
+        {
+            Permission = "",
+            RoleName = "super admin",
+            RoleId = "superadmin"
+        };
+        var roleUser = new RoleEntiry
+        {
+            Permission = "",
+            RoleName = "người dùng",
+            RoleId = "user"
+        };
+
         var account = new AccountEntity
         {
             Account = "admin",
             Password = "admin",
         };
+
         context.Account.Add(account);
+        context.Role.AddRange([role, roleUser]);
+
         context.User.Add(new UserEntity
         {
             UserId = "admin",
             AccountEntity = account,
             FullName = "Chủ quán",
-            Role = "admin",
+            RoleEntiry = role,
             PhoneNumber = ""
         });
         context.SaveChanges();

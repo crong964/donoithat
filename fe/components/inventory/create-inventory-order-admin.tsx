@@ -7,6 +7,7 @@ import priceFormat from "@/util/price-format";
 import { ShoppingCart } from "lucide-react";
 import { toast } from "react-toastify";
 import { createInventoryOrderAdmin } from "@/service/admin/inventory-order-service";
+import ProtectAction from "../permission/protect-action";
 
 const CreateInventoryOrderAdmin = ({
   importPrice,
@@ -19,7 +20,7 @@ const CreateInventoryOrderAdmin = ({
 }: iSuplierAndImportPrice) => {
   const [mess, addForm, pedding] = useActionState(
     createInventoryOrderAdmin,
-    null
+    null,
   );
   const onAddOrder = () => {
     const formData = new FormData();
@@ -52,15 +53,17 @@ const CreateInventoryOrderAdmin = ({
       <td className="py-3 pr-3">{suplierEmail}</td>
       <td className="py-3 pr-3">{priceFormat(importPrice + "")}</td>
       <th>
-        <TooltipCustom content="Đặt hàng">
-          <Button
-            disabled={pedding}
-            variant={"ghost"}
-            onClick={() => onAddOrder()}
-          >
-            <ShoppingCart />
-          </Button>
-        </TooltipCustom>
+        <ProtectAction permission="follower.inventory.add">
+          <TooltipCustom content="Đặt hàng">
+            <Button
+              disabled={pedding}
+              variant={"ghost"}
+              onClick={() => onAddOrder()}
+            >
+              <ShoppingCart />
+            </Button>
+          </TooltipCustom>
+        </ProtectAction>
       </th>
     </tr>
   );

@@ -3,21 +3,30 @@ import { Menu } from "antd";
 import { MenuItem } from "@/components/ui/menu";
 import { iMainCateGory } from "./interface";
 
-export default function CategoryM(p: iMainCateGory) {
+export default function CategoryM({
+  categoryChidlren,
+  id,
+  nameCategory,
+  slug,
+  categoryId,
+  categoryImage,
+}: iMainCateGory) {
   const item: MenuItem[] = [
     {
-      label: p.nameCategory,
-      key: p.id,
-      children: p.categoryChidlren.map((v) => {
-        return {
-          label: (
-            <a className="text-text-shop font-normal" href="#">
-              {v.nameCategory}
-            </a>
-          ),
-          key: v.id,
-        };
-      }),
+      label: nameCategory,
+      key: id,
+      children: categoryChidlren.map(
+        ({ nameCategory, id, slug, categoryId, categoryImage }) => {
+          return {
+            label: (
+              <a className="text-text-shop font-normal" href="#">
+                {nameCategory}
+              </a>
+            ),
+            key: id,
+          };
+        }
+      ),
     },
   ];
   return (

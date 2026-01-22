@@ -24,7 +24,7 @@ export default function CategorySelectInput() {
   );
 
   React.useEffect(() => {
-    fetch("/api/category")
+    fetch("/api/admin/product/category")
       .then((v) => {
         return v.json();
       })

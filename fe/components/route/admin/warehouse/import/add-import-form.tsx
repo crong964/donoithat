@@ -87,7 +87,7 @@ const ImportAddAdminForm = () => {
   }, [mess]);
 
   return (
-    <form onSubmit={onSubmit} className="px-3">
+    <form onSubmit={onSubmit} className="px-3 bg-white pt-3.75 mx-3.75">
       <FieldSet>
         <div className="grid grid-cols-3 gap-4">
           <Field className="flex flex-col gap-3">

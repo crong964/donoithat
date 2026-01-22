@@ -41,13 +41,12 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
 }
 
 @theme {
   --color-f: #c4123f;
   --color-loadingbg: #c4123f6e;
-  --color-a: #F2F2F2;
+  --color-a: #f2f2f2;
   --color-collection1-bg: #f8dbde;
   --color-home-coupon: #fdf0d1;
   --color-home-coupon-light: #f1c150;
@@ -61,7 +60,7 @@
   --shadow-pro: 0 0 3px rgba(0, 0, 0, 0.08);
   --shadow-pro-hover: 0 2px 12px rgba(0, 0, 0, 0.12);
   --shadow-cate-hover: 0 0 0 5px rgba(255, 255, 255, 0.5);
-  --shadow-form: rgba(0, 0, 0, 0.25) 0px 2px 4px 0px
+  --shadow-form: rgba(0, 0, 0, 0.25) 0px 2px 4px 0px;
 }
 
 @theme {
@@ -77,18 +76,15 @@
     }
   }
 
-
   --animate-shorten: shorten 500ms ease-in-out;
 
   @keyframes shorten {
     0% {
       height: 400px;
-
     }
 
     100% {
       height: 100px;
-
     }
   }
 
@@ -97,15 +93,12 @@
   @keyframes extend {
     0% {
       height: 100px;
-
     }
 
     100% {
       max-height: max-content;
     }
   }
-
-
 
   --animate-big: big 100ms ease-in;
 
@@ -174,7 +167,6 @@ body {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-
 }
 
 .dark {
@@ -209,18 +201,15 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-
   }
 
   body {
     @apply bg-background text-foreground;
-
   }
 
   :root {
@@ -239,13 +228,6 @@ body {
     --chart-5: oklch(0.645 0.246 16.439);
   }
 }
-
-.ant-table-thead .ant-table-cell {
-  background-color: black !important;
-  color: white !important;
-}
-
-
 
 .spinner {
   /* ... */

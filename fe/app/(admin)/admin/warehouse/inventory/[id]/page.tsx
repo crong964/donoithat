@@ -1,5 +1,5 @@
 import EditInventory from "@/components/route/admin/warehouse/inventory/edit-inventory";
-import { getBrand } from "@/service/admin/brand-service";
+import { getAllBrand } from "@/service/admin/brand-service";
 import { getInventoryByIdAdmin } from "@/service/admin/inventory-service";
 import { redirect } from "next/navigation";
 
@@ -10,7 +10,7 @@ export default async function InventoryDetail({
 }) {
   const id = (await params).id;
   const data = await getInventoryByIdAdmin(id);
-  const brand = await getBrand();
+  const brand = await getAllBrand();
   if (data == undefined) {
     redirect("/admin/warehouse/");
   }

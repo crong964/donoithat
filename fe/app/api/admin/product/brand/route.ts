@@ -1,5 +1,5 @@
 "use server";
-import { getAllBrandToBuy } from "@/service/admin/brand-service";
+import { getAllBrandToBuy } from "@/service/admin/product-service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

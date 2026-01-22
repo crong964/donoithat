@@ -1,5 +1,6 @@
 "use server";
 import { iCategoryBackup } from "@/components/route/admin/category/interface";
+import { errorResponse } from "@/util/error-response";
 import { api } from "@/util/fetch";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,7 +21,9 @@ export async function GET(request: NextRequest) {
       }
       s += `\n`;
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(errorResponse(error));
+  }
   return new Response(s, { headers });
 }
 

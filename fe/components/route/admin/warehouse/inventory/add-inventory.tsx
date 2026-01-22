@@ -56,6 +56,7 @@ import {
 } from "@/components/ui/field";
 import Link from "next/link";
 import BackButton from "@/components/ui-custom/back-button";
+import ActionHeader from "@/components/ui-custom/action-header";
 export default function AddInventory(p: { ls: iBrand[] }) {
   const brads = p.ls;
   const [url, setUrl] = useState("");
@@ -119,12 +120,7 @@ export default function AddInventory(p: { ls: iBrand[] }) {
   }, [mess]);
   return (
     <>
-      <div className="p-3">
-        <BackButton></BackButton>
-      </div>
-      <div className="p-3">
-        <h1 className="text-4xl font-bold">Thêm sản phẩm mới</h1>
-      </div>
+      <ActionHeader title="Thêm sản phẩm mới" />
       <Form onSubmit={handleForm} action={actionAdd}>
         <fieldset className="flex px-10  **:data-[alert=true]:border-1 **:data-[alert=true]:border-red-500">
           <div className="size-75 ">

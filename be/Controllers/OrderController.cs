@@ -1,11 +1,12 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using be.Entity;
+using be.Enums;
 using be.Models;
 using be.Service;
 
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 namespace be.Controllers;
 
@@ -128,6 +129,7 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
     [HttpPost]
     public async Task<ActionResult> OrderAdd(OrderAdd orderAdds)
     {
+
         var productVariant = orderAdds.ProductVariants;
         var id = _userService.GetUserId(HttpContext);
         if (id == null)
@@ -161,6 +163,7 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         };
 
         await _context.Order.AddAsync(orderEntity);
+        var procout = 0;
         try
         {
             foreach (var item in productVariant)
@@ -172,17 +175,29 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
                 {
                     continue;
                 }
-                if (productVariantEntity.Quality < item.Quality)
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                var row = await _context.Product.
+                                Where(x => x.ProductId == productVariantEntity.ProductEntity.ProductId &&
+                                x.Quality >= item.Quality)
+                                .ExecuteUpdateAsync(setters => setters
+                                .SetProperty(b => b.Quality, b => b.Quality - item.Quality));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                if (row == 0)
                 {
                     continue;
                 }
 
-                await _context.ProductVariant.
-                 Where(x => x.ProductVariantId == item.ProductVariantId &&
-                 x.Quality == productVariantEntity.Quality)
-                 .ExecuteUpdateAsync(setters => setters
-                 .SetProperty(b => b.Quality, productVariantEntity.Quality - item.Quality));
+                row = await _context.ProductVariant.
+                  Where(x => x.ProductVariantId == item.ProductVariantId &&
+                  x.Quality >= item.Quality)
+                  .ExecuteUpdateAsync(setters => setters
+                  .SetProperty(b => b.Quality, b => b.Quality - item.Quality));
+                if (row == 0)
+                {
 
+                    continue;
+                }
                 var orderDetailEntity = new OrderDetailEntity
                 {
                     OrderEntity = orderEntity,
@@ -192,13 +207,21 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
                 };
                 await _context.OrderDetail.AddAsync(orderDetailEntity);
 
-
+                procout += 1;
             }
-            var ls = await _context.Cart.Where(x => x.UserEntity.UserId == id).ToArrayAsync();
-            _context.Cart.RemoveRange(ls);
+            if (procout > 0)
+            {
+                var ls = await _context.Cart.Where(x => x.UserEntity.UserId == id).ToArrayAsync();
+                _context.Cart.RemoveRange(ls);
 
-            await _context.SaveChangesAsync();
-            await _context.Database.CommitTransactionAsync();
+                await _context.SaveChangesAsync();
+                await _context.Database.CommitTransactionAsync();
+            }
+            else
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new { message = "Sản phẩm hết hàng" });
+            }
         }
         catch (System.Exception e)
         {
@@ -208,10 +231,10 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
                 _logger.LogError(e.Message);
             }
 
-            return BadRequest(new { message = "có lỗi" });
+            return BadRequest(new { message = "Hãy thử lại" });
         }
 
-        return Ok("");
+        return Ok(new { message = "Thêm thành công" });
     }
 
 

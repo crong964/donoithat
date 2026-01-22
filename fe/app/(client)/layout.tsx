@@ -40,7 +40,7 @@ export default async function RootLayout({
         <ReduxClientComponent
           children={
             <>
-              <Header></Header>
+              <Header />
               <main className="max-w-350 mx-auto pb-7.5">{children}</main>
               <Footer />
             </>

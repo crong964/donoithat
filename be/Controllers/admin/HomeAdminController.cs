@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using be.Entity;
+using be.Enums;
 using be.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ public class HomeController(DatabaseContext context) : ControllerBase
     private readonly DatabaseContext _context = context;
 
     [HttpGet]
+    [HasPermission(Permission.home, [ActionType.view])]
     public async Task<ActionResult> Home()
     {
         var totalUser = await _context.User.CountAsync();

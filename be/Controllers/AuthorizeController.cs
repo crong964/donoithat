@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using be.Entity;
+using be.Enums;
 using be.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using NuGet.Protocol;
 
 namespace be.Controllers;
 
@@ -41,19 +43,21 @@ IConfiguration config) : ControllerBase
         {
             return BadRequest(new { message = "Mật khẩu không đúng" });
         }
-        var user = await _context.User.Where(x => x.AccountEntity == account).FirstOrDefaultAsync();
+        var user = await _context.User.Include(x => x.RoleEntiry)
+        .Where(x => x.AccountEntity == account).FirstOrDefaultAsync();
 
-        if (user == null || !account.Account.Equals("admin"))
+        if (user == null)
         {
             return BadRequest(new { message = "Tài khoản không tồn tại" });
         }
-        var id = user.UserId ?? account.Account;
-        var role = user.Role ?? "admin";
+        var id = user.UserId;
+
         var authClaims = new List<Claim>
            {
               new("id", id),
               new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-              new(ClaimTypes.Role,role),
+              new("permissionUser",user.RoleEntiry.Permission),
+              new("role",user.RoleEntiry.RoleId),
            };
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("JWT:Secret") ?? ""));
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -80,6 +84,27 @@ IConfiguration config) : ControllerBase
         _logger.LogInformation(id);
         var user = await _context.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
 
+        var permissionUser = token.Claims.First(claim => claim.Type == "permissionUser").Value;
+        if (user == null)
+        {
+            return NotFound(new { message = "không có" });
+        }
+        return Ok(UserInforModel.Convert(user));
+    }
+
+
+    [HttpGet("d")]
+    [HasPermission(Permission.category, [ActionType.add, ActionType.add])]
+    public async Task<ActionResult> G()
+    {
+        var tokenStorage = HttpContext.Request.Headers.Authorization;
+        var handler = new JwtSecurityTokenHandler();
+        var token = handler.ReadJwtToken(tokenStorage[0]?.Replace("Bearer ", ""));
+        var id = token.Claims.First(claim => claim.Type == "id").Value;
+        var role = token.Claims.First(claim => claim.Type == "role").Value;
+
+        var user = await _context.User.Where(x => x.UserId == id).FirstOrDefaultAsync();
+
         if (user == null)
         {
             return NotFound(new { message = "" });
@@ -91,35 +116,57 @@ IConfiguration config) : ControllerBase
 
 public class HasPermissionAttribute : TypeFilterAttribute
 {
-    public HasPermissionAttribute(string permission)
+    public HasPermissionAttribute(string function, string[] permissions)
         : base(typeof(PermissionFilter))
     {
-        Arguments = [permission];
+        Arguments = [function, permissions];
     }
 }
 
 
-public class PermissionFilter(string permission) : IAuthorizationFilter
+public class PermissionFilter(string function, string[] permissions) : IAuthorizationFilter
 {
-    private readonly string _permission = permission;
-
+    private readonly string[] _permissions = permissions;
+    private readonly string _function = function;
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var user = context.HttpContext.User;
 
         // Chưa đăng nhập
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-        if (!user.Identity.IsAuthenticated)
+        if (user is null || user.Identity is null || !user.Identity.IsAuthenticated)
         {
             context.Result = new UnauthorizedResult();
             return;
         }
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-
-        // Không có quyền
-        if (!user.HasClaim("Permission", _permission))
+        var role = context.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+        var permissionUser = context.HttpContext.User.FindFirst("permissionUser")?.Value;
+        var exp = context.HttpContext.User.FindFirst("exp")?.Value;
+        if (role is null || role.Equals("user") || permissionUser is null)
         {
-            context.Result = new ForbidResult();
+            context.Result = new UnauthorizedResult();
+            return;
         }
+        if (role.Equals("superadmin"))
+        {
+            return;
+        }
+        var permissionDis = new HashSet<string>();
+        foreach (var item in _permissions)
+        {
+            permissionDis.Add(_function + "." + item);
+        }
+        var permissionUserLs = permissionUser.Split(" ");
+
+        foreach (var item in permissionUserLs)
+        {
+            if (permissionDis.Contains(item))
+            {
+                return;
+            }
+        }
+
+        context.Result = new UnauthorizedResult();
+        return;
+
     }
 }

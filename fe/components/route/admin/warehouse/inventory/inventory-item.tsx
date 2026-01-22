@@ -22,12 +22,13 @@ import Link from "next/link";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import TooltipCustom from "@/components/ui-custom/tooltip-custom";
+import ProtectAction from "@/components/permission/protect-action";
 
 export default function InventoryItem(p: iInventory) {
   const [open, setOpen] = useState(false);
   const [mess, actionDelete, pedding] = useActionState(
     deleteInventoryAdmin,
-    null
+    null,
   );
   const [del, setDel] = useState(false);
   const dis = useRef<HTMLTableRowElement>(null);
@@ -81,69 +82,76 @@ export default function InventoryItem(p: iInventory) {
       <td className="text-center pb-2">{priceFormat(p.importPrice + "")}</td>
       <td className="text-center pb-2">{p.quality}</td>
       <td className="text-center pb-2 gap-1">
-        <TooltipCustom content="Chỉnh sửa sản phẩm">
-          <Link href={`/admin/warehouse/inventory/${p.productVariantId}`}>
-            <Button variant={"ghost"}>
-              <SquarePen />
-            </Button>
-          </Link>
-        </TooltipCustom>
-        <TooltipCustom content="Nhà cung cấp">
-          <Link
-            href={`/admin/warehouse/inventory/suplier/${p.productVariantId}`}
-          >
-            <Button variant={"ghost"}>
-              <Truck />
-            </Button>
-          </Link>
-        </TooltipCustom>
-
-        <AlertDialog open={open}>
-          <AlertDialogTrigger asChild>
-            <TooltipCustom content="Xóa sản phẩm">
-              <Button onClick={() => setOpen(true)} variant="ghost">
-                <Trash2 />
+        <ProtectAction permission="inventory.update">
+          <TooltipCustom content="Chỉnh sửa sản phẩm">
+            <Link href={`/admin/warehouse/inventory/${p.productVariantId}`}>
+              <Button variant={"ghost"}>
+                <SquarePen />
               </Button>
-            </TooltipCustom>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                Bạn có chắc muốn chỉnh sửa dữ liệu
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                <p>
-                  Việc xóa sẽ khiến sản phẩm không con trên web dữ liệu cũ vẫn
-                  sẽ còn
-                </p>
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter className="flex justify-between">
-              <AlertDialogCancel asChild>
-                <Button onClick={() => setOpen(false)} variant={"ghost"}>
-                  Hủy{" "}
+            </Link>
+          </TooltipCustom>
+        </ProtectAction>
+
+        <ProtectAction permission="follower.inventory.view">
+          <TooltipCustom content="Nhà cung cấp">
+            <Link
+              href={`/admin/warehouse/inventory/suplier/${p.productVariantId}`}
+            >
+              <Button variant={"ghost"}>
+                <Truck />
+              </Button>
+            </Link>
+          </TooltipCustom>
+        </ProtectAction>
+
+        <ProtectAction permission="inventory.delete">
+          <AlertDialog open={open}>
+            <AlertDialogTrigger asChild>
+              <TooltipCustom content="Xóa sản phẩm">
+                <Button onClick={() => setOpen(true)} variant="ghost">
+                  <Trash2 />
                 </Button>
-              </AlertDialogCancel>
-              <AlertDialogAction asChild>
-                <Form action={actionDelete}>
-                  <input
-                    type="hidden"
-                    name="productVariantId"
-                    value={p.productVariantId}
-                  />
-                  {pedding ? (
-                    <Button type="button">
-                      {" "}
-                      <Spinner /> Xóa....
-                    </Button>
-                  ) : (
-                    <Button type="submit">Xóa</Button>
-                  )}
-                </Form>
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+              </TooltipCustom>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Bạn có chắc muốn chỉnh sửa dữ liệu
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  <p>
+                    Việc xóa sẽ khiến sản phẩm không con trên web dữ liệu cũ vẫn
+                    sẽ còn
+                  </p>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="flex justify-between">
+                <AlertDialogCancel asChild>
+                  <Button onClick={() => setOpen(false)} variant={"ghost"}>
+                    Hủy{" "}
+                  </Button>
+                </AlertDialogCancel>
+                <AlertDialogAction asChild>
+                  <Form action={actionDelete}>
+                    <input
+                      type="hidden"
+                      name="productVariantId"
+                      value={p.productVariantId}
+                    />
+                    {pedding ? (
+                      <Button type="button">
+                        {" "}
+                        <Spinner /> Xóa....
+                      </Button>
+                    ) : (
+                      <Button type="submit">Xóa</Button>
+                    )}
+                  </Form>
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </ProtectAction>
       </td>
     </tr>
   );

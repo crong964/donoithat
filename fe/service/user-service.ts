@@ -49,7 +49,6 @@ export const loginUser = async (currentState: any, formData: FormData) => {
   }
 
   revalidatePath("/");
-  redirect(`/`);
 };
 export const logoutUser = async () => {
   const cookieStore = await cookies();

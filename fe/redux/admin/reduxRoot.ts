@@ -3,6 +3,7 @@ import productRedux from "./product/productRedux";
 import mediaLibraryRedux from "./product/mediaLibraryRedux";
 import categoryRedux from "./category/categoryRedux";
 import inventoryRedux from "./product/inventoryRedux";
+import permissionRedux from "./permission/permissionRedux";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     mediaLibrary: mediaLibraryRedux,
     category: categoryRedux,
     inventory: inventoryRedux,
+    permission: permissionRedux,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

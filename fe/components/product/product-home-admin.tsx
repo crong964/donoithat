@@ -33,6 +33,8 @@ import {
   updateStatusProduct,
 } from "@/service/admin/product-service";
 import { toast } from "react-toastify";
+import ProtectAction from "../permission/protect-action";
+import { Input } from "../ui/input";
 
 export default function ProductHomeAdmin(p: iProduct) {
   const total = p.productVariants.reduce((pre, cur) => {
@@ -43,10 +45,11 @@ export default function ProductHomeAdmin(p: iProduct) {
   const [deleteMess, deleteForm] = useActionState(deleteProduct, null);
   const [updateStatusMess, updateStatusForm] = useActionState(
     updateStatusProduct,
-    null
+    null,
   );
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(p.status == 1);
+
   useEffect(() => {
     let f = undefined;
     if (deleteMess?.error) {
@@ -77,7 +80,8 @@ export default function ProductHomeAdmin(p: iProduct) {
     if (!updateStatusMess) {
       return;
     }
-    if (updateStatusMess?.error) {
+
+    if (updateStatusMess.error) {
       toast.error(updateStatusMess.message);
     } else {
       toast.error(updateStatusMess.message);
@@ -95,12 +99,12 @@ export default function ProductHomeAdmin(p: iProduct) {
         <td>
           <div className="space-x-3 flex flex-col cursor-pointer gap-y-3 items-center justify-center">
             <Form action={updateStatusForm}>
-              <input type="hidden" name="productId" value={p.productId} />
+              <Input type="hidden" name="productId" value={p.productId} />
               <div>{status ? "Công khai" : "Ẩn"}</div>
 
               <SubmitButton loading={<Switch checked={status} />}>
-                <Button type="submit" variant={"ghost"}>
-                  <Switch checked={status} />
+                <Button type="submit" variant={"none"}>
+                  <Switch checked={status} className="cursor-pointer"/>
                 </Button>
               </SubmitButton>
             </Form>
@@ -138,45 +142,47 @@ export default function ProductHomeAdmin(p: iProduct) {
         <td className="text-center pb-3.75">{total}</td>
         <td>
           <div className="flex space-x-2.5 justify-end items-center">
-            <AlertDialog open={open}>
-              <AlertDialogTrigger asChild>
-                <Button onClick={() => setOpen(true)} variant="ghost">
-                  <Trash2 />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Bạn có chắc muốn chỉnh sửa dữ liệu
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    <p>
-                      Việc xóa sẽ khiến sản phẩm không con trên web dữ liệu cũ
-                      vẫn sẽ còn
-                    </p>
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter className="flex justify-between">
-                  <AlertDialogCancel asChild>
-                    <Button onClick={() => setOpen(false)} variant={"ghost"}>
-                      Hủy{" "}
-                    </Button>
-                  </AlertDialogCancel>
-                  <AlertDialogAction asChild>
-                    <Form action={deleteForm}>
-                      <input
-                        type="hidden"
-                        name="productId"
-                        value={p.productId}
-                      />
-                      <SubmitButton loading={undefined}>
-                        <Button type="submit">Đồng ý</Button>
-                      </SubmitButton>
-                    </Form>
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <ProtectAction permission="product.delete">
+              <AlertDialog open={open}>
+                <AlertDialogTrigger asChild>
+                  <Button onClick={() => setOpen(true)} variant="ghost">
+                    <Trash2 />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Bạn có chắc muốn chỉnh sửa dữ liệu
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      <p>
+                        Việc xóa sẽ khiến sản phẩm không con trên web dữ liệu cũ
+                        vẫn sẽ còn
+                      </p>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter className="flex justify-between">
+                    <AlertDialogCancel asChild>
+                      <Button onClick={() => setOpen(false)} variant={"ghost"}>
+                        Hủy{" "}
+                      </Button>
+                    </AlertDialogCancel>
+                    <AlertDialogAction asChild>
+                      <Form action={deleteForm}>
+                        <input
+                          type="hidden"
+                          name="productId"
+                          value={p.productId}
+                        />
+                        <SubmitButton loading={undefined}>
+                          <Button type="submit">Đồng ý</Button>
+                        </SubmitButton>
+                      </Form>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </ProtectAction>
           </div>
         </td>
       </tr>

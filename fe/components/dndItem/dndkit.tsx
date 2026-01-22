@@ -44,7 +44,6 @@ export default function Dndkit(p: IDndKit) {
           const oldIndex = items.indexOf(active.id as any);
           const newIndex = items.indexOf(over.id as any);
           //p.onChange(oldIndex, newIndex)
-          console.log(active.id, over.id);
 
           setItems((items) => {
             return arrayMove(items, active.id as any, over.id as any);

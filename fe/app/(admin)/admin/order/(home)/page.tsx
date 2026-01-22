@@ -1,3 +1,4 @@
+import ProtectAction from "@/components/permission/protect-action";
 import { getOrders } from "@/service/admin/order-service";
 import dateFormat from "@/util/date";
 import Link from "next/link";
@@ -11,7 +12,7 @@ const IndexAdminPage = async ({
   let orders = await getOrders(s);
 
   return (
-    <Fragment>
+    <ProtectAction permission="order.view">
       <div className="overflow-x-auto mt-3.75">
         <table className="table-fixed w-full">
           <thead>
@@ -49,7 +50,7 @@ const IndexAdminPage = async ({
           </tbody>
         </table>
       </div>
-    </Fragment>
+    </ProtectAction>
   );
 };
 

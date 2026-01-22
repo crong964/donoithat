@@ -1,3 +1,4 @@
+import TableEmpty from "@/components/empty/table-empty";
 import ProductHomeAdmin from "@/components/product/product-home-admin";
 import Pagination from "@/components/ui-custom/pagination";
 import { getProduct } from "@/service/admin/product-service";
@@ -19,9 +20,21 @@ export default async function ProductHomePage({
     return <></>;
   }
   const products = product.products;
+
+  if (products.length == 0) {
+    return (
+      <TableEmpty
+        btnText="Thêm sản phẩm"
+        description="Bạn chưa đăng bất kỳ sản phẩm nào hay bắt đầu đăng sản phẩm"
+        title="Đăng sản phẩm"
+        url="/admin/product/add"
+      />
+    );
+  }
+
   return (
-    <section className="p-7 relative">
-      <div className="min-h-100 overflow-x-auto">
+    <section className="p-5 mt-2 relative bg-white">
+      <div className="min-h-100 overflow-x-auto  ">
         <table className="table-auto w-full text-[13px] text-black!">
           <thead className=" ">
             <tr className="">

@@ -10,7 +10,7 @@ import { revalidatePath } from "next/cache";
 import { iMessage } from "@/interface/message";
 
 export const getInventoryAdmin = async (
-  p?: iInventoryGet
+  p?: iInventoryGet,
 ): Promise<{
   data: iInventory[];
   curPage: number;
@@ -18,8 +18,9 @@ export const getInventoryAdmin = async (
 }> => {
   try {
     let data = await api.get(
-      `/admin/inventory?curpage=${p?.curPage}&inventoryName=${p?.inventoryName}&onSale=${p?.onSale}&brandId=${p?.brandId}`
+      `/admin/inventory?curpage=${p?.curPage || 1}&inventoryName=${p?.inventoryName}&onSale=${p?.onSale}&brandId=${p?.brandId}`,
     );
+
     return data.data;
   } catch (error) {
     console.log((error as any)?.response?.data);
@@ -29,7 +30,7 @@ export const getInventoryAdmin = async (
 };
 
 export const getInventoryByIdAdmin = async (
-  id: string
+  id: string,
 ): Promise<iProductVariantById | null> => {
   let data = null;
   try {
@@ -40,7 +41,7 @@ export const getInventoryByIdAdmin = async (
 
 export const addInventoryAdmin = async (
   currentState: any,
-  formData: FormData
+  formData: FormData,
 ) => {
   const avatarImage = formData.get("avatarImage") as File;
 
@@ -85,7 +86,7 @@ export const addInventoryAdmin = async (
 
 export const editInventoryAdmin = async (
   currentState: any,
-  formData: FormData
+  formData: FormData,
 ) => {
   const avatarImage = formData.get("avatarImage") as File;
 
@@ -128,7 +129,7 @@ export const editInventoryAdmin = async (
 
 export const deleteInventoryAdmin = async (
   currentState: any,
-  formData: FormData
+  formData: FormData,
 ) => {
   const productVariantId = formData.get("productVariantId");
   try {
@@ -140,12 +141,12 @@ export const deleteInventoryAdmin = async (
 };
 
 export const getInventoryAndSupliersAdmin = async (
-  productId: string
+  productId: string,
 ): Promise<iProductVariantAndSuplier | null> => {
   let data = null;
   try {
     data = await api.get(
-      "/admin/inventory/suplier?productVariantId=" + productId
+      "/admin/inventory/suplier?productVariantId=" + productId,
     );
   } catch (error) {
     console.log(errorResponse(error));

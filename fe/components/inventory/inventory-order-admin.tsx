@@ -8,6 +8,7 @@ import { Trash2 } from "lucide-react";
 import { deleteInventoryOrderAdmin } from "@/service/admin/inventory-order-service";
 import { toast } from "react-toastify";
 import { Checkbox } from "@/components/ui/checkbox";
+import ProtectAction from "../permission/protect-action";
 
 const InventoryOrderAdmin = ({
   inventoryId,
@@ -20,7 +21,7 @@ const InventoryOrderAdmin = ({
 }: iInventoryOrderAdmin) => {
   const [mess, deleteForm, pedding] = useActionState(
     deleteInventoryOrderAdmin,
-    null
+    null,
   );
   const onDeleteOrder = () => {
     const formData = new FormData();
@@ -64,15 +65,17 @@ const InventoryOrderAdmin = ({
       <td data-row>{suplierPhoneNumber}</td>
       <td data-row>{priceFormat(receiedQuality)}</td>
       <td data-row>
-        <TooltipCustom content="Xóa">
-          <Button
-            disabled={pedding}
-            variant={"ghost"}
-            onClick={() => onDeleteOrder()}
-          >
-            <Trash2 />
-          </Button>
-        </TooltipCustom>
+        <ProtectAction permission="follower.inventory.delete">
+          <TooltipCustom content="Xóa">
+            <Button
+              disabled={pedding}
+              variant={"ghost"}
+              onClick={() => onDeleteOrder()}
+            >
+              <Trash2 />
+            </Button>
+          </TooltipCustom>
+        </ProtectAction>
       </td>
     </tr>
   );

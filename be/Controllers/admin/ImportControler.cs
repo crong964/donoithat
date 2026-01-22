@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using be.Entity;
+using be.Enums;
 using be.Models;
 using be.Service;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -15,7 +16,10 @@ public class ImportControler(DatabaseContext context, IUserService userService, 
 	readonly private DatabaseContext _context = context;
 	readonly private ILogger<ImportControler> _logger = logger;
 	readonly private IUserService _userService = userService;
+
+
 	[HttpGet]
+	[HasPermission(Permission.import, [ActionType.view])]
 	public async Task<ActionResult> GetAll()
 	{
 
@@ -39,7 +43,10 @@ public class ImportControler(DatabaseContext context, IUserService userService, 
 
 		return Ok(ls);
 	}
+
+
 	[HttpPost]
+	[HasPermission(Permission.import, [ActionType.add])]
 	public async Task<ActionResult> Create(ImportAddAdminModel importAddAdminModel)
 	{
 
@@ -155,6 +162,7 @@ public class ImportControler(DatabaseContext context, IUserService userService, 
 
 
 	[HttpGet("detail")]
+	[HasPermission(Permission.import, [ActionType.view])]
 	public async Task<ActionResult> Detail(string importId)
 	{
 		if (importId == null)

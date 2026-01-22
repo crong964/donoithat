@@ -19,10 +19,16 @@ public class UserController(DatabaseContext context, IUserService userService) :
     [HttpPost("create")]
     public async Task<ActionResult> CreateUser(UserCreateModel userCreateModel)
     {
+
         var s = await _context.User.FindAsync(userCreateModel.Account);
         if (s != null)
         {
             return BadRequest(new { message = "Tài khoản đã tồn tại" });
+        }
+        var role = await _context.Role.Where(x => x.RoleId.Equals("user")).FirstOrDefaultAsync();
+        if (role == null)
+        {
+            return BadRequest(new { message = "Không có role user" });
         }
         var transaction = await _context.Database.BeginTransactionAsync();
         try
@@ -39,8 +45,7 @@ public class UserController(DatabaseContext context, IUserService userService) :
                 AccountEntity = account,
                 FullName = userCreateModel.FullName,
                 PhoneNumber = userCreateModel.PhoneNumber,
-                Role = "user",
-
+                RoleEntiry = role
             });
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();

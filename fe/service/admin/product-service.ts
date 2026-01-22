@@ -1,20 +1,20 @@
 "use server";
+import { iBrand } from "@/components/brand/interface";
 import {
   iGetProduct,
   iProductDetail,
 } from "@/components/product/interface-admin";
 import { errorResponse } from "@/util/error-response";
 import { api } from "@/util/fetch";
-import { revalidatePath } from "next/cache";
 
 export const getProduct = async (
-  p?: { slug: string; page?: string; nameProduct?: string } | undefined
+  p?: { slug: string; page?: string; nameProduct?: string } | undefined,
 ): Promise<iGetProduct | undefined> => {
   try {
     let data = await api.get(
       `/admin/product?slug=${p?.slug}&page=${p?.page || 1}&nameProduct=${
         p?.nameProduct || ""
-      }`
+      }`,
     );
 
     return data.data;
@@ -26,7 +26,7 @@ export const getProduct = async (
 };
 
 export const getProductBySlug = async (
-  slug: string
+  slug: string,
 ): Promise<iProductDetail | undefined> => {
   try {
     let data = await api.get(`/admin/product/getProductBySlug?slug=${slug}`);
@@ -36,9 +36,19 @@ export const getProductBySlug = async (
   }
 };
 
+export const getAllBrandToBuy = async (): Promise<iBrand[]> => {
+  let data: iBrand[] = [];
+  try {
+    const res = await api.get("admin/product/brand");
+    data = res.data;
+  } catch (e) {}
+
+  return data;
+};
+
 export const updateStatusProduct = async (
   currentState: any,
-  formData: FormData
+  formData: FormData,
 ) => {
   const productId = formData.get("productId");
   let data = 0;

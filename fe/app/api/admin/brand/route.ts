@@ -1,7 +1,5 @@
 "use server";
-import { iMainCateGory } from "@/components/category/interface";
 import { getAllBrand } from "@/service/admin/brand-service";
-import { api } from "@/util/fetch";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

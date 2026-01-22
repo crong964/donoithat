@@ -61,7 +61,7 @@ const SearchImportProduct = ({
   return (
     <Popover onOpenChange={onChangeOpen} open={openSearchName}>
       <PopoverTrigger asChild>
-        <Button variant={"ghost"} className="w-full text-left h-10">
+        <Button variant={"blue"} className="w-full text-left h-10">
           <p className="w-full text-left">Tìm kiếm sản phẩm</p>
         </Button>
       </PopoverTrigger>

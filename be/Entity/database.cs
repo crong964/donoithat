@@ -22,6 +22,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     public DbSet<BrandEntity> Brand { get; set; } = null!;
     public DbSet<ImportDetailEntity> ImportDetailEntity { get; set; } = null!;
     public DbSet<CouponEntity> Coupon { get; set; } = null!;
+    public DbSet<RoleEntiry> Role { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserEntity>()

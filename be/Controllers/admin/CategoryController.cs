@@ -1,5 +1,6 @@
 
 using be.Entity;
+using be.Enums;
 using be.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
 
 
     [HttpGet]
+    [HasPermission(Permission.category, [ActionType.view])]
     public async Task<ActionResult<IEnumerable<CategoryModel>>> GetAll(CategoryGet? categoryGet)
     {
         IEnumerable<CategoryEntity>? ls = null;
@@ -24,19 +26,18 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
         {
             ls = await _context.Category
                                .Where(x => x.CategoryParent == null)
-
                                .Include(x => x.CategoryChidlren)
                                 .OrderBy(x => x.Index)
                                 .ToListAsync();
         }
         else
         {
-            ls = await _context.Category
-                     .Where(x => x.CategoryParent == null && x.Status == categoryGet.Status)
-
-                     .Include(x => x.CategoryChidlren)
-                      .OrderBy(x => x.Index)
-                      .ToListAsync();
+            ls = await _context
+                    .Category
+                    .Where(x => x.CategoryParent == null && x.Status == categoryGet.Status)
+                    .Include(x => x.CategoryChidlren)
+                    .OrderBy(x => x.Index)
+                    .ToListAsync();
         }
 
 
@@ -52,6 +53,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     }
 
     [HttpGet("id")]
+    [HasPermission(Permission.category, [ActionType.view])]
     public async Task<ActionResult> GetById(string categoryId)
     {
         var category = await _context.Category.Include(x => x.CategoryChidlren).
@@ -67,15 +69,11 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
 
 
     [HttpGet("product")]
+    [HasPermission(Permission.product, [ActionType.view])]
     public async Task<ActionResult<IEnumerable<CategoryModel>>> GetProductAll()
     {
         IEnumerable<CategoryEntity>? ls = null;
-
-
         ls = await _context.Category.ToListAsync();
-
-
-
         var lsmodel = new List<CategoryModel>();
 
         foreach (var item in ls)
@@ -88,6 +86,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     }
 
     [HttpPost]
+    [HasPermission(Permission.category, [ActionType.add])]
     public async Task<ActionResult> Add(CategoryAddModel categoryModel)
     {
         if (categoryModel.CategoryImage != null)
@@ -157,6 +156,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
 
 
     [HttpPatch]
+    [HasPermission(Permission.category, [ActionType.update])]
     public async Task<ActionResult<string>> Update(CategoryUpdateModel categoryUpdateModel)
     {
         var category = await _context.Category.FindAsync(categoryUpdateModel.CategoryId);
@@ -218,6 +218,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     }
 
     [HttpPatch("swap")]
+    [HasPermission(Permission.category, [ActionType.update])]
     public async Task<ActionResult<string>> SwapCategory(CategorySwap categorySwap)
     {
         var category1 = await _context.Category
@@ -251,6 +252,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
 
 
     [HttpPost("addchilred")]
+    [HasPermission(Permission.category, [ActionType.add])]
     public async Task<ActionResult<string>> Add(CategoryAddChildrcModel categoryAddChidlren)
     {
         var category = await _context.Category
@@ -281,6 +283,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
     }
 
     [HttpDelete]
+    [HasPermission(Permission.category, [ActionType.delete])]
     public async Task<ActionResult> Delete(CategoryDeleteModel CategorySlug)
     {
 
@@ -378,6 +381,7 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
 
 
     [HttpGet("backup")]
+    [HasPermission(Permission.category, [ActionType.download])]
     public async Task<ActionResult<CategoryBackupAdmin[]>> Backup()
     {
         var ls = await _context.Category
@@ -385,7 +389,10 @@ public class CategoryController(ILogger<CategoryController> logger, DatabaseCont
         .Select(x => CategoryBackupAdmin.Convert(x)).ToArrayAsync();
         return Ok(ls);
     }
+
+
     [HttpPost("backup")]
+    [HasPermission(Permission.category, [ActionType.upload])]
     public async Task<ActionResult> AddList(CategoryBackupAdmin[] categoryBackupAdmins)
     {
 

@@ -1,16 +1,12 @@
-using System.Collections.Immutable;
 using System.Data;
-using System.Threading.Tasks;
 using be.Entity;
+using be.Enums;
 using be.Models;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Elfie.Model.Map;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
-
 namespace be.Controllers.admin;
+
+
 
 [ApiController]
 [Route("api/admin/product")]
@@ -127,7 +123,52 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         return BadRequest(new { mess = "Không tim thấy" });
     }
 
+    [HttpGet("brand")]
+    public async Task<ActionResult> GetAllBrandProductBuyYet()
+    {
+        var ls = await _context.Brand
+         .Where(x => x.ProductVariantEntities != null && x.ProductVariantEntities.Any(x => x.ProductEntity == null))
+         .AsNoTracking().Select(x => BrandAdminGetModel.Covert(x)).ToArrayAsync();
+        return Ok(ls);
+    }
+
+    [HttpGet("category")]
+    public async Task<ActionResult<IEnumerable<CategoryModel>>> GetAll(CategoryGet? categoryGet)
+    {
+        IEnumerable<CategoryEntity>? ls = null;
+        if (categoryGet == null)
+        {
+            ls = await _context.Category
+                               .Where(x => x.CategoryParent == null)
+                               .Include(x => x.CategoryChidlren)
+                                .OrderBy(x => x.Index)
+                                .ToListAsync();
+        }
+        else
+        {
+            ls = await _context.Category
+                     .Where(x => x.CategoryParent == null && x.Status == categoryGet.Status)
+                     .Include(x => x.CategoryChidlren)
+                      .OrderBy(x => x.Index)
+                      .ToListAsync();
+        }
+
+
+        var lsmodel = new List<CategoryModel>();
+
+        foreach (var item in ls)
+        {
+            var categoryModel = ConvertEntityToModel.Converter(item);
+            lsmodel.Add(categoryModel);
+
+        }
+        return lsmodel;
+    }
+
+
+
     [HttpPost]
+    [HasPermission(Permission.product, [ActionType.add])]
     public async Task<ActionResult<string>> AddProduct(ProductAddModel productAddModel)
     {
         List<string> ls = [];
@@ -250,7 +291,9 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         return Ok(new { mess = "Thêm thành công" });
     }
 
+
     [HttpPatch]
+    [HasPermission(Permission.product, [ActionType.update])]
     public async Task<ActionResult<string>> UpdateProduct(ProductUpdateModel productAddModel)
     {
         List<string> ls = [];
@@ -379,7 +422,27 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
     }
 
 
+
+
+    [HttpPatch("status")]
+    [HasPermission(Permission.product, [ActionType.update])]
+    public async Task<ActionResult> UpdateStatus(ProductUpdateStatusModel statusModel)
+    {
+        _logger.LogInformation(statusModel.ProductId);
+        var productEntity = await _context.Product.FindAsync(statusModel.ProductId);
+        if (productEntity == null)
+        {
+            return BadRequest(new { Message = "not found" });
+        }
+        productEntity.Status = productEntity.Status == 0 ? 1 : 0;
+        await _context.SaveChangesAsync();
+        return Ok(new { newValue = productEntity.Status });
+    }
+
+
+
     [HttpDelete]
+    [HasPermission(Permission.product, [ActionType.delete])]
     public async Task<ActionResult<string>> DeleteProduct(ProductDeleteModel productDelete)
     {
         var ProductId = productDelete.ProductId;
@@ -403,22 +466,6 @@ public class ProductController(DatabaseContext context, ILogger<ProductControlle
         }
         return Ok();
     }
-
-
-    [HttpPatch("status")]
-    public async Task<ActionResult> UpdateStatus(ProductUpdateStatusModel statusModel)
-    {
-        _logger.LogInformation(statusModel.ProductId);
-        var productEntity = await _context.Product.FindAsync(statusModel.ProductId);
-        if (productEntity == null)
-        {
-            return BadRequest(new { Message = "not found" });
-        }
-        productEntity.Status = productEntity.Status == 0 ? 1 : 0;
-        await _context.SaveChangesAsync();
-        return Ok(new { newValua = productEntity.Status });
-    }
-
 
 
 

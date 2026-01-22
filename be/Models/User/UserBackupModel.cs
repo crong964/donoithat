@@ -20,7 +20,7 @@ public class UserBackupModel
 			Password = accountEntity.Password,
 			FullName = userEntity.FullName,
 			PhoneNumber = userEntity.PhoneNumber,
-			Role = userEntity.Role,
+			Role = userEntity.RoleEntiry.RoleId,
 			UserId = userEntity.UserId,
 		};
 	}

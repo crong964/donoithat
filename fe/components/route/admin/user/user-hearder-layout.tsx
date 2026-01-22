@@ -7,6 +7,7 @@ import { iUserInAdminBackup } from "@/components/user/interface";
 import { Download, Plus } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
+import ProtectAction from "@/components/permission/protect-action";
 
 export default function UserHearderLayout() {
   const handleCSV = (data: string) => {
@@ -37,31 +38,25 @@ export default function UserHearderLayout() {
   return (
     <div className="p-3 ">
       <h1 className="text-2xl font-bold mb-3">Danh sách khác hàng</h1>
-      <div className="flex justify-between items-center mb-3">
-        <div className="flex">
-          <div className="space-x-2">
-            <Link href={"/api/admin/user/backup"} download>
-              <Button type="button" variant={"default"}>
-                <Download />
-                Tải CSV
-              </Button>
-            </Link>
-            <CsvInput onChange={handleCSV} />
-            <Link href={""}>
-              <Button type="button" variant={"blue"}>
-                <Plus />
-                Thêm
-              </Button>
-            </Link>
-          </div>
-        </div>
+      <div className="flex justify-end items-center gap-x-3 mb-3">
+        <ProtectAction permission="user.download">
+          <Link href={"/api/admin/user/backup"} download>
+            <Button type="button" variant={"default"}>
+              <Download />
+              Tải CSV
+            </Button>
+          </Link>
+        </ProtectAction>
+        <ProtectAction permission="user.upload">
+          <CsvInput onChange={handleCSV} />
+        </ProtectAction>
       </div>
       <Form action={"/admin/user"}>
         <div className="flex gap-4">
           <Input
             type="text"
             name="query"
-            className="flex-1"
+            className="flex-1 bg-white"
             autoComplete="off"
             placeholder="Tìm kiếm khách hàng...."
           />

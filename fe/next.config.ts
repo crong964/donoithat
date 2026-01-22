@@ -4,10 +4,10 @@ const nextConfig: NextConfig = {
   typedRoutes: false,
   experimental: {
     serverActions: {
-      bodySizeLimit: '32mb'
-    }
+      bodySizeLimit: "32mb",
+    },
   },
-  reactStrictMode: false
+  reactStrictMode: false,
 };
 
 export default nextConfig;

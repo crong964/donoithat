@@ -21,7 +21,7 @@ function BrandSelectInput() {
   const [data, setData] = useState<iBrand[]>([]);
 
   useEffect(() => {
-    fetch("/api/admin/brand")
+    fetch("/api/admin/product/brand")
       .then((v) => {
         return v.json();
       })

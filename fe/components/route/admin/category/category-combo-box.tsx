@@ -43,8 +43,11 @@ export default function CategoryCombobox(p: { ls: iMainCateGory[] }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full lg:w-150 p-0">
-        <Command>
-          <CommandInput placeholder="Search framework..." className="h-9" />
+        <Command className="w-full lg:w-150">
+          <CommandInput
+            placeholder="Tìm kiếm thể loại..."
+            className="h-9 w-70 lg:w-150"
+          />
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>

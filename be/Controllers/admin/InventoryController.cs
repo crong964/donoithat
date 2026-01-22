@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Azure;
 using be.Entity;
+using be.Enums;
 using be.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +20,10 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
 
 
     [HttpGet]
+    [HasPermission(Permission.inventory, [ActionType.view])]
     public async Task<ActionResult> GetAll([FromQuery] ProductVariantGetAdminModel get)
     {
+        _log.LogInformation(">>>>>>>>>>>>vào");
         var OnSale = get.OnSale == null || get.OnSale.Equals("all") ? "" : get.OnSale;
         var BrandId = get.BrandId == null || get.BrandId.Equals("all") ? "" : get.BrandId;
         var CurPage = get.CurPage ?? 1;
@@ -84,7 +87,9 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         );
     }
 
+
     [HttpGet("{ProductVariantId}")]
+    [HasPermission(Permission.inventory, [ActionType.view])]
     public async Task<ActionResult> GetId(string productVariantId)
     {
         var productVariant = await _context.ProductVariant
@@ -103,7 +108,8 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
 
 
     [HttpPost]
-    public async Task<ActionResult> Post(InventoryPostAdminModel post)
+    [HasPermission(Permission.inventory, [ActionType.add])]
+    public async Task<ActionResult> Add(InventoryPostAdminModel post)
     {
         var imageEntity = await _context.Image.FindAsync(post.ImageFile);
         var brandEntity = await _context.Brand.FindAsync(post.BrandId);
@@ -138,7 +144,8 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
 
 
     [HttpPatch]
-    public async Task<ActionResult> Patch(InventoryPatchAdminModel post)
+    [HasPermission(Permission.inventory, [ActionType.update])]
+    public async Task<ActionResult> Update(InventoryPatchAdminModel post)
     {
         var imageEntity = await _context.Image.FindAsync(post.ImageFile);
         var brandEntity = await _context.Brand.FindAsync(post.BrandId);
@@ -183,6 +190,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
     }
 
     [HttpDelete]
+    [HasPermission(Permission.inventory, [ActionType.delete])]
     public async Task<ActionResult> Delete(InventoryDeleteAdminModel delete)
     {
         var productVariant = await _context.ProductVariant.FindAsync(delete.ProductVariantId);
@@ -204,6 +212,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
 
 
     [HttpGet("search")]
+    [HasPermission(Permission.inventory, [ActionType.view])]
     public async Task<ActionResult> SearchInventotyName([FromQuery] ImportQueryProductAdmin importQuery)
     {
         var page = importQuery.Page;
@@ -234,6 +243,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
 
         return Ok(productVariants);
     }
+
 
     [HttpGet("suplier")]
     public async Task<ActionResult> Suplier(string productVariantId)
@@ -286,6 +296,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         .Select(provide => InventoryOrderGetAdminModel.Convert(provide)).ToArrayAsync();
         return Ok(ls);
     }
+
     [HttpPost("order")]
     public async Task<ActionResult> OrderPost(InventoryOrderPostAdminModel inventory)
     {
@@ -342,4 +353,5 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
         }
         return Ok();
     }
+
 }

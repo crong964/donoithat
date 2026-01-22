@@ -12,7 +12,6 @@ export default async function SuplierIndexPage() {
   return (
     <>
       <SuplierHeaderLayout />
-
       <div className="p-4 overflow-x-auto w-full">
         <table className="table-auto w-max lg:w-full text-left">
           <tr className="text-sm">

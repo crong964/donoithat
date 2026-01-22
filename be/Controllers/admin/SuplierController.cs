@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
 using be.Entity;
+using be.Enums;
 using be.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace be.Controllers;
 
@@ -15,13 +17,19 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
     private readonly ILogger<SuplierController> _logger = logger;
 
     [HttpGet]
+    [HasPermission(Permission.suplier, [ActionType.view])]
     public async Task<ActionResult<SuplierGetAdminModel[]>> GetAll()
     {
-        var ls = await _context.Suplier.AsNoTracking().Select(x => SuplierGetAdminModel.Convert(x)).ToArrayAsync();
+        var ls = await _context
+        .Suplier
+        .AsNoTracking()
+        .Select(x => SuplierGetAdminModel.Convert(x))
+        .ToArrayAsync();
         return Ok(ls);
     }
 
     [HttpGet("suplierbyid")]
+    [HasPermission(Permission.suplier, [ActionType.view])]
     public async Task<ActionResult<SuplierGetAdminModel>> GetByid(string suplierId)
     {
         var suplier = await _context.Suplier.FindAsync(suplierId);
@@ -31,7 +39,10 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
         }
         return Ok(SuplierGetAdminModel.Convert(suplier));
     }
+
+
     [HttpPost]
+    [HasPermission(Permission.suplier, [ActionType.add])]
     public async Task<ActionResult<SuplierGetAdminModel[]>> Post(SuplierAddAdminModel suplierAddAdminModel)
     {
         var suplierTmp = await _context.Suplier.Where(x => x.SuplierId == suplierAddAdminModel.SuplierId).FirstOrDefaultAsync();
@@ -63,6 +74,7 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
     }
 
     [HttpPatch]
+    [HasPermission(Permission.suplier, [ActionType.update])]
     public async Task<ActionResult> Patch(SuplierAdminUpdateModel suplierAdminUpdateModel)
     {
         var suplier = await _context.Suplier.FindAsync(suplierAdminUpdateModel.Id);
@@ -92,8 +104,16 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
         }
     }
 
+    [HttpDelete]
+    [HasPermission(Permission.suplier, [ActionType.delete])]
+    public ActionResult Delete([FromQuery] string id)
+    {
+
+        return Ok();
+    }
 
     [HttpGet("search")]
+    [HasPermission(Permission.suplier, [ActionType.view])]
     public async Task<ActionResult> Search([FromQuery] SuplierAdminQueryModel quey)
     {
         var limit = 10;
@@ -121,6 +141,7 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
 
 
     [HttpPost("backup")]
+    [HasPermission(Permission.suplier, [ActionType.upload])]
     public async Task<ActionResult<SuplierGetAdminModel[]>> AddList(List<SuplierAddAdminModel> suplierAddAdminModels)
     {
         foreach (var suplierAddAdminModel in suplierAddAdminModels)
@@ -161,7 +182,9 @@ public class SuplierController(DatabaseContext context, ILogger<SuplierControlle
         return Ok();
     }
 
+
     [HttpGet("backup")]
+    [HasPermission(Permission.suplier, [ActionType.download])]
     public async Task<ActionResult<SuplierAdminBackupModel[]>> Backup()
     {
         var ls = await _context.Suplier.Select(x => SuplierAdminBackupModel.Convert(x)).ToArrayAsync();
