@@ -10,6 +10,6 @@ public class ImageEntity
 
     public required string ImagePath { get; set; }
 
-    public List<ProductEntity> ProductEntities { get; } = [];
+    public ICollection<ProductEntity> ProductEntities { get; } = [];
     public ICollection<PhotoGalleryEntity> PhotoGalleries { get; } = [];
 }

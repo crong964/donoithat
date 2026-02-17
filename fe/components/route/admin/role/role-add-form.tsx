@@ -25,8 +25,8 @@ const RoleAddForm = () => {
   return (
     <Form action={addForm}>
       <div className="flex flex-col items-center gap-y-3">
-        <Input required enterKeyHint="go" name="permission" value={permission} type="hidden" />
-        <InputGroup className="w-200">
+        <Input required name="permission" value={permission} type="hidden" />
+        <InputGroup className="min-w-200 bg-white">
           <InputGroupInput
             name="roleName"
             placeholder="Tên vai trò hoặc chức vụ"

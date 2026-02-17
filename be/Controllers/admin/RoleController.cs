@@ -57,10 +57,22 @@ public class RoleController(DatabaseContext context, ILogger<RoleController> log
 
 
 	[HttpDelete]
-	public async Task<ActionResult> Delete(RoleEntiry roleEntiry)
+	[HasPermission(Permission.role, [ActionType.delete])]
+	public async Task<ActionResult> Delete(string roleId)
 	{
-		_context.Role.Remove(roleEntiry);
-		await _context.SaveChangesAsync();
+		try
+		{
+			var roleEntiry = await _context.Role.FindAsync(roleId);
+			if (roleEntiry is not null)
+			{
+				_context.Role.Remove(roleEntiry);
+				await _context.SaveChangesAsync();
+			}
+		}
+		catch (System.Exception)
+		{
+			return BadRequest();
+		}
 		return Ok();
 	}
 }

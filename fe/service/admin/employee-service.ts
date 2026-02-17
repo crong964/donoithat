@@ -1,17 +1,38 @@
 "use server";
 
-import { iEmployee } from "@/components/employee/interface";
+import { iEmployee, iEmployeeForm } from "@/components/employee/interface";
 import { iRole } from "@/components/role/interface";
 import { errorResponse } from "@/util/error-response";
 import { api } from "@/util/fetch";
 import { revalidatePath } from "next/cache";
 
-export const getEmployees = async (): Promise<iEmployee[]> => {
+export const getEmployees = async (roleId?: string): Promise<iEmployee[]> => {
   let data: iEmployee[] = [];
   try {
-    const res = await api.get("admin/employee/");
+    let res;
+    if (roleId) {
+      res = await api.get("admin/employee?roleId=" + roleId);
+    } else {
+      res = await api.get("admin/employee/");
+    }
+
     data = res.data;
-  } catch (error) {}
+  } catch (error) {
+    console.log(errorResponse(error));
+  }
+  return data;
+};
+export const getEmployeesById = async (
+  id: string,
+): Promise<iEmployeeForm | null> => {
+  let data = null;
+  try {
+    const res = await api.get("admin/employee/" + id);
+
+    data = res.data;
+  } catch (error) {
+    console.log(errorResponse(error));
+  }
   return data;
 };
 export const getRole = async (): Promise<iRole[]> => {

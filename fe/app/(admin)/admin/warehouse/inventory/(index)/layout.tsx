@@ -1,10 +1,6 @@
-import TableEmpty from "@/components/empty/table-empty";
 import ActionInventoryHeader from "@/components/route/admin/warehouse/inventory/action-inventory-header";
-import { Button } from "@/components/ui/button";
+import InventoryHearderLayout from "@/components/route/admin/warehouse/inventory/inventory-hearder-layout";
 import { getAllBrand } from "@/service/admin/brand-service";
-import { getInventoryAdmin } from "@/service/admin/inventory-service";
-import { Plus } from "lucide-react";
-import Link from "next/link";
 
 export default async function InventoryLayout({
   children,
@@ -15,15 +11,7 @@ export default async function InventoryLayout({
 
   return (
     <>
-      <div className="p-3.75">
-        <h1 className="text-2xl font-bold mb-3">Hàng tồn kho</h1>
-        <Link href={"/admin/warehouse/inventory/add"}>
-          <Button variant={"blue"}>
-            <Plus />
-            Thêm sản phẩm
-          </Button>
-        </Link>
-      </div>
+      <InventoryHearderLayout />
       <ActionInventoryHeader ls={da} />
       {children}
     </>

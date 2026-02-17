@@ -6,8 +6,14 @@ import { getEmployees } from "@/service/admin/employee-service";
 import { Eye, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 
-export default async function Employee() {
-  const employees = await getEmployees();
+export default async function Employee({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) {
+  const roleId = (await searchParams).roleId;
+
+  const employees = await getEmployees(roleId);
   if (employees.length == 0) {
     return (
       <TableEmpty
@@ -23,22 +29,11 @@ export default async function Employee() {
   return (
     <ProtectAction permission="employee.view">
       <div className="p-3">
-        <h1 className="text-2xl font-bold mb-3">Danh sách khác hàng</h1>
-        <ProtectAction permission="employee.add">
-          <div className="flex justify-end mb-3">
-            <Link href={"/admin/employee/add"}>
-              <Button type="button" variant={"blue"}>
-                <Plus />
-                Thêm
-              </Button>
-            </Link>
-          </div>
-        </ProtectAction>
         <div className="overflow-x-auto min-h-60 bg-white  rounded-sm border">
           <table className="table-fixed w-full ">
             <tr className="h-20">
               <th className="px-2 w-10"></th>
-              <th className="p-2 w-100">Tài khoản</th>
+              <th className="p-2 w-20">Tài khoản</th>
               <th className="p-2 w-50">Họ và tên</th>
               <th className="p-2 w-50">Số điện thoại</th>
               <th className="p-2 w-50">Vài trò</th>

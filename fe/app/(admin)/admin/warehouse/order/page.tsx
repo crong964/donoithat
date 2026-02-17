@@ -1,6 +1,5 @@
 import InventoryOrderAdmin from "@/components/inventory/inventory-order-admin";
 import ProtectAction from "@/components/permission/protect-action";
-import BackButton from "@/components/ui-custom/back-button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getInventoryOrderAdmin } from "@/service/admin/inventory-order-service";
 

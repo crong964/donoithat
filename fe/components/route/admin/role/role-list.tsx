@@ -14,20 +14,24 @@ import RoleTable from "./role-table";
 import Form from "next/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import checkPermission from "@/util/check-permission";
-import { updateRole } from "@/service/admin/role-service";
+import checkPermission from "@/util/check-role";
+import { deleteRole, updateRole } from "@/service/admin/role-service";
 import { toast } from "react-toastify";
-import { Pen, RotateCcw } from "lucide-react";
+import { Pen, RotateCcw, Trash } from "lucide-react";
+import isSameRole from "@/util/check-role";
 
 const RoleList = ({ roles }: iRoleList) => {
   const [index, setIndex] = useState(0);
-  const [clonePermisson, setClonePermisson] = useState(roles[0].permission);
-  const [permisson, setPermisson] = useState(roles[0].permission);
+  const [cloneRole, setCloneRole] = useState(roles[0]);
+  const [role, setRole] = useState(roles[0]);
   const [mess, updateForm, pedding] = useActionState(updateRole, null);
-
+  const [deleteMess, deleteForm, deletePedding] = useActionState(
+    deleteRole,
+    null,
+  );
   useEffect(() => {
-    setClonePermisson(roles[index].permission);
-    setPermisson(roles[index].permission);
+    setCloneRole(roles[index]);
+    setRole(roles[index]);
     return () => {};
   }, [index, roles]);
 
@@ -64,19 +68,28 @@ const RoleList = ({ roles }: iRoleList) => {
           </SelectGroup>
         </SelectContent>
       </Select>
+      <Input
+        className="my-3 bg-white"
+        placeholder="Chỉnh sửa tên vai trò"
+        onChange={(v) => {
+          setRole({ ...role, roleName: v.currentTarget.value });
+        }}
+        value={role.roleName}
+      />
       <RoleTable
         onChange={(v) => {
-          setPermisson(v);
+          setRole({ ...role, permission: v });
         }}
-        data={permisson}
+        data={role.permission}
       />
+
       <div className="flex gap-x-3.5">
         <Form action={updateForm}>
-          <Input hidden name="roleName" value={roles[index].roleName} />
-          <Input hidden name="permission" value={permisson.trim()} />
-          <Input hidden name="roleId" value={roles[index].roleId} />
+          <Input hidden name="roleName" value={role.roleName} />
+          <Input hidden name="permission" value={role.permission.trim()} />
+          <Input hidden name="roleId" value={role.roleId} />
           <Button
-            disabled={checkPermission(clonePermisson, permisson) || pedding}
+            disabled={isSameRole(cloneRole, role) || pedding}
             variant={"blue"}
           >
             <Pen />
@@ -85,14 +98,21 @@ const RoleList = ({ roles }: iRoleList) => {
         </Form>
         <Button
           onClick={() => {
-            setPermisson(clonePermisson);
+            setRole(cloneRole);
           }}
-          disabled={checkPermission(clonePermisson, permisson)}
+          disabled={isSameRole(cloneRole, role)}
           variant={"blue"}
         >
           <RotateCcw />
           Đặt lại
         </Button>
+        <Form action={updateForm}>
+          <Input hidden name="roleId" value={roles[index].roleId} />
+          <Button variant={"blue"} disabled={deletePedding}>
+            <Trash />
+            Xóa
+          </Button>
+        </Form>
       </div>
     </div>
   );

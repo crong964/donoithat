@@ -35,3 +35,19 @@ export interface iInventoryOrderAdmin {
   productVariantName: string;
   receiedQuality: string;
 }
+
+export interface iBackupInventory {
+  productVariantId: string;
+  productVariantName: string;
+  variantId: string;
+  variantName: string;
+  price: string;
+  importPrice: string;
+  image: string;
+  quality: string;
+  position: string;
+  weight: string;
+  brandId: string;
+  productId: string;
+  imageFiles: string;
+}

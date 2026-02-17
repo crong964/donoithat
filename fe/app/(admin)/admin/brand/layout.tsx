@@ -1,10 +1,17 @@
 import BrandHearderLayout from "@/components/route/admin/brand/brand-hearder-layout";
 import React from "react";
 
-const BrandLayout = ({ children }: { children: React.ReactNode }) => {
+const BrandLayout = ({
+  add,
+  children,
+}: {
+  children: React.ReactNode;
+  add: React.ReactNode;
+}) => {
   return (
-    <div className="p-2 ">
-      <BrandHearderLayout></BrandHearderLayout>
+    <div className="p-3.75">
+      {add}
+      <BrandHearderLayout />
       {children}
     </div>
   );

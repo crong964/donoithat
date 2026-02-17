@@ -46,6 +46,7 @@ export const addRole = async (currentState: any, formData: FormData) => {
       error: true,
     };
   }
+  revalidatePath("/admin");
   return { d: Date.now(), error: false };
 };
 
@@ -53,8 +54,6 @@ export const updateRole = async (currentState: any, formData: FormData) => {
   const roleName = formData.get("roleName");
   const permission = formData.get("permission");
   const roleId = formData.get("roleId");
-  console.log(permission);
-
   try {
     await api.patch("/admin/role", {
       roleName,
@@ -64,6 +63,26 @@ export const updateRole = async (currentState: any, formData: FormData) => {
   } catch (error) {
     console.log((error as any).response?.data);
 
+    return {
+      message: errorResponse(error).message,
+      d: Date.now(),
+      error: true,
+    };
+  }
+  revalidatePath("/admin");
+  return { d: Date.now(), error: false };
+};
+
+export const deleteRole = async (currentState: any, formData: FormData) => {
+  const roleId = formData.get("roleId");
+  try {
+    await api.delete("/admin/role", {
+      data: {
+        roleId,
+      },
+    });
+  } catch (error) {
+    console.log((error as any).response?.data);
     return {
       message: errorResponse(error).message,
       d: Date.now(),

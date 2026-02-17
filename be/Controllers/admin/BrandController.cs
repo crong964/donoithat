@@ -24,6 +24,19 @@ public class BrandController(DatabaseContext context, ILogger<BrandController> l
     }
 
 
+    [HttpGet("{id}")]
+    [HasPermission(Permission.brand, [ActionType.view])]
+    public async Task<ActionResult> GetById(string id)
+    {
+        var ls = await _context
+        .Brand
+        .AsNoTracking()
+        .Where(x => x.BrandId.Equals(id))
+        .FirstOrDefaultAsync();
+        return Ok(ls);
+    }
+
+
     [HttpPost]
     [HasPermission(Permission.brand, [ActionType.add])]
     public async Task<ActionResult> Add(BrandEntity brandEntity)
@@ -36,9 +49,12 @@ public class BrandController(DatabaseContext context, ILogger<BrandController> l
 
     [HttpPatch]
     [HasPermission(Permission.brand, [ActionType.update])]
-    public async Task<ActionResult> Update(BrandEntity brandEntity)
+    public async Task<ActionResult> Update(BrandAdminPostModel brandAdminPostModel)
     {
-        _context.Brand.Update(brandEntity);
+        _context.Brand.Update(new BrandEntity
+        {
+            BrandName = brandAdminPostModel.BrandName
+        });
         await _context.SaveChangesAsync();
         return Ok();
     }
@@ -63,7 +79,7 @@ public class BrandController(DatabaseContext context, ILogger<BrandController> l
 
     [HttpPost("backup")]
     [HasPermission(Permission.brand, [ActionType.upload])]
-    public async Task<ActionResult<SuplierGetAdminModel[]>> AddList(List<BrandAdminPostModel> brands)
+    public async Task<ActionResult<SuplierGetAdminModel[]>> AddList(List<BrandAdminBackupModel> brands)
     {
         foreach (var brand1 in brands)
         {

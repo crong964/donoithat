@@ -1,22 +1,37 @@
+using System.Threading.Tasks;
 using be.Entity;
+using be.Enums;
 using be.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace be.Controllers.admin;
 
 
 
 [ApiController]
-[Route("api/admin/image")]
+[Route("api/admin/[controller]")]
 public class ImageController(DatabaseContext context, ILogger<ImageController> logger) : ControllerBase
 {
     private readonly DatabaseContext _context = context;
     private readonly ILogger<ImageController> _logger = logger;
 
 
+    [HttpGet]
+    public async Task<ActionResult> Get([FromQuery] ImageQueryGetAdminModel imageQuery)
+    {
+        var curPage = imageQuery.CurPage;
+        var limit = 40;
+        var images = await _context.Image.Skip((curPage - 1) * 40).Take(limit).ToListAsync();
+        var totalPage = await _context.Image.CountAsync();
+        return Ok(new { images, totalPage, curPage });
+    }
+
+
+
     [HttpPost("upload")]
     [RequestSizeLimit(100_000_000_000_000)]
-
+    [HasPermission(Permission.image, [ActionType.add])]
     public async Task<ActionResult<List<string>>> Upload(ImageModel imageModel)
     {
         List<string> ls = [];
@@ -61,6 +76,7 @@ public class ImageController(DatabaseContext context, ILogger<ImageController> l
 
     [HttpPost("remove")]
     [RequestSizeLimit(100_000_000_000_000)]
+    [HasPermission(Permission.image, [ActionType.delete])]
     public ActionResult<string> Remove(string nameFiles)
     {
         var dir = System.IO.Directory.GetCurrentDirectory() + "/StaticFiles/";

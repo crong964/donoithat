@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Azure;
 using be.Entity;
@@ -23,7 +24,7 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
     [HasPermission(Permission.inventory, [ActionType.view])]
     public async Task<ActionResult> GetAll([FromQuery] ProductVariantGetAdminModel get)
     {
-        _log.LogInformation(">>>>>>>>>>>>vào");
+
         var OnSale = get.OnSale == null || get.OnSale.Equals("all") ? "" : get.OnSale;
         var BrandId = get.BrandId == null || get.BrandId.Equals("all") ? "" : get.BrandId;
         var CurPage = get.CurPage ?? 1;
@@ -243,6 +244,95 @@ public class InventoryController(DatabaseContext context, ILogger<InventoryContr
 
         return Ok(productVariants);
     }
+
+
+    [HttpGet("backup")]
+    [HasPermission(Permission.inventory, [ActionType.download])]
+    public async Task<ActionResult> Download()
+    {
+        var query = from item in _context.ProductVariant
+
+                    join Product in _context.Product on
+                    item.ProductEntity equals Product into products
+                    from product in products.DefaultIfEmpty()
+
+                    join Brand in _context.Brand on
+                    item.BrandEntity equals Brand into brands
+                    from brand in brands.DefaultIfEmpty()
+
+                    join Image in _context.Image on
+                    item.ImageEntity equals Image into images
+                    from image in images.DefaultIfEmpty()
+
+                    select new
+                    {
+                        item.ProductVariantId,
+                        item.ProductVariantName,
+                        item.VariantId,
+                        item.VariantName,
+                        item.Price,
+                        item.ImportPrice,
+                        item.Image,
+                        item.Quality,
+                        item.Position,
+                        item.Weight,
+
+                        brand.BrandId,
+                        product.ProductId,
+                        image.ImageFiles
+                    };
+        var productVariant = await query.ToArrayAsync();
+        return Ok(productVariant);
+    }
+
+
+    [HttpPost("backup")]
+    [HasPermission(Permission.inventory, [ActionType.upload])]
+    public async Task<ActionResult> Upload(Collection<InventoryBackupAdminModel> inventories)
+    {
+        foreach (var inventorie in inventories)
+        {
+            try
+            {
+                var image = await _context
+               .Image
+               .Where(x => x.ImageFiles.Equals(inventorie.ImageFiles))
+               .FirstOrDefaultAsync();
+
+                var product = await _context
+               .Product
+               .Where(x => x.ProductId.Equals(inventorie.ProductId))
+               .FirstOrDefaultAsync();
+
+                var brandEntity = await _context
+               .Brand
+               .Where(x => x.BrandId.Equals(inventorie.BrandId))
+               .FirstOrDefaultAsync();
+
+                var inventory = new ProductVariantEntity
+                {
+                    ProductVariantId = inventorie.ProductVariantId,
+                    BrandEntity = brandEntity,
+                    Image = inventorie.Image,
+                    ImageEntity = image,
+                    ImportPrice = inventorie.ImportPrice,
+                    Price = inventorie.Price,
+                    ProductEntity = product,
+                    ProductVariantName = inventorie.ProductVariantName,
+                    VariantId = inventorie.VariantId,
+                    VariantName = inventorie.VariantName
+                };
+                _context.ProductVariant.Add(inventory);
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception)
+            {
+
+            }
+        }
+        return Ok(new { message = "ok" });
+    }
+
 
 
     [HttpGet("suplier")]

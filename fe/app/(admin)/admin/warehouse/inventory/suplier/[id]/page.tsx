@@ -36,7 +36,7 @@ export default async function ProvideInventoryDetail({
               <p className="font-bold">{product.productVariantName}</p>
             </div>
             <div className="flex gap-3">
-              <p className="">Tên sản phẩm:</p>
+              <p className="">Số lượng trong kho:</p>
               <p className="font-bold">{product.quality}</p>
             </div>
           </div>

@@ -37,6 +37,14 @@ export default function BrandHearderLayout() {
       <div className="p-3 ">
         <h1 className="text-2xl font-bold mb-3">Danh sách nhãn hàng</h1>
         <div className="flex justify-end items-center gap-x-3 mb-3">
+          <ProtectAction permission="brand.add">
+            <Link href={"/admin/brand/add"}>
+              <Button type="button" variant={"blue"}>
+                <Plus />
+                Thêm nhãn hàng
+              </Button>
+            </Link>
+          </ProtectAction>
           <ProtectAction permission="brand.download">
             <Link href={"/api/admin/brand/backup"} download>
               <Button type="button" variant={"default"}>

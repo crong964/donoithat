@@ -2,7 +2,6 @@ import TableEmpty from "@/components/empty/table-empty";
 import ProtectAction from "@/components/permission/protect-action";
 import { getAllBrand } from "@/service/admin/brand-service";
 import { Pen, Trash2 } from "lucide-react";
-import React from "react";
 
 const BrandPage = async () => {
   const brands = await getAllBrand();
@@ -18,19 +17,25 @@ const BrandPage = async () => {
   }
 
   return (
-    <div className="grid grid-cols-3  p-3.75 bg-white shadow-pro ">
-      {brands.map((brand) => {
-        return (
-          <div key={brand.brandId} className="border p-2">
-            {brand.brandName}
-            <div className="flex gap-x-2.5 mt-2.5 **:data-[icon]:cursor-pointer">
-              <Pen data-icon size={16} />
-              <Trash2 data-icon size={16} />
+    <ProtectAction permission="brand.view">
+      <div className="grid grid-cols-3  p-3.75 bg-white shadow-pro ">
+        {brands.map((brand) => {
+          return (
+            <div key={brand.brandId} className="border p-2">
+              {brand.brandName}
+              <div className="flex gap-x-2.5 mt-2.5 **:data-[icon]:cursor-pointer">
+                <ProtectAction permission="brand.update">
+                  <Pen data-icon size={16} />
+                </ProtectAction>
+                <ProtectAction permission="brand.delete">
+                  <Trash2 data-icon size={16} />
+                </ProtectAction>
+              </div>
             </div>
-          </div>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
+    </ProtectAction>
   );
 };
 

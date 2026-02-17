@@ -12,7 +12,9 @@ public static class Permission
 	public const string suplier = nameof(suplier);
 	public const string inventory = nameof(inventory);
 	public const string role = nameof(role);
-	public const string followerinventory = "follower.inventory";
+	public const string followerInventory = "follower.inventory";
+	public const string image = nameof(image);
+
 	public const string import = nameof(import);
 }
 

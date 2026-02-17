@@ -1,4 +1,6 @@
-const checkPermission = (clonePermission: string, permission: string) => {
+import { iRole } from "@/components/role/interface";
+
+const isSamrPermission = (clonePermission: string, permission: string) => {
   let clonePermissionSet = new Set<string>();
   clonePermission.split(" ").forEach((v) => {
     clonePermissionSet.add(v);
@@ -13,5 +15,10 @@ const checkPermission = (clonePermission: string, permission: string) => {
   }
   return true;
 };
-
-export default checkPermission;
+const isSameRole = (cloneRole: iRole, role: iRole) => {
+  if (cloneRole.roleName != role.roleName) {
+    return false;
+  }
+  return isSamrPermission(cloneRole.permission, role.permission);
+};
+export default isSameRole;

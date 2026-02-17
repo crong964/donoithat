@@ -2,24 +2,24 @@ using be.Entity;
 
 namespace be.Models.User.Employee;
 
-public class EmployeePatchAdminModel
+public class EmployeeBackupAdminModel
 {
-
-	public required string PhoneNumber { get; set; }
-	public required string FullName { get; set; }
 	public required string Account { get; set; }
 	public required string Password { get; set; }
 	public required string RoleId { get; set; }
 	public required string UserId { get; set; }
+	public required string PhoneNumber { get; set; }
+	public required string FullName { get; set; }
 
-	static public EmployeePatchAdminModel Convert(UserEntity userEntity)
+
+	public static EmployeeBackupAdminModel Convert(UserEntity userEntity)
 	{
-		return new EmployeePatchAdminModel
+		return new EmployeeBackupAdminModel
 		{
 			Account = userEntity.AccountEntity.Account,
 			FullName = userEntity.FullName,
 			PhoneNumber = userEntity.PhoneNumber,
-			Password = "",
+			Password = userEntity.AccountEntity.Password,
 			RoleId = userEntity.RoleEntiry.RoleId,
 			UserId = userEntity.UserId
 		};

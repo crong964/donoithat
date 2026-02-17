@@ -1,3 +1,5 @@
+using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using be.Entity;
 using be.Enums;
@@ -11,25 +13,42 @@ namespace be.Controllers.admin;
 
 [ApiController]
 [Route("api/admin/employee")]
-public class EmployeeController(DatabaseContext context, ILogger<EmployeeController> logger) : ControllerBase
+public class EmployeeController(DatabaseContext context, DbContextOptions<DatabaseContext> options, ILogger<EmployeeController> logger) : ControllerBase
 {
     private readonly DatabaseContext _context = context;
+    private readonly DbContextOptions<DatabaseContext> _options = options;
     private readonly ILogger<EmployeeController> _logger = logger;
 
     [HttpGet]
     [HasPermission(Permission.employee, [ActionType.view])]
-    public async Task<ActionResult> GetAll(UserGetModel? userGetModel)
+    public async Task<ActionResult> GetAll([FromQuery] EmployeeQueryAdminModel? queyModel)
     {
-        var Query = userGetModel?.Query ?? "";
-        var page = userGetModel?.Page ?? 1;
-
+        var roleId = queyModel?.RoleId ?? "";
+        _logger.LogInformation(roleId);
         var employee = await _context
         .User
         .Include(x => x.RoleEntiry)
         .Include(x => x.AccountEntity)
-        .Where(x => !x.RoleEntiry.RoleId.Equals("user") && !x.RoleEntiry.RoleId.Equals("superadmin"))
+        .Where(x => !x.RoleEntiry.RoleId.Equals("user") && !x.RoleEntiry.RoleId.Equals("superadmin") &&
+                EF.Functions.Like(x.RoleEntiry.RoleId, "%" + roleId + "%"))
         .Select(x => EmployeeGetAdminModel.Convert(x))
         .ToArrayAsync();
+
+        return Ok(employee);
+    }
+
+    [HttpGet("{id}")]
+    [HasPermission(Permission.employee, [ActionType.view])]
+    public async Task<ActionResult> GetById(string id)
+    {
+        var employee = await _context
+        .User
+        .Include(x => x.RoleEntiry)
+        .Include(x => x.AccountEntity)
+        .AsNoTracking()
+        .Where(x => x.UserId.Equals(id))
+        .Select(x => EmployeePatchAdminModel.Convert(x))
+        .FirstOrDefaultAsync();
 
         return Ok(employee);
     }
@@ -122,5 +141,65 @@ public class EmployeeController(DatabaseContext context, ILogger<EmployeeControl
         return Ok();
     }
 
+
+
+
+    [HttpGet("backup")]
+    [HasPermission(Permission.employee, [ActionType.download])]
+    public async Task<ActionResult> Download()
+    {
+
+        var employees = await _context
+        .User
+        .Include(x => x.RoleEntiry)
+        .Include(x => x.AccountEntity)
+        .Where(x => !x.RoleEntiry.RoleId.Equals("user"))
+        .Select(x => EmployeeBackupAdminModel.Convert(x))
+        .ToArrayAsync();
+        return Ok(employees);
+    }
+
+
+    [HttpPost("backup")]
+    [HasPermission(Permission.employee, [ActionType.upload])]
+    public async Task<ActionResult> Upload(Collection<EmployeeBackupAdminModel> employees)
+    {
+        try
+        {
+            using var ctx = new DatabaseContext(_options);
+            ctx.ChangeTracker.AutoDetectChangesEnabled = false;
+
+            var roleIds = employees.Select(x => x.RoleId).Distinct().ToList();
+            var roles = await ctx.Role
+                .Where(r => roleIds.Contains(r.RoleId))
+                .ToDictionaryAsync(r => r.RoleId);
+
+            foreach (var item in employees)
+            {
+                if (!roles.TryGetValue(item.RoleId, out var role))
+                    return BadRequest(new { message = "Thiếu dữ liệu phân quyền" });
+
+                ctx.User.Add(new UserEntity
+                {
+                    UserId = item.UserId,
+                    FullName = item.FullName,
+                    PhoneNumber = item.PhoneNumber,
+                    RoleEntiry = role,
+                    AccountEntity = new AccountEntity
+                    {
+                        Account = item.Account,
+                        Password = item.Password
+                    }
+                });
+            }
+            await ctx.SaveChangesAsync();
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Backup employee failed");
+            return BadRequest(new { message = "Backup thất bại" });
+        }
+    }
 
 }

@@ -10,6 +10,4 @@ public class UserGetModel
 
     [FromQuery(Name = "page")]
     public int Page { get; set; } = 1;
-
-
 }
