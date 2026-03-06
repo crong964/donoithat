@@ -1,12 +1,12 @@
 import TableEmpty from "@/components/empty/table-empty";
+import ProtectAction from "@/components/permission/protect-action";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getAllImportAdmin } from "@/service/admin/import-service";
 import dateFormat from "@/util/date";
 import priceFormat from "@/util/price-format";
-import { Plus, View } from "lucide-react";
+import { Eye, Plus } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
 const ImportPage = async () => {
   const data = await getAllImportAdmin();
@@ -32,7 +32,7 @@ const ImportPage = async () => {
         </Link>
       </div>
       <div className="overflow-x-auto">
-        <table className="table-auto mt-4 border-separate border-spacing-2 border border-gray-400 dark:border-gray-500">
+        <table className="table-auto mt-4 ">
           <thead>
             <tr>
               <th className="px-2">
@@ -49,7 +49,7 @@ const ImportPage = async () => {
           <tbody>
             {data.map((v) => {
               return (
-                <tr className="**:data-[row]:px-2 **:data-[row]:text-center">
+                <tr className="**:data-[row]:p-3.75 **:data-[row]:text-center cursor-pointer hover:bg-white">
                   <td data-row className="">
                     <Checkbox id={v.importId} className="border-black" />
                   </td>
@@ -60,14 +60,16 @@ const ImportPage = async () => {
                   <td data-row>{priceFormat(v.totalMoney + "")}</td>
                   <td data-row>
                     <div className="flex flex-wrap gap-2">
-                      <Link
-                        href={
-                          "/admin/warehouse/import/detail?importId=" +
-                          v.importId
-                        }
-                      >
-                        <View className="text-green-500 " />
-                      </Link>
+                      <ProtectAction permission="import.view">
+                        <Link
+                          href={
+                            "/admin/warehouse/import/detail?importId=" +
+                            v.importId
+                          }
+                        >
+                          <Eye />
+                        </Link>
+                      </ProtectAction>
                     </div>
                   </td>
                 </tr>

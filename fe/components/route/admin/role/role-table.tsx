@@ -1,10 +1,8 @@
 "use client";
-import { _permissions } from "@/contant/permission";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Plus } from "lucide-react";
-import Form from "next/form";
-import React, { useMemo, useState } from "react";
+import { _permissions } from "@/contant/permission";
+import { useMemo } from "react";
+
 interface iPermissionAddForm {
   data?: string;
   onChange: (data: string) => void;
@@ -46,11 +44,11 @@ const RoleTable = ({ data = "", onChange }: iPermissionAddForm) => {
       <table>
         <tr>
           <th className="p-2 w-100"></th>
-          <th className="p-2 w-40 text-left uppercase">Xem</th>
-          <th className="p-2 w-40 text-left uppercase">Tạo</th>
-          <th className="p-2 w-40 text-left uppercase">Cập nhập</th>
-          <th className="p-2 w-40 text-left uppercase">Xóa</th>
-          <th className="p-2 w-40 text-left uppercase">Tất cả</th>
+          <th className="p-2 w-max text-left uppercase">Xem</th>
+          <th className="p-2 w-max text-left uppercase">Tạo</th>
+          <th className="p-2 w-max text-left uppercase">Cập nhập</th>
+          <th className="p-2 w-max text-left uppercase">Xóa</th>
+          <th className="p-2 w-max text-left uppercase">Tất cả</th>
         </tr>
         <>
           {_permissions.map((permission) => {

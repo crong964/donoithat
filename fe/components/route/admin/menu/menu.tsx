@@ -61,6 +61,7 @@ import {
   setPermission,
   setRole,
 } from "@/redux/admin/permission/permissionRedux";
+import TooltipCustom from "@/components/ui-custom/tooltip-custom";
 
 const itemsMenu = [
   {
@@ -294,35 +295,44 @@ export function AppSidebar({ permissionUser, role }: iAppSidebar) {
                       <CollapsibleContent>
                         <SidebarMenuSub>
                           {item.sub.map((subItem) => (
-                            <SidebarMenuSubItem key={subItem.title}>
-                              <SidebarMenuSubButton asChild>
-                                <Link
-                                  data-link
-                                  data-activelink={subItem.url == pathName}
-                                  href={subItem.url as any}
-                                >
-                                  <span>{subItem.title}</span>
-                                </Link>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
+                            <TooltipCustom
+                              key={subItem.title}
+                              content={subItem.title}
+                            >
+                              <SidebarMenuSubItem>
+                                <SidebarMenuSubButton asChild>
+                                  <Link
+                                    data-link
+                                    data-activelink={subItem.url == pathName}
+                                    href={subItem.url}
+                                  >
+                                    <span >
+                                      {subItem.title}
+                                    </span>
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            </TooltipCustom>
                           ))}
                         </SidebarMenuSub>
                       </CollapsibleContent>
                     </SidebarMenuItem>
                   </Collapsible>
                 ) : (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        data-link
-                        data-activelink={item.url == pathName}
-                        href={item.url}
-                      >
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                  <TooltipCustom content={item.title}>
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild>
+                        <Link
+                          data-link
+                          data-activelink={item.url == pathName}
+                          href={item.url}
+                        >
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </TooltipCustom>
                 ),
               )}
             </SidebarMenu>

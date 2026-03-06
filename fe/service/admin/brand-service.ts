@@ -1,3 +1,4 @@
+"use server";
 import { iBrand } from "@/components/brand/interface";
 import { errorResponse } from "@/util/error-response";
 import { api } from "@/util/fetch";

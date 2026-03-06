@@ -1,3 +1,4 @@
+"use client"
 import ParallelModal from "@/components/ui-custom/parallel-modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

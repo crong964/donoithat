@@ -1,29 +1,10 @@
 import ProtectAction from "@/components/permission/protect-action";
 import BackButton from "@/components/ui-custom/back-button";
-import { Button } from "@/components/ui/button";
 import { getImportAdminById } from "@/service/admin/import-service";
 import dateFormat from "@/util/date";
 import priceFormat from "@/util/price-format";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import React from "react";
-interface iImportDetail {
-  userId: string;
-  fullName: string;
-  importId: string;
-  purchaseInvoiceId: string;
-  totalMoney: number;
-  receivedDate: string;
-  suplierId: string;
-  suplierName: string;
-}
-interface iProductVariantDetail {
-  productVariantId: string;
-  productVariantName: string;
-  importPrice: number;
-  image: string;
-  quality: string;
-}
+
 const ImportDetailPage = async ({
   searchParams,
 }: {
@@ -61,7 +42,7 @@ const ImportDetailPage = async ({
           <table className="w-full">
             <thead>
               <tr>
-                <th className="w-80">Tên sản phẩm</th>
+                <th className="w-120">Tên sản phẩm</th>
                 <th className="w-50">Giá nhập</th>
                 <th className="w-50">Số lượng</th>
                 <th>Tổng tiền</th>
@@ -70,14 +51,14 @@ const ImportDetailPage = async ({
             <tbody>
               {data?.ls.map((importProduct) => {
                 return (
-                  <tr key={importProduct.productVariantId}>
+                  <tr key={importProduct.productVariantId} >
                     <td className=" p-2">
-                      <div className="flex gap-3 items-start">
+                      <div className="flex gap-3 items-center">
                         <img
-                          className="w-13 h-auto"
+                          className="w-30 h-auto"
                           src={importProduct.image}
                         />
-                        <p className="text-sm">
+                        <p className="text-lg">
                           {importProduct.productVariantName}
                         </p>
                       </div>
