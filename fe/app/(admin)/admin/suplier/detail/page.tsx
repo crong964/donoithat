@@ -1,6 +1,6 @@
 import BackButton from "@/components/ui-custom/back-button";
 import { redirect } from "next/navigation";
-import React from "react";
+
 
 const SuplierDetailPage = async ({
   searchParams,
@@ -15,14 +15,12 @@ const SuplierDetailPage = async ({
   return (
     <>
       <div className="p-3">
-        <BackButton/>
+        <BackButton />
       </div>
       <div className="my-5 ">
         <h1 className="font-bold text-2xl">Thông tin nhà cung cấp </h1>
       </div>
-			<div>
-
-			</div>
+      <div></div>
     </>
   );
 };

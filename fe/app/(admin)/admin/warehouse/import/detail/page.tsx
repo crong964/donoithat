@@ -39,28 +39,23 @@ const ImportDetailPage = async ({
               <div className="font-bold">{data?.import.purchaseInvoiceId}</div>
             </div>
           </div>
-          <table className="w-full">
+          <table className="w-full bg-white">
             <thead>
               <tr>
-                <th className="w-120">Tên sản phẩm</th>
-                <th className="w-50">Giá nhập</th>
-                <th className="w-50">Số lượng</th>
-                <th>Tổng tiền</th>
+                <th className="w-120 p-2">Tên sản phẩm</th>
+                <th className="w-50 p-2">Giá nhập</th>
+                <th className="w-50 p-2">Số lượng</th>
+                <th className="p-2">Tổng tiền</th>
               </tr>
             </thead>
             <tbody>
               {data?.ls.map((importProduct) => {
                 return (
-                  <tr key={importProduct.productVariantId} >
+                  <tr key={importProduct.productVariantId}>
                     <td className=" p-2">
                       <div className="flex gap-3 items-center">
-                        <img
-                          className="w-30 h-auto"
-                          src={importProduct.image}
-                        />
-                        <p className="text-lg">
-                          {importProduct.productVariantName}
-                        </p>
+                        <img className="size-25" src={importProduct.image} />
+                        <p className="">{importProduct.productVariantName}</p>
                       </div>
                     </td>
                     <td className="p-2 text-center">

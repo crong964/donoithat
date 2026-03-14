@@ -1,4 +1,3 @@
-
 const BrandPage = async () => {
   return null;
 };

@@ -1,4 +1,4 @@
-import React from "react";
+
 import BackButton from "./back-button";
 
 const ActionHeader = ({ title }: { title: string }) => {

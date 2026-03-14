@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { getProduct } from "@/service/product-service";
 import Link from "next/link";
-import React from "react";
+
 
 export default async function Colection(params: {
   params: Promise<{ slug: string }>;

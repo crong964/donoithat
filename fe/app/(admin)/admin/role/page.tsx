@@ -6,7 +6,7 @@ import { getAllRole } from "@/service/admin/role-service";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
-import React from "react";
+
 
 const PermissionPage = async () => {
   const roles = await getAllRole();

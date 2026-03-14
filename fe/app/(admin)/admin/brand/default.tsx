@@ -1,4 +1,3 @@
-
 const BrandDefaultPage = async () => {
   return null;
 };

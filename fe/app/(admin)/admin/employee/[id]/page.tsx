@@ -1,7 +1,6 @@
 import ProtectAction from "@/components/permission/protect-action";
 import EmployeeForm from "@/components/route/admin/employee/employee-form";
 import { getEmployeesById, getRole } from "@/service/admin/employee-service";
-import React from "react";
 
 const EmpoyeeIdPage = async ({
   params,

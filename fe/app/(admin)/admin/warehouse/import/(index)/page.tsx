@@ -32,10 +32,10 @@ const ImportPage = async () => {
         </Link>
       </div>
       <div className="overflow-x-auto">
-        <table className="table-auto mt-4 ">
+        <table className="table-auto mt-4 bg-white ">
           <thead>
             <tr>
-              <th className="px-2">
+              <th className="p-3">
                 <Checkbox id="terms" className="border-black" />
               </th>
               <th className="w-50">Số phiếu</th>

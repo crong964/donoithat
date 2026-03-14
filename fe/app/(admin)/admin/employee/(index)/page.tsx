@@ -25,7 +25,6 @@ export default async function Employee({
       />
     );
   }
-
   return (
     <ProtectAction permission="employee.view">
       <div className="p-3">

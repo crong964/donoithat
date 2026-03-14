@@ -31,7 +31,11 @@ export default async function Layout({
       <div className="px-2 space-y-3">
         <CategoryCombobox ls={cate} />
         <Form action={"/admin/product"} className="flex gap-x-3">
-          <Input name="nameProduct" className="bg-white" placeholder="Tên sản phẩm" />
+          <Input
+            name="nameProduct"
+            className="bg-white"
+            placeholder="Tên sản phẩm"
+          />
           <Button>Tìm kiếm</Button>
         </Form>
       </div>
