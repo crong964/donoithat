@@ -12,6 +12,9 @@ import Link from "next/link";
 import LuxuryProduct from "./luxury-product";
 import CouponSection from "./coupon-section";
 import ImageSection from "./image-section";
+import CategorySection from "./category-section";
+import NewProductSection from "./new-product-section";
+import PromotionSection from "./promotion-section";
 
 export default function Home(data: {
   products: iGetProduct;
@@ -24,56 +27,10 @@ export default function Home(data: {
   return (
     <>
       <ImageSection />
-      <section className="mt-7.5 pb-17.5 px-3.75">
-        <MainCarousel>
-          {Array.from({ length: 4 }).map((v, i) => {
-            return (
-              <div
-                key={i}
-                className="group basis-9/13 lg:basis-1/4  grow-0  shrink-0 px-2 h-max cursor-pointer relative "
-              >
-                <div className=" overflow-hidden h-50 rounded-sm">
-                  <img
-                    src={`/categorybanner_${i + 1}_img.jpg`}
-                    className="w-full h-full object-cover transform  group-hover:scale-110 duration-500 "
-                    alt=""
-                    srcSet=""
-                  />
-                </div>
-                <div className="w-full pointer-events-none  z-0 absolute bottom-0   left-0 px-5 py-2.5">
-                  <div className="text-center text-[18px] leading-5  font-bold text-f">
-                    Phòng khách
-                  </div>
-                  <div className="text-center">xem ngay</div>
-                </div>
-              </div>
-            );
-          })}
-        </MainCarousel>
-      </section>
+      <CategorySection />
       <LuxuryProduct products={product} />
       <CouponSection />
-      <section className="lg:px-3.75 pb-17.5 relative">
-        <div className="mb-5 max-lg:px-3.75">
-          <h2 className="text-[18px] lg:text-[24px] font-bold leading-7.25 text-f">
-            <Link href="#">Back To School - Up To 60%</Link>
-          </h2>
-        </div>
-        <MainCarousel
-          action={
-            <>
-              <div className="absolute top-0 right-0 pr-3 flex space-x-2 lg:space-x-2.5 ">
-                <CarouselPrevious />
-                <CarouselNext />
-              </div>
-            </>
-          }
-        >
-          {product.map((v, i) => {
-            return <ProductHome {...v} key={v.slug} />;
-          })}
-        </MainCarousel>
-      </section>
+      <PromotionSection products={product} />
       <section className="pb-17.5">
         <div className="px-3.75 min-h-40">
           <div
@@ -136,64 +93,7 @@ export default function Home(data: {
           </div>
         </div>
       </section>
-      <section className="lg:px-3.75 pb-17.5">
-        <div className="flex max-lg:flex-col justify-between lg:items-center mb-5">
-          <div className="max-lg:mb-3.5">
-            <h1 className="text-[24px] leading-7.25 font-bold text-f">
-              Sản phẩm nổi bật
-            </h1>
-          </div>
-          <div className="">
-            <ul className=" font-bold h-auto flex items-center">
-              <li>
-                <Link
-                  href="#"
-                  className="px-4 py-2.5 text-[14px] leading-5  rounded-full border text-white bg-f"
-                >
-                  Sản phẩm mới
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="px-4 py-2.5 text-[14px] leading-5 rounded-full text-[#787878] border border-[#eae4e8] ml-5"
-                >
-                  Sofa New Arrival
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="flex flex-wrap ">
-          <div className="max-lg:hidden basis-1/5 min-h-[650px] pb-2">
-            <img
-              src="/home_coll_1_banner.jpg"
-              className="w-full  object-cover h-full"
-              alt=""
-              srcSet=""
-            />
-          </div>
-          <div className=" lg:basis-4/5  ">
-            <div className="flex flex-wrap h-full ">
-              {product
-                .filter((_, i) => {
-                  return i < 10;
-                })
-                .map((v, i) => {
-                  return <ProductItem key={v.slug} {...v}></ProductItem>;
-                })}
-            </div>
-          </div>
-        </div>
-        <div className="mt-6.25 text-center">
-          <Link
-            href="/collections"
-            className="px-6.25 py-2.5 tracking-wider border text-center text-f border-f text-sm hover:text-white rounded-sm hover:bg-f "
-          >
-            Xem tất cả <strong>Sản phẩm mới </strong>
-          </Link>
-        </div>
-      </section>
+      <NewProductSection products={product} />
     </>
   );
 }
