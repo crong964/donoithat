@@ -1,6 +1,4 @@
 "use server";
-import { iMainCateGory } from "@/components/category/interface";
-import { errorResponse } from "@/util/error-response";
 import { api } from "@/util/fetch";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,7 +8,7 @@ export async function GET(request: NextRequest) {
     let data = await api.get(
       `/admin/inventory?curpage=${p.get("page") || ""}&inventoryName=${
         p.get("inventoryName") || ""
-      }&onSale=${p.get("onSale") || ""}&brandId=${p.get("brandId") || ""}`
+      }&onSale=${p.get("onSale") || ""}&brandId=${p.get("brandId") || ""}`,
     );
 
     return NextResponse.json(data.data);
@@ -19,7 +17,7 @@ export async function GET(request: NextRequest) {
     { message: "" },
     {
       status: 505,
-    }
+    },
   );
 }
 

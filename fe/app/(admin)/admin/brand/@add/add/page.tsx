@@ -1,4 +1,4 @@
-import BrandForm from "@/components/route/admin/brand/brand-form";
+import BrandForm from "@/components/admin/brand/brand-form";
 
 const Page = async () => {
   return <BrandForm />;

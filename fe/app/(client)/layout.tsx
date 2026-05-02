@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/layout/footer";
-import ReduxClientComponent from "@/components/route/client/redux-client-component";
 import { ToastContainer, toast } from "react-toastify";
+import ReduxClientComponent from "@/components/client/redux-client-component";
 
 export const metadata: Metadata = {
   title: "Create Next App",

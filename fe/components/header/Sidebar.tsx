@@ -71,7 +71,7 @@ const Sidebar = () => {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-width="2"
+                    strokeWidth="2"
                     d="M2 2l4 4-4 4"
                     fill="none"
                     stroke-linecap="square"
@@ -110,7 +110,7 @@ const Sidebar = () => {
             >
               <path
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
                 d="M2 2l4 4-4 4"
                 fill="none"
                 stroke-linecap="square"

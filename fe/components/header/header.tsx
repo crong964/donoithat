@@ -1,16 +1,19 @@
-import Category from "@/components//category/category";
-import Search from "./search";
-import Sign from "./sign";
-import Cart from "./cart";
+
 import Link from "next/link";
 import { getCategory } from "@/service/category-service";
 import { getUserInfor } from "@/service/user-service";
-import Sidebar from "./sidebar";
+import { getAllProductCart } from "@/service/cart-service";
+import HeaderNavi from "./header-navi";
 
 export default async function Header() {
-  let datas = await Promise.all([getCategory(), getUserInfor()]);
-  let data = datas[0];
+  let datas = await Promise.all([
+    getCategory(),
+    getUserInfor(),
+    getAllProductCart(),
+  ]);
+  let category = datas[0];
   let user = datas[1];
+  const productVariantCarts = datas[2];
   return (
     <>
       <Link href="/" className="flex justify-center">
@@ -21,54 +24,7 @@ export default async function Header() {
           srcSet=""
         />
       </Link>
-      <header className="">
-        <div className="bg-f pt-2.5 pb-2.5 lg:pt-4.5 lg:pb-3.5">
-          <div className="max-w-350  mx-auto gap-5 flex max-lg:items-center max-lg:px-1.75">
-            <div className="max-lg:flex-1">
-              <div className="max-lg:flex items-center">
-                <Sidebar />
-                <div className="w-37.5 h-15 lg:h-17.5 px-3.75">
-                  <Link href="/" className="size-full">
-                    <img
-                      src="/logo.png"
-                      className="h-full w-auto"
-                      alt=""
-                      srcSet=""
-                    />
-                  </Link>
-                </div>
-              </div>
-            </div>
-            <div className=" lg:flex-1 px-3.75  fill-white">
-              <div className="flex  items-center text-white  font-normal">
-                <div className="hidden flex-1 lg:block">
-                  <Search />
-                </div>
-                <Sign {...user} />
-                <Cart />
-              </div>
-            </div>
-          </div>
-          <div className="lg:hidden">
-            <Search />
-          </div>
-        </div>
-        <nav className="max-lg:hidden max-w-350 mx-auto  uppercase px-3.75">
-          <ul className="text-f fill-f font-medium flex flex-wrap gap-0.75 justify-center">
-            {data.map((v, i) => {
-              return (
-                <Category
-                  key={v.slug + i}
-                  id={v.id}
-                  slug={v.slug}
-                  categoryChidlren={v.categoryChidlren}
-                  nameCategory={v.nameCategory}
-                />
-              );
-            })}
-          </ul>
-        </nav>
-      </header>
+      <HeaderNavi category={category} ls={productVariantCarts} user={user} />
     </>
   );
 }

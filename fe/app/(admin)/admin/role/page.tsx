@@ -1,6 +1,6 @@
 import TableEmpty from "@/components/empty/table-empty";
 import ProtectAction from "@/components/permission/protect-action";
-import RoleList from "@/components/route/admin/role/role-list";
+import RoleList from "@/components/admin/role/role-list";
 import { Button } from "@/components/ui/button";
 import { getAllRole } from "@/service/admin/role-service";
 import { Plus } from "lucide-react";

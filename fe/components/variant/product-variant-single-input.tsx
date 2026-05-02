@@ -1,7 +1,7 @@
 import React, { JSX, useMemo } from "react";
 import { Input } from "../ui/input";
 import { Check, Image } from "lucide-react";
-import { IProductVariant } from "../route/admin/product/interface";
+import { IProductVariant } from "../admin/product/interface";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/admin/reduxRoot";
 import {

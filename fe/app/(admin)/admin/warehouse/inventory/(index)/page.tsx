@@ -1,6 +1,6 @@
 import TableEmpty from "@/components/empty/table-empty";
 import ProtectAction from "@/components/permission/protect-action";
-import InventoryItem from "@/components/route/admin/warehouse/inventory/inventory-item";
+import InventoryItem from "@/components/admin/warehouse/inventory/inventory-item";
 import Pagination from "@/components/ui-custom/pagination";
 import { getInventoryAdmin } from "@/service/admin/inventory-service";
 

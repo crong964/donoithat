@@ -1,4 +1,4 @@
-import AddInventory from "@/components/route/admin/warehouse/inventory/add-inventory";
+import AddInventory from "@/components/admin/warehouse/inventory/add-inventory";
 import { Select } from "@/components/ui/select";
 import { getAllBrand } from "@/service/admin/brand-service";
 import Form from "next/form";

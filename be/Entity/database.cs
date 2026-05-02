@@ -23,6 +23,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     public DbSet<ImportDetailEntity> ImportDetailEntity { get; set; } = null!;
     public DbSet<CouponEntity> Coupon { get; set; } = null!;
     public DbSet<RoleEntiry> Role { get; set; } = null!;
+    public DbSet<LocationEntity> Location { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserEntity>()

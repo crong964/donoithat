@@ -1,4 +1,4 @@
-import EditInventory from "@/components/route/admin/warehouse/inventory/edit-inventory";
+import EditInventory from "@/components/admin/warehouse/inventory/edit-inventory";
 import { getAllBrand } from "@/service/admin/brand-service";
 import { getInventoryByIdAdmin } from "@/service/admin/inventory-service";
 import { redirect } from "next/navigation";

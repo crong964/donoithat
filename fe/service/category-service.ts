@@ -1,5 +1,6 @@
 "use server";
 import { iMainCateGory } from "@/components/category/interface";
+
 import { api } from "@/util/fetch";
 
 export const getCategory = async (): Promise<iMainCateGory[]> => {

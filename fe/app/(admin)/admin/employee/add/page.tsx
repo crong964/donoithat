@@ -1,5 +1,5 @@
 import ProtectAction from "@/components/permission/protect-action";
-import EmployeeForm from "@/components/route/admin/employee/employee-form";
+import EmployeeForm from "@/components/admin/employee/employee-form";
 import { getRole } from "@/service/admin/employee-service";
 
 const EmployeeAddPage = async () => {

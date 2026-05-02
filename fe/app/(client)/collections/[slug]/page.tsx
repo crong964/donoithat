@@ -10,7 +10,6 @@ import {
 import { getProduct } from "@/service/product-service";
 import Link from "next/link";
 
-
 export default async function Colection(params: {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -50,10 +49,16 @@ export default async function Colection(params: {
           </span>
           <span className="w-full max-w"> {key}</span>
         </label>
-      </li>
+      </li>,
     );
   }
-
+  const priceFilter = [
+    "Dưới 1.000.000đ",
+    "1.000.000đ - 2.000.000đ",
+    "2.000.000đ - 3.000.000đ",
+    "3.000.000đ - 4.000.000đ",
+    "Trên 4.000.000đ",
+  ];
   return (
     <>
       <Navi ls={ls} />
@@ -62,7 +67,7 @@ export default async function Colection(params: {
           <section className="bg-white shadow-a rounded-sm mb-3.5">
             <div className="px-3.25 py-2.5 ">
               <h3 className="text-[16px] leading-5.75 font-bold">
-                Danh mục sản phẩm{" "}
+                Danh mục sản phẩm
               </h3>
             </div>
             <div className="p-2.5  border-t border-boder">
@@ -87,7 +92,7 @@ export default async function Colection(params: {
             >
               <AccordionTrigger className="px-3.25 py-2.5 ">
                 <h3 className="text-[16px] leading-5.75 font-bold">
-                  Danh mục sản phẩm{" "}
+                  Danh mục sản phẩm
                 </h3>
               </AccordionTrigger>
               <AccordionContent className="p-2.5  border-t border-boder">
@@ -128,18 +133,22 @@ export default async function Colection(params: {
               </AccordionTrigger>
               <AccordionContent className="p-2.5  border-t border-boder">
                 <ul className="text-[14px] font-normal tracking-letter leading-7">
-                  <li className="hover:border-f w-full cursor-pointer">
-                    <label htmlFor="1">
-                      <span className="pl-6.25 relative">
-                        <input
-                          id="1"
-                          className="size-4 accent-f absolute top-0 left-0 border border-boder "
-                          type="checkbox"
-                        />
-                      </span>
-                      <span className="w-full max-w"> Dưới 1,000,000 đ</span>
-                    </label>
-                  </li>
+                  {priceFilter.map((v) => {
+                    return (
+                      <li key={v} className="hover:border-f w-full cursor-pointer">
+                        <label htmlFor="1">
+                          <span className="pl-6.25 relative">
+                            <input
+                              id="1"
+                              className="size-4 accent-f absolute top-0 left-0 border border-boder "
+                              type="checkbox"
+                            />
+                          </span>
+                          <span className="w-full max-w">{v}</span>
+                        </label>
+                      </li>
+                    );
+                  })}
                 </ul>
               </AccordionContent>
             </AccordionItem>

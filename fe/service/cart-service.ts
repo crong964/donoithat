@@ -41,7 +41,7 @@ export const getAllProductCart = async (): Promise<iProductVariantCart[]> => {
 
 export const deleteProductCart = async (
   currentState: any,
-  formData: FormData
+  formData: FormData,
 ) => {
   const productVariantId = formData.get("productVariantId");
   try {
@@ -61,7 +61,7 @@ export const deleteProductCart = async (
 
 export const updateProductCart = async (
   currentState: any,
-  formData: FormData
+  formData: FormData,
 ) => {
   const productVariantId = formData.get("productVariantId");
   const quality = formData.get("quality");

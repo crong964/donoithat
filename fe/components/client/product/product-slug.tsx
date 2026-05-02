@@ -16,7 +16,7 @@ import {
 import PriceFormat from "@/util/price-format";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import CartProductAddButton from "./cart-product-add-button";
-import { IProductClassification } from "../../admin/product/interface";
+import { IProductClassification } from "@/components/admin/product/interface";
 
 export default function ProductSlug(productdetail: iProductDetail) {
   const [variants, setVariants] = useState<string[]>([]);
@@ -36,7 +36,7 @@ export default function ProductSlug(productdetail: iProductDetail) {
     { name: product.nameProduct, url: `/product/${slug}` },
   ];
   const productClassification = JSON.parse(
-    product.productClassification
+    product.productClassification,
   ) as IProductClassification[];
   const relatedProducts = productdetail.relatedProducts;
 
@@ -227,101 +227,99 @@ export default function ProductSlug(productdetail: iProductDetail) {
                     className="text-[28px] font-semibold"
                   >
                     {PriceFormat(
-                      productVariants[curIndexProductVariant].price + ""
+                      productVariants[curIndexProductVariant].price + "",
                     )}
                     đ
                   </span>
                 </div>
               </div>
-              {productClassification.length > 1 ? (
-                <ol className="px-3.75 pb-3.75 bg-[#fafafa]">
-                  {productClassification.map((v, i) => {
-                    return (
-                      <li key={v.id} className="flex  items-center mt-3.75">
-                        <span className="basis-1/7 font-semibold text-[14px]">
-                          {v.name}
-                        </span>
-                        <div className="flex-1">
-                          <ol className="flex flex-wrap text-f">
-                            {v.options.map((vo) => {
-                              return (
-                                <Fragment key={vo.id}>
-                                  {variants[i] == vo.id ? (
-                                    <li
-                                      onClick={() => choseOption(i, vo.id)}
-                                      className="text-[12px] mb-2 mr-2 rounded-xs cursor-pointer px-2.5 py-1.75 border-f border font-semibold"
-                                    >
-                                      <p className="px-2.5">{vo.name}</p>
-                                    </li>
-                                  ) : (
-                                    <li
-                                      onClick={() => choseOption(i, vo.id)}
-                                      className="text-[12px] mb-2 mr-2 rounded-xs cursor-pointer px-2.5 py-1.75 border-white border font-semibold"
-                                    >
-                                      <p className="px-2.5">{vo.name}</p>
-                                    </li>
-                                  )}
-                                </Fragment>
-                              );
-                            })}
-                          </ol>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ol>
-              ) : (
-                <></>
-              )}
-              {curquality == 0 ? (
-                <></>
-              ) : (
-                <div className="pt-3.75 mb-3.75">
-                  <div className="flex px-3.75 items-center ">
-                    <span className="w-1/5 font-semibold text-[14px]">
-                      Số lượng:
-                    </span>
-                    <button
-                      onClick={() => decrease()}
-                      className="size-9.75 cursor-pointer flex items-center justify-center"
-                    >
-                      <svg
-                        focusable="false"
-                        className="size-3 "
-                        viewBox="0 0 10 2"
-                        role="presentation"
-                      >
-                        <path d="M10 0v2H0V0z"></path>
-                      </svg>
-                    </button>
-                    <div className="size-9.75  flex items-center justify-center">
-                      <p>{quality}</p>
-                    </div>
-                    <button
-                      onClick={() => increase()}
-                      className="size-9.75 cursor-pointer flex items-center justify-center"
-                    >
-                      <svg
-                        focusable="false"
-                        className="size-3 "
-                        viewBox="0 0 10 10"
-                        role="presentation"
-                      >
-                        <path d="M6 4h4v2H6v4H4V6H0V4h4V0h2v4z"></path>
-                      </svg>
-                    </button>
-                  </div>
-                  <div
-                    style={{ lineHeight: "normal" }}
-                    className="mt-3.75 tracking-letter flex text-[15px] font-bold"
+              <ol
+                data-show={productClassification.length > 1}
+                className="data-[show=false]:hidden px-3.75 pb-3.75 bg-[#fafafa]"
+              >
+                {productClassification.map((v, i) => {
+                  return (
+                    <li key={v.id} className="lg:flex  items-center mt-3.75">
+                      <span className="basis-1/7 max-lg:mb-3 font-semibold text-[14px]">
+                        {v.name}
+                      </span>
+                      <div className="flex-1">
+                        <ol className="flex flex-wrap  text-f">
+                          {v.options.map((vo) => {
+                            return (
+                              <Fragment key={vo.id}>
+                                {variants[i] == vo.id ? (
+                                  <li
+                                    onClick={() => choseOption(i, vo.id)}
+                                    className="text-[12px] mb-2 mr-2 rounded-xs cursor-pointer px-2.5 py-1.75 border-f border font-semibold"
+                                  >
+                                    <p className="px-2.5">{vo.name}</p>
+                                  </li>
+                                ) : (
+                                  <li
+                                    onClick={() => choseOption(i, vo.id)}
+                                    className="text-[12px] mb-2 mr-2 rounded-xs cursor-pointer px-2.5 py-1.75 border-white border font-semibold"
+                                  >
+                                    <p className="px-2.5">{vo.name}</p>
+                                  </li>
+                                )}
+                              </Fragment>
+                            );
+                          })}
+                        </ol>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+              <div
+                data-show={curquality > 0}
+                className="pt-3.75 data-[show=false]:hidden mb-3.75"
+              >
+                <div className="flex px-3.75 items-center ">
+                  <span className="w-1/5 font-semibold text-[14px]">
+                    Số lượng:
+                  </span>
+                  <button
+                    onClick={() => decrease()}
+                    className="size-9.75 cursor-pointer flex items-center justify-center"
                   >
-                    <CartProductAddButton
-                      productVariantId={productVariant.productVariantId}
-                      curquality={quality}
-                    />
+                    <svg
+                      focusable="false"
+                      className="size-3 "
+                      viewBox="0 0 10 2"
+                      role="presentation"
+                    >
+                      <path d="M10 0v2H0V0z"></path>
+                    </svg>
+                  </button>
+                  <div className="size-9.75  flex items-center justify-center">
+                    <p>{quality}</p>
                   </div>
+                  <button
+                    onClick={() => increase()}
+                    className="size-9.75 cursor-pointer flex items-center justify-center"
+                  >
+                    <svg
+                      focusable="false"
+                      className="size-3 "
+                      viewBox="0 0 10 10"
+                      role="presentation"
+                    >
+                      <path d="M6 4h4v2H6v4H4V6H0V4h4V0h2v4z"></path>
+                    </svg>
+                  </button>
                 </div>
-              )}
+                <div
+                  style={{ lineHeight: "normal" }}
+                  className="mt-3.75 tracking-letter flex text-[15px] font-bold"
+                >
+                  <CartProductAddButton
+                    productVariantId={productVariant.productVariantId}
+                    curquality={quality}
+                  />
+                </div>
+              </div>
 
               <ProductDelivery />
             </div>

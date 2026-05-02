@@ -1,5 +1,5 @@
 import ProtectAction from "@/components/permission/protect-action";
-import ImportAddAdminForm from "@/components/route/admin/warehouse/import/add-import-form";
+import ImportAddAdminForm from "@/components/admin/warehouse/import/add-import-form";
 import BackButton from "@/components/ui-custom/back-button";
 
 

@@ -1,4 +1,4 @@
-import BrandHearderLayout from "@/components/route/admin/brand/brand-hearder-layout";
+import BrandHearderLayout from "@/components/admin/brand/brand-hearder-layout";
 
 const BrandLayout = ({
   add,

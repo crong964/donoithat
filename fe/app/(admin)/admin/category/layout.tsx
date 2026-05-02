@@ -1,5 +1,5 @@
-import CategoryHeaderLayout from "@/components/route/admin/category/categery-hearder-layout";
-import CategoryItem from "@/components/route/admin/category/category-item";
+import CategoryHeaderLayout from "@/components/admin/category/categery-hearder-layout";
+import CategoryItem from "@/components/admin/category/category-item";
 import { getCategory } from "@/service/admin/category-service";
 
 export default async function Layout({

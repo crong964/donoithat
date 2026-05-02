@@ -1,5 +1,5 @@
 import ProtectAction from "@/components/permission/protect-action";
-import CategoryCombobox from "@/components/route/admin/category/category-combo-box";
+import CategoryCombobox from "@/components/admin/category/category-combo-box";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getCategoryInProduct } from "@/service/admin/category-service";

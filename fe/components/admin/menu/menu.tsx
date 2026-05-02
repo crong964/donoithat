@@ -209,11 +209,16 @@ const itemsMenu = [
       },
     ],
   },
-
   {
     title: "Chường trình khuyến mãi",
     url: "/admin/coupon",
     icon: TicketPercent,
+    permission: "",
+  },
+  {
+    title: "Cài đặt",
+    url: "/admin/setting",
+    icon: Settings,
     permission: "",
   },
 ];
@@ -306,9 +311,7 @@ export function AppSidebar({ permissionUser, role }: iAppSidebar) {
                                     data-activelink={subItem.url == pathName}
                                     href={subItem.url}
                                   >
-                                    <span >
-                                      {subItem.title}
-                                    </span>
+                                    <span>{subItem.title}</span>
                                   </Link>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>

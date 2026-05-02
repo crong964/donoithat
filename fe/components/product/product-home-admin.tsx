@@ -104,7 +104,7 @@ export default function ProductHomeAdmin(p: iProduct) {
 
               <SubmitButton loading={<Switch checked={status} />}>
                 <Button type="submit" variant={"none"}>
-                  <Switch checked={status} className="cursor-pointer"/>
+                  <Switch checked={status} className="cursor-pointer" />
                 </Button>
               </SubmitButton>
             </Form>

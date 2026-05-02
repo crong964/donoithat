@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
 
-import { AppSidebar } from "@/components/route/admin/menu/menu";
+import { AppSidebar } from "@/components/admin/menu/menu";
 import { SidebarInset } from "@/components/ui/sidebar";
-import ReduxComponent from "@/components/route/admin/redux-component";
+import ReduxComponent from "@/components/admin/redux-component";
 import { ToastContainer } from "react-toastify";
 import { getToken } from "@/service/user-service";
 import { parseJwt } from "@/util/parse-jwt";

@@ -1,5 +1,5 @@
 import ProtectAction from "@/components/permission/protect-action";
-import UserHearderLayout from "@/components/route/admin/user/user-hearder-layout";
+import UserHearderLayout from "@/components/admin/user/user-hearder-layout";
 import Pagination from "@/components/ui-custom/pagination";
 import { getUserAdmin } from "@/service/admin/user-service";
 

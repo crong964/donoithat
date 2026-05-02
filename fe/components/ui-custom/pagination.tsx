@@ -98,7 +98,7 @@ const PaginationItem = (p: {
   children?: JSX.Element;
   showOnlyPc?: boolean;
 }) => {
-  const hrel = `${p.url}&page=${p.page}`;
+  const hrel = `${p.url}page=${p.page}`;
   return (
     <Link
       href={hrel}

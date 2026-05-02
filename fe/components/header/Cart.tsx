@@ -1,8 +1,11 @@
-import { getAllProductCart } from "@/service/cart-service";
 import Link from "next/link";
+import { iProductVariantCart } from "@/components/product/interface";
 
-export default async function Cart() {
-  const productVariantCarts = await getAllProductCart();
+export default function Cart({
+  ls: productVariantCarts,
+}: {
+  ls: iProductVariantCart[];
+}) {
   const count = productVariantCarts.reduce((pre, cur) => {
     return pre + cur.quality;
   }, 0);

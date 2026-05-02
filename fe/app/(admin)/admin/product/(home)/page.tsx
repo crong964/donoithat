@@ -59,7 +59,7 @@ export default async function ProductHomePage({
           total={product.totalPage}
           url={`/admin/product?slug=${slug || "all"}&nameProduct=${
             nameProduct || ""
-          }`}
+          }&`}
         />
       </div>
     </section>

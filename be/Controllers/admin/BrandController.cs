@@ -2,12 +2,13 @@ using System.Threading.Tasks;
 using be.Entity;
 using be.Enums;
 using be.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace be.Controllers;
 
-
+[Authorize]
 [ApiController]
 [Route("api/admin/brand")]
 public class BrandController(DatabaseContext context, ILogger<BrandController> logger) : ControllerBase

@@ -1,4 +1,4 @@
-import RoleAddForm from "@/components/route/admin/role/role-add-form";
+import RoleAddForm from "@/components/admin/role/role-add-form";
 import BackButton from "@/components/ui-custom/back-button";
 
 const AddPermisionPage = () => {

@@ -1,5 +1,5 @@
 import ProtectAction from "@/components/permission/protect-action";
-import EditProductPage from "@/components/route/admin/product/edit-product";
+import EditProductPage from "@/components/admin/product/edit-product";
 import { getProductBySlug } from "@/service/admin/product-service";
 
 export default async function ProductDetailAdminPage({

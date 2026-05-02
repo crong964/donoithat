@@ -69,7 +69,7 @@ export default function CategoryCombobox(p: { ls: iMainCateGory[] }) {
                     <Check
                       className={cn(
                         "ml-auto",
-                        value === category.slug ? "opacity-100" : "opacity-0"
+                        value === category.slug ? "opacity-100" : "opacity-0",
                       )}
                     />
                   </CommandItem>
@@ -87,7 +87,7 @@ export default function CategoryCombobox(p: { ls: iMainCateGory[] }) {
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === "" ? "opacity-100" : "opacity-0"
+                      value === "" ? "opacity-100" : "opacity-0",
                     )}
                   />
                 </CommandItem>

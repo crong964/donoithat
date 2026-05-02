@@ -3,8 +3,6 @@ using Microsoft.Extensions.FileProviders;
 using be.Service;
 using be.Entity;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -76,6 +74,7 @@ builder.Services.AddCors(options =>
                           policy.WithOrigins("*");
                       });
 });
+
 //https://blog.nashtechglobal.com/authentication-and-authorization-in-asp-net-core-web-using-jwt/
 builder.Services.AddAuthentication(options =>
            {
@@ -168,16 +167,6 @@ app.MapFallbackToFile("index.html");
 
 //var port = Environment.GetEnvironmentVariable("PORT") ?? "3000";
 app.Run();
-
-
-
-
-
-
-
-
-
-
 
 
 

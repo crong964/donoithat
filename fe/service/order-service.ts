@@ -49,7 +49,7 @@ export const getOrders = async (): Promise<iOrder[]> => {
 };
 
 export const getOrderById = async (
-  orderId: string
+  orderId: string,
 ): Promise<iOrderDetail | undefined> => {
   try {
     let data = await api.get("/order/detail?orderId=" + orderId);

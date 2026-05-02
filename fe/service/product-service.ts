@@ -2,7 +2,7 @@ import { iGetProduct, iProductDetail } from "@/components/product/interface";
 import { api } from "@/util/fetch";
 
 export const getProduct = async (
-  p?: { slug: string; page?: string } | undefined
+  p?: { slug: string; page?: string } | undefined,
 ): Promise<iGetProduct | undefined> => {
   try {
     let data = await api.get(`/product?slug=${p?.slug}&page=${p?.page || 1}`);
@@ -13,7 +13,7 @@ export const getProduct = async (
 };
 
 export const getProductBySlug = async (
-  slug: string
+  slug: string,
 ): Promise<iProductDetail | undefined> => {
   try {
     let data = await api.get(`/product/getProductBySlug?slug=${slug}`);
@@ -25,11 +25,11 @@ export const getProductBySlug = async (
 
 export const searchProduct = async (
   name: string,
-  page?: string
+  page?: string,
 ): Promise<iGetProduct | undefined> => {
   try {
     let data = await api.get(
-      `/product/search?title=${name.trim()}&page=${page || 1}`
+      `/product/search?title=${name.trim()}&page=${page || 1}`,
     );
     return data.data;
   } catch (error) {

@@ -17,11 +17,13 @@ export const getAllAddresses = async (): Promise<iAddress[]> => {
 
 export const addAddresses = async (currentState: any, formData: FormData) => {
   const data = {
-    lat: parseFloat(formData.get("lat") + ""),
-    lng: parseFloat(formData.get("lng") + ""),
+    lat: parseFloat(formData.get("lat") + "0"),
+    lng: parseFloat(formData.get("lng") + "0"),
     title: formData.get("title"),
     address: formData.get("address"),
   };
+  console.log(data);
+
   try {
     let res = await api.post("/address", data);
   } catch (error) {
@@ -53,7 +55,7 @@ export const editAddresses = async (currentState: any, formData: FormData) => {
 
 export const deleteAddresses = async (
   currentState: any,
-  formData: FormData
+  formData: FormData,
 ) => {
   const data = {
     addressId: formData.get("addressId"),

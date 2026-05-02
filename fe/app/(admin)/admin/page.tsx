@@ -1,4 +1,4 @@
-import CardHome from "@/components/route/admin/home/card-home";
+import CardHome from "@/components/admin/home/card-home";
 import ProductSaleChart from "@/components/chart/product-sale-chart";
 import { getHomeAdmin } from "@/service/admin/home-service";
 import { Fragment } from "react";

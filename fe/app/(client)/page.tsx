@@ -1,4 +1,4 @@
-import Home from "@/components/route/client/home/home";
+import Home from "@/components/client/home/home";
 import { getCategory } from "@/service/category-service";
 import { getProduct } from "@/service/product-service";
 
@@ -13,6 +13,6 @@ export default async function HomePage() {
     <Home
       categories={categories.filter((v) => v.categoryImage != undefined)}
       products={data}
-    ></Home>
+    />
   );
 }

@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { errorResponse } from "@/util/error-response";
+import { cache } from "react";
 
 export const createUser = async (currentState: any, formData: FormData) => {
   const user: iUser = {
@@ -56,19 +57,21 @@ export const logoutUser = async () => {
   revalidatePath("/");
 };
 
-export const getUserInfor = async (): Promise<{
-  fullName: string;
-  account: string;
-  phoneNumber: string;
-  address: string;
-} | null> => {
-  let data = null;
-  try {
-    data = await api.get("/token/infor");
-  } catch (error: any) {}
+export const getUserInfor = cache(
+  async (): Promise<{
+    fullName: string;
+    account: string;
+    phoneNumber: string;
+    address: string;
+  } | null> => {
+    let data = null;
+    try {
+      data = await api.get("/token/infor");
+    } catch (error: any) {}
 
-  return data?.data;
-};
+    return data?.data;
+  },
+);
 
 export const updateUser = async (currentState: any, formData: FormData) => {
   const user = {
@@ -86,7 +89,7 @@ export const updateUser = async (currentState: any, formData: FormData) => {
   return revalidatePath("/");
 };
 
-export const getToken = async () => {
+export const getToken = cache(async () => {
   const cookieStore = await cookies();
   return cookieStore.get("token")?.value;
-};
+});

@@ -2,8 +2,8 @@
 import {
   IProductClassification,
   IProductVariant,
-} from "@/components/route/admin/product/interface";
-import { createClassificationFormSaveToHandle } from "@/components/route/admin/product/ulti";
+} from "@/components/admin/product/interface";
+import { createClassificationFormSaveToHandle } from "@/components/admin/product/ulti";
 import { iProductDetail } from "@/components/product/interface-admin";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
@@ -70,7 +70,7 @@ export const productSlice = createSlice({
     },
     addProductClassifications: (
       state,
-      action: PayloadAction<IProductClassification>
+      action: PayloadAction<IProductClassification>,
     ) => {
       state.productClassifications.push(action.payload);
     },
@@ -78,11 +78,11 @@ export const productSlice = createSlice({
       state.productClassifications = state.productClassifications.filter(
         (v, i) => {
           return v.id != action.payload;
-        }
+        },
       );
       localStorage.setItem(
         "temp",
-        JSON.stringify(state.productClassifications)
+        JSON.stringify(state.productClassifications),
       );
     },
     addOptionInProductClassifications: (
@@ -94,10 +94,10 @@ export const productSlice = createSlice({
           edit: boolean;
         };
         pci: number;
-      }>
+      }>,
     ) => {
       state.productClassifications[action.payload.pci].options.push(
-        action.payload.data
+        action.payload.data,
       );
     },
     removeOptionInProductClassifications: (
@@ -105,17 +105,17 @@ export const productSlice = createSlice({
       action: PayloadAction<{
         oi: number;
         pci: number;
-      }>
+      }>,
     ) => {
       state.productClassifications[action.payload.pci].options =
         state.productClassifications[action.payload.pci].options.filter(
           (_, i) => {
             return i != action.payload.oi;
-          }
+          },
         );
       localStorage.setItem(
         "temp",
-        JSON.stringify(state.productClassifications)
+        JSON.stringify(state.productClassifications),
       );
     },
     editOptionInProductClassifications: (
@@ -124,14 +124,14 @@ export const productSlice = createSlice({
         data: string;
         pci: number;
         oi: number;
-      }>
+      }>,
     ) => {
       state.productClassifications[action.payload.pci].options[
         action.payload.oi
       ].name = action.payload.data;
       localStorage.setItem(
         "temp",
-        JSON.stringify(state.productClassifications)
+        JSON.stringify(state.productClassifications),
       );
     },
     editProductClassifications: (
@@ -139,18 +139,18 @@ export const productSlice = createSlice({
       action: PayloadAction<{
         data: string;
         pci: number;
-      }>
+      }>,
     ) => {
       state.productClassifications[action.payload.pci].name =
         action.payload.data;
       localStorage.setItem(
         "temp",
-        JSON.stringify(state.productClassifications)
+        JSON.stringify(state.productClassifications),
       );
     },
     setProductClassifications: (
       state,
-      action: PayloadAction<IProductClassification[]>
+      action: PayloadAction<IProductClassification[]>,
     ) => {
       state.productClassifications = [...action.payload];
     },
@@ -184,7 +184,7 @@ export const productSlice = createSlice({
     },
     setSingleProductVariant: (
       state,
-      action: PayloadAction<IProductVariant>
+      action: PayloadAction<IProductVariant>,
     ) => {
       if (state.productVariants[0]) {
         state.productVariants[0] = action.payload;
@@ -237,7 +237,7 @@ export const productSlice = createSlice({
     },
     setIamgeVariants: (
       state,
-      action: PayloadAction<{ [key: string]: number }>
+      action: PayloadAction<{ [key: string]: number }>,
     ) => {
       state.imageVariants = action.payload;
     },
@@ -249,7 +249,7 @@ export const productSlice = createSlice({
       action: PayloadAction<{
         minPrice: number;
         maxPrice: number;
-      }>
+      }>,
     ) => {
       state.minPrice = action.payload.minPrice;
       state.maxPrice = action.payload.maxPrice;
@@ -259,7 +259,7 @@ export const productSlice = createSlice({
       action: PayloadAction<{
         value: number;
         measure: string;
-      }>
+      }>,
     ) => {
       state.weightProduct.value = action.payload.value;
       state.weightProduct.measure = action.payload.measure;
@@ -274,7 +274,7 @@ export const productSlice = createSlice({
     setProductData: (state, action: PayloadAction<iProductDetail>) => {
       let tmp = action.payload;
       let d: IProductClassification[] = createClassificationFormSaveToHandle(
-        JSON.parse(tmp.productClassification)
+        JSON.parse(tmp.productClassification),
       );
 
       var tmpEdit: { [key: string]: IProductVariant } = {};
@@ -322,7 +322,7 @@ export const productSlice = createSlice({
         producVariantImageurls: action.payload.productVariants.map(
           ({ image }) => {
             return image;
-          }
+          },
         ),
         brandId: tmp.brandId,
       };

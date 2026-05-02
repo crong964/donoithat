@@ -103,7 +103,7 @@ export default function Search() {
                         <div className="w-10">
                           <img
                             className="size-10"
-                            src={v.imageUrl}
+                            src={v.imageUrls[0]}
                             alt={v.nameProduct}
                             srcSet=""
                           />

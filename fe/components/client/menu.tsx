@@ -20,6 +20,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -28,7 +29,7 @@ import {
 import Link from "next/link";
 import Form from "next/form";
 import { logoutUser } from "@/service/user-service";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 // Menu items.
 const items = [
@@ -39,8 +40,8 @@ const items = [
 
 export function UserSidebar() {
   return (
-    <Sidebar className="sticky top-0" variant="inset" collapsible="icon">
-      <SidebarHeader></SidebarHeader>
+    <Sidebar className="sticky top-0 z-50" variant="inset" collapsible="icon">
+      <SidebarHeader />
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>

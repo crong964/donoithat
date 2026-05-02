@@ -11,6 +11,7 @@ public static class Permission
 	public const string user = nameof(user);
 	public const string suplier = nameof(suplier);
 	public const string inventory = nameof(inventory);
+	public const string location = nameof(location);
 	public const string role = nameof(role);
 	public const string followerInventory = "follower.inventory";
 	public const string image = nameof(image);
