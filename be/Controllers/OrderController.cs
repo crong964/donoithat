@@ -168,21 +168,22 @@ IUserService userService, ILogger<OrderController> logger) : ControllerBase
         {
             foreach (var item in productVariant)
             {
+
                 var productVariantEntity = await _context
                 .ProductVariant
+                .Include(x => x.ProductEntity)
                 .SingleOrDefaultAsync(x => x.ProductVariantId == item.ProductVariantId);
                 if (productVariantEntity == null)
                 {
                     continue;
                 }
-
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                _logger.LogInformation(productVariantEntity.ProductVariantId);
                 var row = await _context.Product.
-                                Where(x => x.ProductId == productVariantEntity.ProductEntity.ProductId &&
-                                x.Quality >= item.Quality)
-                                .ExecuteUpdateAsync(setters => setters
-                                .SetProperty(b => b.Quality, b => b.Quality - item.Quality));
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                    Where(x => x.ProductId == productVariantEntity.ProductEntity.ProductId &&
+                        x.Quality >= item.Quality)
+                        .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(b => b.Quality, b => b.Quality - item.Quality));
+
                 if (row == 0)
                 {
                     continue;
